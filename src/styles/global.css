@@ -1,0 +1,628 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   OmniDel shared components — standalone stylesheet.
+
+   This file is a SELF-CONTAINED copy of the design language read from the
+   main application's src/app/globals.css (parchment palette, mono eyebrows,
+   serif headings). It is never imported by the Next.js app, and the app's
+   own globals.css is untouched. Class names are kept IDENTICAL to the app's
+   so a component lifted from here drops into the app without a restyle.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+
+:root {
+  /* Surfaces */
+  --page: #efe9dc;
+  --surface: #f6f1e3;
+  --surface-sunk: #e5dcc4;
+  --rule: #d6cca9;
+  --rule-strong: #b5a77a;
+  --overlay: rgba(35, 29, 20, 0.45);
+
+  /* Ink */
+  --ink: #231d14;
+  --ink-soft: #4a4030;
+  --ink-mute: #8b7d60;
+  --ink-faint: #b3a888;
+
+  /* Accents */
+  --green-deep: #254a33;
+  --green: #376a46;
+  --green-soft: #c7d6bd;
+  --green-wash: #dde5cb;
+  --terracotta: #a74a2d;
+  --terra-soft: #e7bfa5;
+  --terra-wash: #eccfb5;
+  --ochre: #a5711a;
+  --ochre-wash: #e6cf9a;
+
+  /* Status */
+  --ok: #3b6f49;
+  --ok-wash: #d3ddc3;
+  --amber: #8f6115;
+  --amber-wash: #e6cf9a;
+  --crit: #8b3320;
+  --crit-wash: #e5c0ae;
+
+  /* Type */
+  --serif: "Fraunces", "PT Serif", Georgia, serif;
+  --sans: "Inter Tight", "Inter", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Radii / shadow / spacing */
+  --r-sm: 3px;
+  --r-md: 4px;
+  --r-lg: 8px;
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.04), 0 1px 2px rgba(26, 31, 23, 0.04);
+  --shadow-md: 0 1px 2px rgba(26, 31, 23, 0.04), 0 8px 24px -10px rgba(26, 31, 23, 0.12);
+  --gutter: 20px;
+  --card-pad: 18px;
+
+  /* Z-index scale — never hard-code a z-index in a component. */
+  --z-base: 0;
+  --z-popover: 2000;
+  --z-modal: 2400;
+  --z-dialog: 2500;
+  --z-select: 2600;
+  --z-toast: 2800;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+h1 { font-size: 44px; line-height: 1.05; }
+h2 { font-size: 28px; line-height: 1.15; }
+h3 { font-size: 20px; line-height: 1.2; }
+p { margin: 0; }
+
+input, button, select, textarea { font-family: var(--sans); }
+
+::selection { background: var(--green-wash); color: var(--green-deep); }
+
+/* ─── Scrollbars ──────────────────────────────────────────────────────── */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ink-mute); background-clip: content-box; }
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent; }
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────── */
+.btn-primary {
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--sans);
+  background: var(--green-deep);
+  color: var(--surface);
+  border: 1px solid var(--green-deep);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.btn-primary:hover:not(:disabled) { background: var(--green); border-color: var(--green); }
+.btn-primary:active:not(:disabled) { background: #1d3b28; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--sans);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.btn-secondary:hover:not(:disabled) { background: var(--surface-sunk); color: var(--ink); }
+.btn-secondary:active:not(:disabled) { background: var(--rule); }
+.btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-danger {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--sans);
+  background: var(--crit);
+  color: var(--surface);
+  border: 1px solid var(--crit);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.btn-danger:hover:not(:disabled) { background: #74291a; border-color: #74291a; }
+.btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-ghost {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--sans);
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.btn-ghost:hover:not(:disabled) { background: var(--surface-sunk); }
+.btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-danger:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--rule-strong);
+  outline-offset: 2px;
+}
+
+/* Size modifiers — the app's default is `md` (the sizes above). */
+.btn-sm { padding: 6px 12px; font-size: 11px; }
+.btn-lg { padding: 10px 24px; font-size: 13px; }
+.btn-block { width: 100%; }
+
+/* ─── Form controls ───────────────────────────────────────────────────── */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--page);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--green-deep);
+  box-shadow: 0 0 0 2px var(--green-wash);
+}
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--ink-faint); }
+.form-input:disabled,
+.form-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--surface-sunk);
+}
+.form-input[aria-invalid="true"],
+.form-textarea[aria-invalid="true"] { border-color: var(--crit); }
+.form-input[aria-invalid="true"]:focus,
+.form-textarea[aria-invalid="true"]:focus { box-shadow: 0 0 0 2px var(--crit-wash); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+}
+.form-hint {
+  font-size: 11px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.form-error {
+  color: var(--crit);
+  font-size: 12px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.form-error-banner {
+  color: var(--crit);
+  font-size: 13px;
+  padding: 8px 12px;
+  background: var(--crit-wash);
+  border-radius: var(--r-sm);
+  margin-bottom: 16px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 24px;
+}
+@media (max-width: 767px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Table ───────────────────────────────────────────────────────────── */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  min-height: var(--table-min-h, 480px);
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header {
+  display: grid;
+  padding: 10px 16px;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule-strong);
+  background: var(--surface-sunk);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  align-items: center;
+}
+
+.table-row {
+  display: grid;
+  padding: 12px 16px;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  align-items: center;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row--clickable { cursor: pointer; }
+.table-row--clickable:hover { background: var(--page); }
+
+.table-cell { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.table-cell--wrap { overflow: visible; white-space: normal; word-break: break-word; }
+
+.table-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-mute);
+  font-size: 13px;
+  padding: 32px;
+  text-align: center;
+}
+
+/* Horizontal scroll — desktop uses the native bar, phones get a drawn rail
+   because iOS hides its overlay scrollbar once the scroll stops. */
+.table-scroll-viewport {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+.table-scroll-viewport > .table-header,
+.table-scroll-viewport > .table-row {
+  min-width: var(--table-min-w, 640px);
+}
+.table-scroll-rail { display: none; }
+
+@media (max-width: 767px) {
+  .table-scroll-viewport {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .table-scroll-viewport::-webkit-scrollbar { display: none; }
+  .table-scroll-rail {
+    display: block;
+    position: relative;
+    height: 6px;
+    margin: 8px 12px 10px;
+    background: var(--surface-sunk);
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .table-scroll-thumb {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    min-width: 28px;
+    background: var(--rule-strong);
+    border-radius: 3px;
+    transition: left 80ms linear, width 80ms linear;
+  }
+}
+
+/* Skeleton rows while a table loads. */
+@keyframes pulse-shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.skeleton-bar {
+  height: 10px;
+  border-radius: 2px;
+  background: var(--surface-sunk);
+  animation: pulse-shimmer 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar { animation: none; }
+}
+
+/* Toolbar above a table: search + filters left, add button right. */
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.table-controls-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+.table-controls-filters .picker-field {
+  flex: 0 0 auto;
+  width: 160px;
+  min-width: 160px;
+  max-width: 200px;
+}
+@media (max-width: 767px) {
+  .table-toolbar { flex-wrap: nowrap; gap: 8px; overflow-x: clip; }
+  .table-toolbar .multi-filter { flex: 1 1 auto; min-width: 0; }
+  .table-toolbar .multi-filter__field { width: 100%; }
+  .table-toolbar .multi-filter__search { width: 100% !important; }
+}
+
+/* ─── Tags / pills ────────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+/* ─── Pickers (select / filter popovers) ──────────────────────────────── */
+.picker-field { position: relative; min-width: 0; width: 100%; max-width: 100%; }
+.picker-truncate {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.picker-option { min-width: 0; max-width: 100%; overflow: hidden; box-sizing: border-box; }
+.custom-select-dropdown { scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent; }
+.custom-select-dropdown::-webkit-scrollbar { width: 6px; }
+.custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 3px; }
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover { background: var(--ink-mute); }
+
+/* ─── Modal ───────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  width: 420px;
+  max-width: 100%;
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+.modal-card h3 { margin-bottom: 12px; }
+.modal-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.modal-card--sm { width: 380px; }
+.modal-card--lg { width: 640px; }
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* ─── Toast ───────────────────────────────────────────────────────────── */
+.toast-stack {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 380px;
+}
+.toast-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  font-size: 13px;
+  font-family: var(--sans);
+  line-height: 1.4;
+  cursor: pointer;
+  animation: toast-in 0.18s ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-item { animation: none; }
+}
+
+/* ─── Spinner ─────────────────────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--rule);
+  border-top-color: var(--green-deep);
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2s; }
+}
+
+/* --- Playground / demo-page chrome (not part of the library) --- */
+.pg-section { margin-bottom: 44px; scroll-margin-top: 24px; }
+.pg-section__title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 18px;
+}
+.pg-case { margin-bottom: 22px; }
+.pg-case__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+}
+.pg-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pg-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: var(--card-pad);
+}
+.pg-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+
+/* ─── Shell ───────────────────────────────────────────────────────────── */
+
+/* Nav rows — hover/active tinting lives here so a row keeps its feel whether
+   it is rendered by the sidebar, a flyout or a panel. */
+.nav-link {
+  transition:
+    background-color 140ms cubic-bezier(0.32, 0.72, 0, 1),
+    color 140ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 120ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.nav-link:hover {
+  background: var(--surface-sunk) !important;
+  color: var(--green-deep) !important;
+}
+.nav-link:active {
+  transform: scale(0.97);
+}
+.nav-link:focus-visible {
+  outline: 2px solid var(--rule-strong);
+  outline-offset: -2px;
+}
+
+/* Sidebar scroll — thin but always visible, so the affordance shows before
+   the window is enlarged. */
+.sidebar-nav {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+.sidebar-nav::-webkit-scrollbar { width: 8px; }
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: var(--ink-mute); }
+
+.sidebar-flyout { scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent; }
+
+/* Scrim behind the mobile drawer and the expanded assistant. */
+.shell-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.themed-scroll-y {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-mute) transparent;
+  overscroll-behavior: contain;
+}
+
+/* Status strip — one line, scrolls sideways on a phone rather than stealing a
+   second row of height from the content above it. */
+.shell-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+  padding: 7px 32px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.shell-statusbar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.shell-statusbar__label {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.shell-statusbar__trailing {
+  margin-left: auto;
+  padding-left: 18px;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+@media (max-width: 767px) {
+  .shell-statusbar { padding: 7px 16px; gap: 14px; }
+  .shell-statusbar__trailing { display: none; }
+}

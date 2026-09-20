@@ -1,0 +1,29 @@
+{
+  "name": "@omnidel/shared-components",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated shared-component library + playground for OmniDel. Independent of the Next.js app.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "smoke": "vite build --ssr scripts/smoke.tsx --outDir .smoke && node .smoke/smoke.js"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.39.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.0"
+  }
+}
