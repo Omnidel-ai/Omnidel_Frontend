@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
+  Button,
   ConfirmDialog,
   CustomSelect,
   PageHeader,
@@ -55,6 +56,16 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
   const [creating, setCreating] = useState(false);
   const [pending, setPending] = useState<{ kind: "archive" | "restore"; row: DemoRow } | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  // Where the read would happen. Held briefly on mount and whenever the screen
+  // switches masters, so the table's skeleton is on the real path rather than
+  // only in the playground.
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const id = window.setTimeout(() => setLoading(false), 600);
+    return () => window.clearTimeout(id);
+  }, [master.key]);
 
   // A different master means a different screen: reset the view state rather
   // than carrying a lanes search over to languages.
@@ -83,6 +94,11 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
       );
     });
   }, [rows, view, query, master.columns]);
+
+  // "Narrowed" means the view is empty because of the search or the filter,
+  // not because the master has no rows — the difference decides which empty
+  // state the table shows.
+  const narrowed = Boolean(query) || (view !== "all" && rows.length > 0);
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
@@ -211,16 +227,47 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
         columns={columns}
         data={paginated}
         rowKey={(r) => r.id}
+        loading={loading}
         minWidth={master.minWidth ?? 820}
+        // Three different messages, because they call for three different
+        // actions: clear the search, widen the view, or create the first row.
+        emptyVariant={narrowed ? "no-results" : "empty"}
         emptyMessage={
           query
             ? `No ${master.label.toLowerCase()} match “${query}”`
-            : (master.emptyMessage ?? `No ${master.label.toLowerCase()} in this view`)
+            : view === "archived"
+              ? `No archived ${master.label.toLowerCase()}`
+              : view !== "all" && rows.length > 0
+                ? `No ${view} ${master.label.toLowerCase()}`
+                : (master.emptyMessage ?? `No ${master.label.toLowerCase()} yet`)
         }
         emptyHint={
-          view === "archived"
-            ? "Archived rows are restored from here."
-            : `Add one with “+ Add ${master.singular.toLowerCase()}”.`
+          query
+            ? "Check the spelling, or clear the search to see everything."
+            : view === "archived"
+              ? "Rows archived from this screen can be restored here."
+              : view !== "all" && rows.length > 0
+                ? `There are ${rows.length} in total — switch the view to All.`
+                : master.emptyHint
+        }
+        emptyAction={
+          narrowed ? (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setSearch("");
+                setView("all");
+                setPage(1);
+              }}
+            >
+              Clear search and filters
+            </Button>
+          ) : (
+            <Button size="sm" onClick={() => setCreating(true)}>
+              Add the first {master.singular.toLowerCase()}
+            </Button>
+          )
         }
       />
 

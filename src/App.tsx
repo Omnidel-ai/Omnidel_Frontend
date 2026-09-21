@@ -3,6 +3,7 @@ import { Toaster } from "./components";
 import { ShellLayout } from "./shell";
 import { AdminPage } from "./admin";
 import { Playground } from "./playground/Playground";
+import { DashboardHome } from "./dashboard";
 import { HomePage } from "./playground/HomePage";
 import { PlaceholderPage } from "./playground/PlaceholderPage";
 import demo from "./data/demo.json";
@@ -47,6 +48,8 @@ export function App() {
         ) : activeHref === "/playground" ? (
           <Playground />
         ) : activeHref === "/home" ? (
+          <DashboardHome data={DATA} onNavigate={setActiveHref} />
+        ) : activeHref === "/about" ? (
           <HomePage data={DATA} onNavigate={setActiveHref} />
         ) : (
           <PlaceholderPage href={activeHref} onNavigate={setActiveHref} />

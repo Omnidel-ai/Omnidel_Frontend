@@ -11,7 +11,12 @@ export interface StatusToggleProps {
 }
 
 /**
- * Pill switch for an active/inactive row.
+ * Switch for an active/inactive row.
+ *
+ * Squared off, not a pill: the rest of this system is built on 3–4px radii and
+ * 1px rules, and a fully rounded capsule was the one control that read as
+ * borrowed from somewhere else. The track uses `--r-sm`, the thumb a 2px
+ * radius, and both keep the dimensions and travel of the original.
  *
  * `role="switch"` + `aria-checked`, so a screen reader announces a toggle
  * rather than a button. States: on · off · busy · disabled.
@@ -41,7 +46,7 @@ export function StatusToggle({
         alignItems: "center",
         width: 34,
         height: 18,
-        borderRadius: 9,
+        borderRadius: "var(--r-sm)",
         border: "none",
         padding: 0,
         background: isDisabled
@@ -63,7 +68,7 @@ export function StatusToggle({
           left: active ? 18 : 3,
           width: 12,
           height: 12,
-          borderRadius: "50%",
+          borderRadius: 2,
           background: "var(--surface)",
           transition: "left 0.18s",
         }}

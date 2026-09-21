@@ -67,6 +67,40 @@ export interface DemoAssistant {
   fallback: string;
 }
 
+
+export interface DemoPoint {
+  label: string;
+  value: number;
+}
+
+export interface DemoStat {
+  key: string;
+  label: string;
+  value: string;
+  /** Signed, so direction is in the text and not only in the tone. */
+  delta?: string;
+  deltaTone: "ok" | "warn" | "crit" | "neutral";
+  hint?: string;
+}
+
+export interface DemoActivity {
+  id: string;
+  who: string;
+  what: string;
+  at: string;
+  tone: "ok" | "warn" | "crit" | "info";
+}
+
+export interface DemoDashboard {
+  greeting: string;
+  subtitle: string;
+  stats: DemoStat[];
+  weekly: { label: string; unit: string; points: DemoPoint[] };
+  stages: { label: string; points: DemoPoint[] };
+  statuses: { label: string; value: number; tone: "ok" | "warn" | "crit" | "neutral" }[];
+  activity: DemoActivity[];
+}
+
 export type ColumnType = "text" | "code" | "badge" | "flag" | "number" | "date" | "status";
 
 export interface DemoColumn {
@@ -105,6 +139,8 @@ export interface DemoMaster {
   eyebrow?: string;
   searchPlaceholder?: string;
   emptyMessage?: string;
+  /** Second line under the empty-state title. */
+  emptyHint?: string;
   /** Phone-only floor for the row grid. */
   minWidth?: number;
   columns: DemoColumn[];
@@ -122,6 +158,7 @@ export interface DemoRow {
 
 export interface DemoData {
   brand: DemoBrand;
+  dashboard: DemoDashboard;
   user: DemoUser;
   nav: DemoNavItem[];
   status: DemoStatusItem[];

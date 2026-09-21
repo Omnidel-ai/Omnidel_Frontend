@@ -6,8 +6,9 @@ import { SelectionSection } from "./SelectionSection";
 import { TableSection } from "./TableSection";
 import { OverlaysSection } from "./OverlaysSection";
 import { ChromeSection } from "./ChromeSection";
+import { StatesSection } from "./StatesSection";
 
-const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Overlays", "Header"];
+const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Empty & loading", "Overlays", "Header"];
 
 /**
  * Component playground.
@@ -47,6 +48,7 @@ export function Playground() {
       {show("Inputs") && <InputsSection />}
       {show("Selects & filters") && <SelectionSection />}
       {show("Table") && <TableSection />}
+      {show("Empty & loading") && <StatesSection />}
       {show("Overlays") && <OverlaysSection />}
       {show("Header") && <ChromeSection />}
     </div>
