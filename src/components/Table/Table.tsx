@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { EmptyState } from "../EmptyState/EmptyState";
+import { SkeletonRows } from "../Skeleton/Skeleton";
 import { TableScroll } from "./TableScroll";
 
 export interface Column<T> {
@@ -26,10 +28,22 @@ export interface TableProps<T> {
   loading?: boolean;
   /** Placeholder row count while loading. */
   skeletonRows?: number;
-  /** Shown when `data` is empty and `loading` is false. */
+  /** Title of the built-in empty state. */
   emptyMessage?: ReactNode;
   /** Second, muted line under the empty message. */
   emptyHint?: ReactNode;
+  /**
+   * Distinguishes "nothing created yet" from "the filter matched nothing" —
+   * the table cannot know which, because it never sees the query.
+   */
+  emptyVariant?: "empty" | "no-results" | "error";
+  /** Action button inside the empty state ("Add the first lane"). */
+  emptyAction?: ReactNode;
+  /**
+   * Replaces the built-in empty state entirely. Use it when the screen needs
+   * more than a title, a line and a button.
+   */
+  empty?: ReactNode;
   /** Makes rows clickable — hover highlight and a pointer cursor. */
   onRowClick?: (row: T, index: number) => void;
   /** Phone-only floor for the row grid, in px. */
@@ -57,6 +71,9 @@ export function Table<T>({
   skeletonRows = 5,
   emptyMessage = "Nothing here yet",
   emptyHint,
+  emptyVariant = "empty",
+  emptyAction,
+  empty,
   onRowClick,
   minWidth = 640,
   minHeight,
@@ -64,7 +81,7 @@ export function Table<T>({
   const gridTemplateColumns = columns.map((c) => c.width ?? "1fr").join(" ");
 
   return (
-    <TableScroll minWidth={minWidth} minHeight={minHeight}>
+    <TableScroll minWidth={minWidth} minHeight={minHeight} busy={loading}>
       <div className="table-header" style={{ gridTemplateColumns }} role="row">
         {columns.map((c) => (
           <div
@@ -79,23 +96,20 @@ export function Table<T>({
       </div>
 
       {loading ? (
-        Array.from({ length: skeletonRows }).map((_, i) => (
-          <div key={`sk-${i}`} className="table-row" style={{ gridTemplateColumns }} aria-hidden="true">
-            {columns.map((c, ci) => (
-              <div key={c.key} className="table-cell">
-                <span
-                  className="skeleton-bar"
-                  style={{ display: "block", width: ci === 0 ? "70%" : "45%" }}
-                />
-              </div>
-            ))}
-          </div>
-        ))
+        <SkeletonRows
+          rows={skeletonRows}
+          columns={columns.length}
+          gridTemplateColumns={gridTemplateColumns}
+        />
       ) : data.length === 0 ? (
-        <div className="table-empty">
-          <span>{emptyMessage}</span>
-          {emptyHint && <span style={{ fontSize: 12, color: "var(--ink-faint)" }}>{emptyHint}</span>}
-        </div>
+        (empty ?? (
+          <EmptyState
+            variant={emptyVariant}
+            title={typeof emptyMessage === "string" ? emptyMessage : "Nothing here yet"}
+            description={emptyHint}
+            action={emptyAction}
+          />
+        ))
       ) : (
         data.map((row, i) => (
           <div

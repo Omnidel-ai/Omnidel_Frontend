@@ -8,6 +8,8 @@ export interface TableScrollProps {
   minWidth?: number;
   /** Floor for the card height; a short list still reads as a card. */
   minHeight?: number;
+  /** Marks the card busy while its rows are placeholders. */
+  busy?: boolean;
   style?: CSSProperties;
 }
 
@@ -18,12 +20,19 @@ export interface TableScrollProps {
  * that bar and get the drawn rail underneath, because an overlay scrollbar
  * that fades out cannot advertise the columns it is hiding.
  */
-export function TableScroll({ children, minWidth = 640, minHeight, style }: TableScrollProps) {
+export function TableScroll({
+  children,
+  minWidth = 640,
+  minHeight,
+  busy,
+  style,
+}: TableScrollProps) {
   const { viewportRef, thumb } = useHScrollThumb(children);
 
   return (
     <div
       className="table-wrap"
+      aria-busy={busy || undefined}
       style={
         {
           "--table-min-w": `${minWidth}px`,

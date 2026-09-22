@@ -19,7 +19,7 @@
   },
 
   "nav": [
-    { "label": "Home", "href": "/home", "icon": "home" },
+    { "label": "Dashboard", "href": "/home", "icon": "home" },
     { "label": "Components", "href": "/playground", "icon": "grid" },
     {
       "label": "OmniPulse",
@@ -51,11 +51,13 @@
         { "label": "Languages", "href": "/admin/languages" },
         { "label": "Task Types", "href": "/admin/task-types" },
         { "label": "Locations", "href": "/admin/locations" },
-        { "label": "Missions", "href": "/admin/missions" }
+        { "label": "Missions", "href": "/admin/missions" },
+        { "label": "Trade Types", "href": "/admin/trade-types" }
       ]
     },
     { "label": "OmniVarsity", "href": "/omnivarsity", "icon": "book" },
-    { "label": "OmniMoney", "href": "/omnimoney", "icon": "coin" }
+    { "label": "OmniMoney", "href": "/omnimoney", "icon": "coin" },
+    { "label": "About this demo", "href": "/about", "icon": "book" }
   ],
 
   "status": [
@@ -89,6 +91,59 @@
       { "match": "shell", "text": "The shell is the sidebar, the topbar with search and notifications, the profile menu, the status bar and this assistant. All five read demo.json, so none of them hard-code a route or a person." }
     ],
     "fallback": "This is a demo assistant — it answers from a small canned set. Try one of the suggestions above, or ask about the masters, the shell, the shared components or the backend."
+  },
+
+  "dashboard": {
+    "greeting": "Good morning, Harshit",
+    "subtitle": "Here is the shape of the week. Every number on this page comes from demo.json.",
+    "stats": [
+      { "key": "orders", "label": "Orders", "value": "1,284", "delta": "+8.4%", "deltaTone": "ok", "hint": "vs last week" },
+      { "key": "revenue", "label": "Revenue", "value": "₹18.4L", "delta": "+2.1%", "deltaTone": "ok", "hint": "vs last week" },
+      { "key": "sla", "label": "On-time", "value": "94%", "delta": "-1.2pt", "deltaTone": "warn", "hint": "target 95%" },
+      { "key": "open", "label": "Open tasks", "value": "37", "delta": "+6", "deltaTone": "crit", "hint": "12 overdue" }
+    ],
+    "weekly": {
+      "label": "Deliveries completed",
+      "unit": "per week",
+      "points": [
+        { "label": "W24", "value": 186 },
+        { "label": "W25", "value": 204 },
+        { "label": "W26", "value": 178 },
+        { "label": "W27", "value": 231 },
+        { "label": "W28", "value": 249 },
+        { "label": "W29", "value": 222 },
+        { "label": "W30", "value": 268 },
+        { "label": "W31", "value": 291 },
+        { "label": "W32", "value": 274 },
+        { "label": "W33", "value": 305 },
+        { "label": "W34", "value": 318 },
+        { "label": "W35", "value": 296 }
+      ]
+    },
+    "stages": {
+      "label": "Pipeline by stage",
+      "points": [
+        { "label": "Enquiry", "value": 64 },
+        { "label": "Survey", "value": 41 },
+        { "label": "Quotation", "value": 33 },
+        { "label": "Negotiation", "value": 19 },
+        { "label": "Won", "value": 12 },
+        { "label": "Handover", "value": 7 }
+      ]
+    },
+    "statuses": [
+      { "label": "On track", "value": 58, "tone": "ok" },
+      { "label": "At risk", "value": 12, "tone": "warn" },
+      { "label": "Blocked", "value": 5, "tone": "crit" }
+    ],
+    "activity": [
+      { "id": "a1", "who": "Ananya", "what": "archived lane LN-004", "at": "12 min ago", "tone": "warn" },
+      { "id": "a2", "who": "Bikram", "what": "closed 14 deliveries on LN-007", "at": "1 h ago", "tone": "ok" },
+      { "id": "a3", "who": "Chandni", "what": "imported 412 catalogue rows", "at": "3 h ago", "tone": "ok" },
+      { "id": "a4", "who": "Devraj", "what": "flagged 3 worker setups for review", "at": "Yesterday", "tone": "crit" },
+      { "id": "a5", "who": "Ananya", "what": "added mission “Vernacular first”", "at": "Yesterday", "tone": "info" },
+      { "id": "a6", "who": "Bikram", "what": "updated SLA on route-audit to 36h", "at": "2 days ago", "tone": "info" }
+    ]
   },
 
   "masters": [
@@ -307,6 +362,32 @@
         { "id": "m7", "name": "Seasonal produce only", "owner": "Chandni", "horizon": "Ongoing", "sort_order": 7, "statement": "", "is_active": false, "is_archived": true },
         { "id": "m8", "name": "Two-hour support reply", "owner": "Devraj", "horizon": "Quarter", "sort_order": 8, "statement": "", "is_active": true }
       ]
+    },
+
+    {
+      "key": "trade-types",
+      "label": "Trade Types",
+      "singular": "Trade type",
+      "module": "OmniMart",
+      "section": "Masters",
+      "eyebrow": "Reference data",
+      "searchPlaceholder": "Search trade types…",
+      "emptyMessage": "No trade types yet",
+      "emptyHint": "Trade types classify a kaarigar's work — carpentry, plumbing, wiring. Add the first one to get started.",
+      "minWidth": 720,
+      "columns": [
+        { "key": "name", "header": "Name", "width": "minmax(170px, 2fr)" },
+        { "key": "slug", "header": "Slug", "width": "150px", "type": "code" },
+        { "key": "day_rate", "header": "Day rate", "width": "120px", "type": "number", "align": "right" },
+        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
+      ],
+      "fields": [
+        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Carpentry" },
+        { "key": "slug", "label": "Slug", "type": "text", "required": true, "placeholder": "carpentry", "readOnlyOnEdit": true },
+        { "key": "day_rate", "label": "Day rate (₹)", "type": "number", "placeholder": "850" },
+        { "key": "is_active", "label": "Active", "type": "checkbox" }
+      ],
+      "rows": []
     }
   ]
 }

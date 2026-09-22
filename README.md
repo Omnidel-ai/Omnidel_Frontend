@@ -1,8 +1,8 @@
 # OmniDel — Shared Components, Shell & Admin UI
 
 An **isolated** frontend workspace: shared UI components, the application
-shell, and a generic admin screen — all running on demo data. There is no API,
-no database and no auth here, by design.
+shell, a dashboard home page and a generic admin screen — all running on demo
+data. There is no API, no database and no auth here, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
@@ -15,6 +15,7 @@ Omnidel_Frontend/
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
 │   ├── data/demo.json  ← 3. demo data
 │   ├── admin/          ← 5. generic admin page
+│   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
 │   ├── styles/global.css
@@ -37,6 +38,8 @@ Existing Next.js app → inspect only → current UI / design
 3. Demo data           src/data/demo.json   ✅
 4. Shell layout        src/App.tsx          ✅
 5. Generic admin UI    src/admin/           ✅
+   Dashboard home      src/dashboard/       ✅
+   Empty & loading     EmptyState, Skeleton ✅
 6. Testing & polish    typecheck · lint · build · smoke · playground
           ↓
        STOP — backend split lands first
@@ -62,7 +65,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders the shell, the playground and every admin screen, and asserts the markup |
+| `npm run smoke` | Server-renders all nine screens — shell, playground, dashboard and every admin master — and asserts the markup |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -71,10 +74,16 @@ fall back to Georgia / system sans / a mono face and nothing else changes.
 
 ### What you can do in the running app
 
-* **Home** — what the workspace is, with the masters one click away.
-* **Masters → Lanes / Languages / Task Types / Locations / Missions** — the same
-  generic screen five times: search, filter by Active / Inactive / All /
-  Archived, add, edit, activate, archive, restore, paginate.
+* **Dashboard** — the landing screen: stat tiles, a 12-week bar chart with a
+  range filter and a table view, pipeline-by-stage bars, a status breakdown and
+  an activity feed. **Reload** replays the loading state so the skeletons show.
+* **About this demo** — what the workspace is, with the masters one click away.
+* **Masters → Lanes / Languages / Task Types / Locations / Missions / Trade
+  Types** — the same generic screen six times: search, filter by Active /
+  Inactive / All / Archived, add, edit, activate, archive, restore, paginate.
+  Every screen opens through a skeleton. **Trade Types has no rows**, so it is
+  where the empty state lives; search for nonsense on any other to see the
+  `no-results` one.
 * **Components** — the playground, every shared component in every state.
 * **Shell** — collapse the sidebar, open a section flyout from the collapsed
   rail, use the topbar search (Ctrl/Cmd+K), open notifications, switch language
@@ -109,6 +118,8 @@ the data.
 | `PageHeader/` | `PageHeader`, `BreadcrumbTrail` |
 | `NoAccessScreen/` | `NoAccessScreen` |
 | `Badge/` | `Badge` — 7 tones |
+| `EmptyState/` | `EmptyState` — `empty` / `no-results` / `error`, three sizes |
+| `Skeleton/` | `Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonRows` |
 | `StatusToggle/` | `StatusToggle` |
 | `Spinner/` | `Spinner` |
 | `hooks/` | `useIsMobile`, `useHScrollThumb` |
@@ -177,6 +188,20 @@ dependency, because introducing one would be a decision for the real app.
 The topbar search is passed into the admin screen, so the shell's search
 actually filters the table rather than being decoration.
 
+## Dashboard home — `src/dashboard/`
+
+`DashboardHome` reads `data.dashboard` and nothing else. `StatTile` for the
+headline numbers, and `charts.tsx` for the plots: `BarColumns`
+(change-over-time, hover tooltip, selective labels, table view),
+`BarRows` (magnitude by category), `StatusBreakdown` (state, with a label on
+every mark) and `Panel` / `PanelToggle`.
+
+Every chart is **single-series**, so it uses one hue and needs no legend — the
+panel title names the series, and identity never rests on colour. The status
+breakdown is the one exception and uses the reserved status tokens with a text
+label beside each mark. Marks are thin, data-ends carry a 2px radius, bars are
+separated by a 2px gap, and the grid is recessive.
+
 ## 5. Generic admin UI — `src/admin/AdminPage/`
 
 The application has nine admin master pages — 3,564 lines — each
@@ -190,6 +215,9 @@ different table. This is that page written once:
   validation and fields that lock after creation
 * `ConfirmDialog` for archive and restore, toasts on every write
 * pagination with rows-per-page
+* skeleton rows while the (notional) read is in flight, and three distinct
+  empty states: nothing created yet, the filter matched nothing, the read
+  failed — each with the action that fits it
 
 Nothing in it names a lane, a language or a mission. Writes change component
 state; reload resets everything.
@@ -251,6 +279,9 @@ Rendered in the playground — check them there rather than reading this list.
 | StatusToggle | on · off · busy · disabled |
 | PageHeader | short trail · collapsed long trail · eyebrow · actions |
 | Badge | 7 tones · with dot |
+| EmptyState | empty · no-results · error · inline / card / page · action + secondary action |
+| Skeleton | line · circle · block · text block · card · table rows on the real grid |
+| Dashboard | loading (skeletons) · loaded · range filter · chart / table view · bar hover · empty activity feed |
 | Sidebar | expanded · collapsed · section open · flyout · tooltip · badge · active route · mobile drawer |
 | Topbar | desktop · mobile (hamburger + compact profile) · search focus · unread count |
 | Profile | closed · open · teams · language selected · sign out |
@@ -324,6 +355,11 @@ approach keeps the two identical and the dependency list at two packages.
   could be added in a single block.
 * **Fonts load from Google Fonts** rather than being self-hosted as the app does
   with `next/font`.
+* **`StatusToggle` is squared off**, unlike the app's pill-shaped one. That was a
+  deliberate change to match the 3–4px radius language of everything around it;
+  if the pill is wanted back it is two values in one file.
+* **The dashboard's "Reload" button** is a demo affordance for showing the
+  skeletons. A real screen takes its loading state from the request.
 
 ---
 

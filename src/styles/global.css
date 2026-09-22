@@ -626,3 +626,8 @@ input, button, select, textarea { font-family: var(--sans); }
   .shell-statusbar { padding: 7px 16px; gap: 14px; }
   .shell-statusbar__trailing { display: none; }
 }
+
+/* Dashboard split panels — two columns on desktop, stacked on a phone. */
+@media (max-width: 900px) {
+  .dash-split { grid-template-columns: 1fr !important; }
+}

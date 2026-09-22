@@ -13,6 +13,7 @@ import { renderToString } from "react-dom/server";
 import { App } from "../src/App";
 import { Playground } from "../src/playground/Playground";
 import { AdminPage } from "../src/admin";
+import { DashboardHome } from "../src/dashboard";
 import demo from "../src/data/demo.json";
 import type { DemoData } from "../src/data/types";
 
@@ -47,6 +48,26 @@ const screens: Screen[] = [
       ["table header", "table-header"],
       ["badge", 'class="tag"'],
       ["picker field", "picker-field"],
+      ["empty state", "No trade types yet"],
+      ["no-results empty state", "No lanes match"],
+      ["skeleton", "skeleton-bar"],
+      // A real data row, since the admin screens SSR in their loading state.
+      ["rendered data row", "LN-001"],
+    ],
+  },
+  {
+    // Renders in its loading state, which is what SSR sees — so this asserts
+    // the skeleton path as well as the panels.
+    name: "dashboard (loading)",
+    html: renderToString(<DashboardHome data={DATA} onNavigate={() => undefined} />),
+    markers: [
+      ["greeting", DATA.dashboard.greeting],
+      ["stat skeletons", "skeleton-bar"],
+      ["weekly panel", DATA.dashboard.weekly.label],
+      ["stages panel", DATA.dashboard.stages.label],
+      ["status panel", "Work by status"],
+      ["activity panel", "Recent activity"],
+      ["range filter", "12 weeks"],
     ],
   },
   ...DATA.masters.map((m) => ({
@@ -56,7 +77,9 @@ const screens: Screen[] = [
       ["toolbar", "table-toolbar"],
       ["table card", "table-wrap"],
       ["table header", "table-header"],
-      ["table row", "table-row"],
+      // A master with no rows renders the empty state instead of rows; both
+      // paths still draw the header strip and the toolbar.
+      [m.rows.length > 0 ? "table row" : "empty state", m.rows.length > 0 ? "table-row" : "table-header"],
       ["first column header", m.columns[0].header],
       ["add button", m.singular.toLowerCase()],
     ] as Array<[string, string]>,
