@@ -1,7 +1,7 @@
 # OmniDel — Shared Components, Shell & Admin UI
 
 An **isolated** frontend workspace: shared UI components, the application
-shell, a dashboard home page and a generic admin screen — all running on demo
+shell, a dashboard home page and the complete admin area — all running on demo
 data. There is no API, no database and no auth here, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
@@ -13,8 +13,8 @@ Omnidel_Frontend/
 ├── src/
 │   ├── components/     ← 1. shared UI components
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
-│   ├── data/demo.json  ← 3. demo data
-│   ├── admin/          ← 5. generic admin page
+│   ├── data/           ← 3. demo data (demo.json + masters.json)
+│   ├── admin/          ← 5. the admin screens, one layout
 │   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
@@ -65,7 +65,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all nine screens — shell, playground, dashboard and every admin master — and asserts the markup |
+| `npm run smoke` | Server-renders all 20 screens — shell, playground, dashboard and all 17 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -78,12 +78,17 @@ fall back to Georgia / system sans / a mono face and nothing else changes.
   range filter and a table view, pipeline-by-stage bars, a status breakdown and
   an activity feed. **Reload** replays the loading state so the skeletons show.
 * **About this demo** — what the workspace is, with the masters one click away.
-* **Masters → Lanes / Languages / Task Types / Locations / Missions / Trade
-  Types** — the same generic screen six times: search, filter by Active /
-  Inactive / All / Archived, add, edit, activate, archive, restore, paginate.
-  Every screen opens through a skeleton. **Trade Types has no rows**, so it is
-  where the empty state lives; search for nonsense on any other to see the
-  `no-results` one.
+* **Masters (14 screens) and Access (3 screens)** — the complete admin area,
+  every screen the same component with a different descriptor: search, filter
+  by Active / Inactive / All / Archived, add, edit, activate, archive, restore,
+  paginate. Worth opening in particular:
+  * **Lead Sources / Missions / Roles** — reorder arrows
+  * **Pipeline Stages** — reorder + group tabs + per-row **Fields** panel
+  * **Languages** — "Make default", which clears the flag everywhere else
+  * **Lanes / State Codes / Users** — **Download CSV** of what the table shows
+  * **Trade Types** — no rows, so this is where the empty state lives
+  Every screen opens through a skeleton; search for nonsense anywhere to see
+  the `no-results` empty state.
 * **Components** — the playground, every shared component in every state.
 * **Shell** — collapse the sidebar, open a section flyout from the collapsed
   rail, use the topbar search (Ctrl/Cmd+K), open notifications, switch language
@@ -146,12 +151,17 @@ Every one of them is data-driven. `Sidebar` has no route table, `Topbar` no
 session, `Profile` no auth call, `AskMache` no model. They take props and report
 events, exactly like the shared components.
 
-## 3. Demo data — `src/data/demo.json`
+## 3. Demo data — `src/data/`
 
-One file drives the whole workspace: the brand, the person in the topbar, the
-navigation tree with its badges, the status strip, the notifications, the
-assistant's canned answers, and every admin screen. `src/data/types.ts`
-declares its shapes and is the only place the JSON is described.
+Two files drive the whole workspace, because they answer to different people:
+
+* **`demo.json`** — the shell: brand, the person in the topbar, the navigation
+  tree with its badges, the status strip, the notifications, the assistant's
+  canned answers, and the dashboard.
+* **`masters.json`** — the 17 admin descriptors, 135 rows.
+
+`src/data/types.ts` declares both shapes and is the only place the JSON is
+described. `App.tsx` merges them in one line.
 
 To add a master, add an entry to `masters` — a key, labels, `columns` and
 `fields`. It appears in the sidebar and gets a full CRUD screen with no new
@@ -202,25 +212,62 @@ breakdown is the one exception and uses the reserved status tokens with a text
 label beside each mark. Marks are thin, data-ends carry a 2px radius, bars are
 separated by a 2px gap, and the grid is recessive.
 
-## 5. Generic admin UI — `src/admin/AdminPage/`
+## 5. Admin — `src/admin/AdminPage/`, 17 screens, one layout
 
-The application has nine admin master pages — 3,564 lines — each
+The application has fourteen admin master pages — 3,564 lines — each
 re-implementing the same table, dialog, toggle and archive flow against a
-different table. This is that page written once:
+different table. This is that page written **once**, and every admin screen in
+the workspace is it:
 
-* toolbar: search + view filter (Active / Inactive / All / Archived) + add
-* table: columns from the descriptor, one renderer per declared type
-* row actions: status toggle, edit, archive — or restore in the archived view
-* `MasterForm`: create/edit dialog built from `fields`, with required/number
-  validation and fields that lock after creation
-* `ConfirmDialog` for archive and restore, toasts on every write
-* pagination with rows-per-page
-* skeleton rows while the (notional) read is in flight, and three distinct
-  empty states: nothing created yet, the filter matched nothing, the read
-  failed — each with the action that fits it
+**Masters (14)** — Lanes, Languages, Locations, Missions, Task Types, Trade
+Types, Acharya Types, Lead Sources, Departments, Pipeline Stages, Operation
+Stages, Stage Fields, State Codes, Project Types.
+**Access (3)** — Users, Roles, Workspaces.
 
-Nothing in it names a lane, a language or a mission. Writes change component
-state; reload resets everything.
+The shared layout is: page header · optional group tabs · optional summary ·
+toolbar (search + view + extra filters + export + add) · table · pagination,
+with the create/edit dialog, the archive/restore confirm and the toasts behind
+it.
+
+### The extras are parameters, not forks
+
+The real pages differ in a handful of ways. Each of those is one optional key
+on the descriptor, and a master that declares none renders the plain screen:
+
+| Parameter | What it adds | Used by |
+|---|---|---|
+| `reorder` | up/down arrows swapping a numeric order field | Lead Sources, Missions, Pipeline/Operation Stages, Roles |
+| `singleFlag` | a flag only one row may hold, with a "Make default" action | Languages |
+| `filters` | extra equality filters in the toolbar | Lanes, Locations, Task Types, Stage Fields, State Codes, Project Types, Users, Workspaces |
+| `tabs` | grouping tabs with counts above the toolbar | Pipeline Stages |
+| `summary` | count / sum counters over the rows in view | Lanes, Locations, Task Types, Lead Sources, Departments, Users, Workspaces |
+| `exportable` | CSV download of exactly the columns on screen | Lanes, Locations, Lead Sources, State Codes, Users |
+| `detail` | a per-row panel of child records, itself descriptor-driven | Pipeline/Operation Stages (fields), Roles (permissions) |
+
+Reordering is disabled while a search, tab or filter is narrowing the list —
+the arrows swap with the neighbour *in view*, so they are only meaningful when
+the view is the whole ordered set. Two rows sharing an order value say so
+rather than silently doing nothing, as the real screens do.
+
+### Files
+
+| File | Job |
+|---|---|
+| `AdminPage.tsx` | the layout and its state |
+| `useMasterRows.ts` | rows + every write — **the seam the real API goes behind** |
+| `MasterToolbar.tsx` | search, view, filters, export, add |
+| `columns.tsx` | descriptor column → cell, one renderer per type |
+| `MasterForm.tsx` | create/edit dialog built from `fields` |
+| `DetailPanel.tsx` | child records for one row |
+| `SummaryStrip.tsx` | the counters |
+| `exportCsv.ts` | client-side CSV, no request |
+
+Column types: `text · code · badge · flag · number · percent · date · status ·
+color · chips · user`. Field types: `text · textarea · number · select ·
+checkbox · date · color · multiselect`.
+
+Nothing in any of it names a lane, a language or a role. Writes change
+component state; reload resets everything.
 
 ---
 
@@ -288,7 +335,7 @@ Rendered in the playground — check them there rather than reading this list.
 | NotificationBell | unread count · read · empty · mark all read |
 | StatusBar | tones ok / warn / crit / neutral · overflow scroll on a phone |
 | AskMache | pill · panel · suggestions · thinking · thread · expanded · docked left / right |
-| AdminPage | active · inactive · all · archived · search hit / miss · create · edit · toggle busy · archive · restore · empty · paginated |
+| AdminPage | active · inactive · all · archived · search hit / miss · create · edit · toggle busy · archive · restore · empty · paginated · reorder (and its disabled state) · make default · group tabs · extra filters · summary · CSV export · detail panel (add / edit / remove child) |
 
 ---
 

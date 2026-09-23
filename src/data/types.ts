@@ -101,7 +101,21 @@ export interface DemoDashboard {
   activity: DemoActivity[];
 }
 
-export type ColumnType = "text" | "code" | "badge" | "flag" | "number" | "date" | "status";
+export type ColumnType =
+  | "text"
+  | "code"
+  | "badge"
+  | "flag"
+  | "number"
+  | "percent"
+  | "date"
+  | "status"
+  /** Colour swatch + the value, for a row that carries a hex or a hint. */
+  | "color"
+  /** An array of strings, rendered as small pills. */
+  | "chips"
+  /** Initials avatar + name. */
+  | "user";
 
 export interface DemoColumn {
   key: string;
@@ -114,7 +128,17 @@ export interface DemoColumn {
   tones?: Record<string, string>;
 }
 
-export type FieldType = "text" | "textarea" | "number" | "select" | "checkbox" | "date";
+export type FieldType =
+  | "text"
+  | "textarea"
+  | "number"
+  | "select"
+  | "checkbox"
+  | "date"
+  /** Colour picker from a fixed swatch list. */
+  | "color"
+  /** Several values from `options`, stored as an array. */
+  | "multiselect";
 
 export interface DemoField {
   key: string;
@@ -146,6 +170,40 @@ export interface DemoMaster {
   columns: DemoColumn[];
   fields: DemoField[];
   rows: DemoRow[];
+
+  /* ── Optional parameters. Every master uses the SAME page component; these
+        switch on the parts that only some of them need. ───────────────── */
+
+  /** Up/down arrows that swap this numeric field between adjacent rows. */
+  reorder?: { field: string };
+  /**
+   * A flag only one row may hold (a default language, a home branch). Adds a
+   * "Make default" action and clears the flag on every other row.
+   */
+  singleFlag?: { field: string; label: string; action?: string };
+  /** Extra equality filters in the toolbar, beside the view select. */
+  filters?: { key: string; label: string; options: { value: string; label: string }[] }[];
+  /** Grouping tabs above the toolbar, each matching one field value. */
+  tabs?: { label: string; field: string; value: string }[];
+  /** Counters above the table. `sum` needs `field`. */
+  summary?: { label: string; kind: "count" | "sum"; field?: string; where?: { field: string; value: unknown } }[];
+  /** Adds a "Download CSV" button that exports the rows currently in view. */
+  exportable?: boolean;
+  /** Per-row child records, edited in a panel opened from the row. */
+  detail?: DemoDetailPanel;
+}
+
+export interface DemoDetailPanel {
+  /** Row action label, e.g. "Fields". */
+  action: string;
+  /** Panel title; `{row}` is replaced with the row's name. */
+  title: string;
+  /** Key on the row holding the child array. */
+  itemsKey: string;
+  singular: string;
+  columns: DemoColumn[];
+  fields: DemoField[];
+  emptyMessage?: string;
 }
 
 export interface DemoRow {
@@ -164,5 +222,6 @@ export interface DemoData {
   status: DemoStatusItem[];
   notifications: DemoNotification[];
   assistant: DemoAssistant;
+  /** From `masters.json`, merged in at the edge (see App.tsx). */
   masters: DemoMaster[];
 }

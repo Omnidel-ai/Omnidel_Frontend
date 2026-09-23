@@ -631,3 +631,22 @@ input, button, select, textarea { font-family: var(--sans); }
 @media (max-width: 900px) {
   .dash-split { grid-template-columns: 1fr !important; }
 }
+
+/* Reorder arrows in a master table's leading column. */
+.arrow-btn {
+  width: 22px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink-mute);
+  opacity: 0.6;
+  transition: opacity 0.15s, color 0.15s;
+  border-radius: var(--r-sm);
+}
+.arrow-btn:hover:not(:disabled) { opacity: 1; color: var(--green-deep); }
+.arrow-btn:disabled { opacity: 0.2; cursor: not-allowed; }

@@ -58,6 +58,12 @@ const PATHS: Record<string, ReactElement> = {
       <path d="M15 9a4 4 0 0 1 0 6" />
     </>
   ),
+  shield: (
+    <>
+      <path d="M12 3l8 3v6c0 4.2-3.2 7.9-8 9-4.8-1.1-8-4.8-8-9V6z" />
+      <path d="M9.2 12.2l2 2 3.6-3.8" />
+    </>
+  ),
   dot: <circle cx="12" cy="12" r="4" />,
 };
 

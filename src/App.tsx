@@ -7,11 +7,14 @@ import { DashboardHome } from "./dashboard";
 import { HomePage } from "./playground/HomePage";
 import { PlaceholderPage } from "./playground/PlaceholderPage";
 import demo from "./data/demo.json";
-import type { DemoData } from "./data/types";
+import masters from "./data/masters.json";
+import type { DemoData, DemoMaster } from "./data/types";
 
 // One cast at the edge: JSON has no types, and everything downstream reads the
-// declared shapes. When the real API lands, this is the line that changes.
-const DATA = demo as DemoData;
+// declared shapes. The shell's content and the admin descriptors are separate
+// files because they answer to different people — when the real API lands,
+// these are the lines that change.
+const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 
 /**
  * Demo application.
