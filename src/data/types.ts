@@ -25,6 +25,11 @@ export interface DemoNavChild {
   label: string;
   href: string;
   badge?: number;
+  /**
+   * A third level — Admin's groups (Sales & Pipeline, People & Access, …) hold
+   * their pages here. A child with `children` is a heading, not a destination.
+   */
+  children?: DemoNavChild[];
 }
 
 export interface DemoNavItem {
@@ -206,6 +211,29 @@ export interface DemoDetailPanel {
   emptyMessage?: string;
 }
 
+export interface DemoSettingsGroup {
+  title: string;
+  description?: string;
+  fields: DemoField[];
+}
+
+/**
+ * A single-record admin screen — Business Details, company settings.
+ *
+ * The other admin layout: groups of fields instead of columns, saved in place.
+ * It shares the field controls and the validation with the master dialog.
+ */
+export interface DemoSettings {
+  key: string;
+  label: string;
+  module: string;
+  section: string;
+  eyebrow?: string;
+  description?: string;
+  groups: DemoSettingsGroup[];
+  values: Record<string, unknown>;
+}
+
 export interface DemoRow {
   id: string;
   is_active: boolean;
@@ -224,4 +252,6 @@ export interface DemoData {
   assistant: DemoAssistant;
   /** From `masters.json`, merged in at the edge (see App.tsx). */
   masters: DemoMaster[];
+  /** Single-record admin screens. */
+  settings: DemoSettings[];
 }

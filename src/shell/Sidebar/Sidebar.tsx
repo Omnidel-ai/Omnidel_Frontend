@@ -47,7 +47,8 @@ export function Sidebar({
   // The section whose children are shown. Starts on whichever section owns the
   // active route, so a deep link opens with its group already unfolded.
   const [openSection, setOpenSection] = useState<string | null>(
-    () => items.find((i) => i.children?.some((c) => c.href === activeHref))?.href ?? null,
+    // Look two levels down, so /admin/lanes opens Admin as well as its group.
+    () => items.find((i) => (i.children ?? []).some((c) => holds(c, activeHref)))?.href ?? null,
   );
 
   const width = isMobile ? SIDEBAR_W_OPEN : collapsed ? SIDEBAR_W_CLOSED : SIDEBAR_W_OPEN;
@@ -281,7 +282,11 @@ function NavSection({
   onNavigate: (href: string) => void;
 }) {
   const kids = item.children ?? [];
-  const anyActive = kids.some((c) => c.href === activeHref);
+  const anyActive = kids.some((c) => c.href === activeHref || holds(c, activeHref));
+  // One sub-group open at a time, starting on whichever holds the open page.
+  const [openSub, setOpenSub] = useState<string | null>(
+    () => kids.find((c) => holds(c, activeHref))?.href ?? null,
+  );
   const [flyout, setFlyout] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [flyoutTop, setFlyoutTop] = useState(0);
@@ -347,14 +352,21 @@ function NavSection({
           marginLeft: 22,
           borderLeft: "1px solid var(--rule)",
           marginBottom: 4,
-          maxHeight: !collapsed && open ? kids.length * 34 + 8 : 0,
+          maxHeight: !collapsed && open ? kids.length * 34 + 8 + subHeight(kids, openSub) : 0,
           opacity: !collapsed && open ? 1 : 0,
           overflow: "hidden",
           transition: `max-height 240ms ${EASE_OUT}, opacity ${FADE_MS}ms ${EASE_OUT}`,
         }}
       >
         {kids.map((c) => (
-          <ChildRow key={c.href} child={c} active={c.href === activeHref} onNavigate={onNavigate} />
+          <ChildRow
+            key={c.href}
+            child={c}
+            activeHref={activeHref}
+            onNavigate={onNavigate}
+            openSub={openSub}
+            onToggleSub={(href) => setOpenSub((cur) => (cur === href ? null : href))}
+          />
         ))}
       </div>
 
@@ -388,9 +400,26 @@ function NavSection({
           >
             {item.label}
           </div>
-          {kids.map((c) => (
-            <ChildRow key={c.href} child={c} active={c.href === activeHref} onNavigate={onNavigate} />
-          ))}
+          {/* In the flyout every group is open: a hover card that needed a
+              second click to reveal its pages would defeat the point. */}
+          {kids.map((c) =>
+            c.children?.length ? (
+              <div key={c.href}>
+                <div style={flyoutGroupStyle}>{c.label}</div>
+                {c.children.map((g) => (
+                  <ChildRow
+                    key={g.href}
+                    child={g}
+                    activeHref={activeHref}
+                    onNavigate={onNavigate}
+                    indent
+                  />
+                ))}
+              </div>
+            ) : (
+              <ChildRow key={c.href} child={c} activeHref={activeHref} onNavigate={onNavigate} />
+            ),
+          )}
         </div>
       )}
     </div>
@@ -399,13 +428,90 @@ function NavSection({
 
 function ChildRow({
   child,
-  active,
+  activeHref,
   onNavigate,
+  openSub,
+  onToggleSub,
+  indent = false,
 }: {
   child: DemoNavChild;
-  active: boolean;
+  activeHref: string;
   onNavigate: (href: string) => void;
+  /** Which sub-group the parent section currently has open. */
+  openSub?: string | null;
+  onToggleSub?: (href: string) => void;
+  /** Third-level padding, used inside a sub-group and in the flyout. */
+  indent?: boolean;
 }) {
+  const kids = child.children ?? [];
+
+  // A child with children is a heading (Sales & Pipeline, People & Access):
+  // it opens its pages rather than navigating anywhere itself.
+  if (kids.length > 0) {
+    const open = openSub === child.href;
+    const anyActive = kids.some((g) => g.href === activeHref);
+    return (
+      <div>
+        <button
+          type="button"
+          className="nav-link"
+          onClick={() => onToggleSub?.(child.href)}
+          aria-expanded={open}
+          style={{
+            ...childRowStyle,
+            color: anyActive || open ? "var(--green-deep)" : "var(--ink-soft)",
+            fontWeight: anyActive ? 600 : 400,
+            background: "transparent",
+          }}
+        >
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {child.label}
+          </span>
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--ink-mute)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            style={{
+              flexShrink: 0,
+              transform: open ? "rotate(90deg)" : "rotate(0)",
+              transition: `transform 180ms ${EASE_OUT}`,
+            }}
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+
+        <div
+          style={{
+            marginLeft: 10,
+            borderLeft: "1px solid var(--rule)",
+            maxHeight: open ? kids.length * 32 + 6 : 0,
+            opacity: open ? 1 : 0,
+            overflow: "hidden",
+            transition: `max-height 220ms ${EASE_OUT}, opacity ${FADE_MS}ms ${EASE_OUT}`,
+          }}
+        >
+          {kids.map((g) => (
+            <ChildRow
+              key={g.href}
+              child={g}
+              activeHref={activeHref}
+              onNavigate={onNavigate}
+              indent
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const active = child.href === activeHref;
   return (
     <button
       type="button"
@@ -413,18 +519,10 @@ function ChildRow({
       onClick={() => onNavigate(child.href)}
       aria-current={active ? "page" : undefined}
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 8,
-        width: "100%",
-        padding: "8px 14px",
-        fontSize: 13,
-        fontFamily: "var(--sans)",
-        border: "none",
-        textAlign: "left",
-        cursor: "pointer",
-        color: active ? "var(--green-deep)" : "var(--ink-soft)",
+        ...childRowStyle,
+        paddingLeft: indent ? 20 : 14,
+        fontSize: indent ? 12.5 : 13,
+        color: active ? "var(--green-deep)" : indent ? "var(--ink-mute)" : "var(--ink-soft)",
         fontWeight: active ? 600 : 400,
         background: active ? "var(--green-wash)" : "transparent",
       }}
@@ -435,6 +533,40 @@ function ChildRow({
       {child.badge != null && child.badge > 0 && <StageCount n={child.badge} active={active} />}
     </button>
   );
+}
+
+const childRowStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 8,
+  width: "100%",
+  padding: "8px 14px",
+  fontSize: 13,
+  fontFamily: "var(--sans)",
+  border: "none",
+  textAlign: "left",
+  cursor: "pointer",
+};
+
+const flyoutGroupStyle: CSSProperties = {
+  padding: "8px 14px 4px",
+  fontFamily: "var(--mono)",
+  fontSize: 9,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: "var(--ink-faint)",
+};
+
+/** Does this child, or any page under it, own the open route? */
+function holds(child: DemoNavChild, activeHref: string): boolean {
+  return child.href === activeHref || (child.children ?? []).some((g) => g.href === activeHref);
+}
+
+/** Extra height the inline list needs while a sub-group is open. */
+function subHeight(kids: DemoNavChild[], openSub: string | null): number {
+  const open = kids.find((c) => c.href === openSub);
+  return open?.children?.length ? open.children.length * 32 + 6 : 0;
 }
 
 function StageCount({ n, active }: { n: number; active: boolean }) {

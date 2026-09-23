@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Toaster } from "./components";
 import { ShellLayout } from "./shell";
-import { AdminPage } from "./admin";
+import { AdminPage, SettingsPage } from "./admin";
 import { Playground } from "./playground/Playground";
 import { DashboardHome } from "./dashboard";
 import { HomePage } from "./playground/HomePage";
@@ -16,6 +16,11 @@ import type { DemoData, DemoMaster } from "./data/types";
 // these are the lines that change.
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 
+/** /admin/<key> → the master or the settings record with that key. */
+function adminKey(href: string): string | null {
+  return href.startsWith("/admin/") ? href.slice("/admin/".length) : null;
+}
+
 /**
  * Demo application.
  *
@@ -28,9 +33,9 @@ export function App() {
   const [activeHref, setActiveHref] = useState("/home");
   const [search, setSearch] = useState("");
 
-  const master = activeHref.startsWith("/admin/")
-    ? DATA.masters.find((m) => m.key === activeHref.slice("/admin/".length))
-    : undefined;
+  const key = adminKey(activeHref);
+  const master = key ? DATA.masters.find((m) => m.key === key) : undefined;
+  const settings = key ? DATA.settings.find((s) => s.key === key) : undefined;
 
   return (
     <>
@@ -48,6 +53,11 @@ export function App() {
           // The topbar search reaches the admin table so the shell's search is
           // not decorative; the page keeps its own box too.
           <AdminPage key={master.key} master={master} externalSearch={search} />
+        ) : settings ? (
+          <SettingsPage key={settings.key} settings={settings} />
+        ) : activeHref === "/admin/dashboard" ? (
+          // Admin's own dashboard is the dashboard — one component, two routes.
+          <DashboardHome data={DATA} onNavigate={setActiveHref} />
         ) : activeHref === "/playground" ? (
           <Playground />
         ) : activeHref === "/home" ? (

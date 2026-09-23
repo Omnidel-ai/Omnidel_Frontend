@@ -12,7 +12,7 @@
 import { renderToString } from "react-dom/server";
 import { App } from "../src/App";
 import { Playground } from "../src/playground/Playground";
-import { AdminPage } from "../src/admin";
+import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
@@ -37,6 +37,11 @@ const screens: Screen[] = [
       ["assistant pill", "Ask MahAcharya"],
       ["brand", DATA.brand.name],
       ["masters listed", DATA.masters[0].label],
+      // The Admin tree is three levels deep: item → group → page. The group
+      // labels carry an ampersand, which renders escaped.
+      ["admin group (sales)", "Sales &amp; Pipeline"],
+      ["admin group (people)", "People &amp; Access"],
+      ["a page inside a group", "Pipeline Stages"],
     ],
   },
   {
@@ -74,6 +79,17 @@ const screens: Screen[] = [
   // Every master, through the one shared page — and each optional parameter
   // asserted on the masters that declare it, so the layout staying shared does
   // not mean the extras quietly stopped rendering.
+  ...DATA.settings.map((st) => ({
+    name: `admin/${st.key}`,
+    html: renderToString(<SettingsPage settings={st} />),
+    markers: [
+      ["title", st.label],
+      ["first group", st.groups[0].title],
+      ["last group", st.groups[st.groups.length - 1].title],
+      ["a field label", st.groups[0].fields[0].label],
+      ["clean state", "No unsaved changes"],
+    ] as Array<[string, string]>,
+  })),
   ...DATA.masters.map((m) => ({
     name: `admin/${m.key}`,
     html: renderToString(<AdminPage master={m} />),
