@@ -15,9 +15,10 @@ import { Playground } from "../src/playground/Playground";
 import { AdminPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import demo from "../src/data/demo.json";
-import type { DemoData } from "../src/data/types";
+import masters from "../src/data/masters.json";
+import type { DemoData, DemoMaster } from "../src/data/types";
 
-const DATA = demo as DemoData;
+const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 
 interface Screen {
   name: string;
@@ -70,6 +71,9 @@ const screens: Screen[] = [
       ["range filter", "12 weeks"],
     ],
   },
+  // Every master, through the one shared page — and each optional parameter
+  // asserted on the masters that declare it, so the layout staying shared does
+  // not mean the extras quietly stopped rendering.
   ...DATA.masters.map((m) => ({
     name: `admin/${m.key}`,
     html: renderToString(<AdminPage master={m} />),
@@ -77,11 +81,18 @@ const screens: Screen[] = [
       ["toolbar", "table-toolbar"],
       ["table card", "table-wrap"],
       ["table header", "table-header"],
-      // A master with no rows renders the empty state instead of rows; both
-      // paths still draw the header strip and the toolbar.
-      [m.rows.length > 0 ? "table row" : "empty state", m.rows.length > 0 ? "table-row" : "table-header"],
       ["first column header", m.columns[0].header],
       ["add button", m.singular.toLowerCase()],
+      ...(m.rows.length > 0
+        ? ([["a data row", String(m.rows[0][m.columns[0].key] ?? m.rows[0].id)]] as Array<[string, string]>)
+        : ([["empty state", m.emptyMessage ?? "yet"]] as Array<[string, string]>)),
+      ...(m.reorder ? ([["reorder arrows", "arrow-btn"]] as Array<[string, string]>) : []),
+      ...(m.singleFlag ? ([["default action", m.singleFlag.action ?? "Make default"]] as Array<[string, string]>) : []),
+      ...(m.detail ? ([["detail action", m.detail.action]] as Array<[string, string]>) : []),
+      ...(m.exportable ? ([["csv export", "Download CSV"]] as Array<[string, string]>) : []),
+      ...(m.summary?.length ? ([["summary strip", m.summary[0].label]] as Array<[string, string]>) : []),
+      ...(m.tabs?.length ? ([["group tabs", m.tabs[0].label]] as Array<[string, string]>) : []),
+      ...(m.filters?.length ? ([["extra filter", `Any ${m.filters[0].label.toLowerCase()}`]] as Array<[string, string]>) : []),
     ] as Array<[string, string]>,
   })),
 ];

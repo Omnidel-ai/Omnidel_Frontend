@@ -1,0 +1,4019 @@
+[
+  {
+    "key": "lanes",
+    "label": "Lanes",
+    "singular": "Lane",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search lanes…",
+    "minWidth": 980,
+    "filters": [
+      {
+        "key": "region",
+        "label": "Region",
+        "options": [
+          {
+            "value": "North",
+            "label": "North"
+          },
+          {
+            "value": "South",
+            "label": "South"
+          },
+          {
+            "value": "East",
+            "label": "East"
+          },
+          {
+            "value": "West",
+            "label": "West"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Lanes",
+        "kind": "count"
+      },
+      {
+        "label": "Stops",
+        "kind": "sum",
+        "field": "stops"
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "code",
+        "header": "Code",
+        "width": "110px",
+        "type": "code"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(180px, 2fr)"
+      },
+      {
+        "key": "color",
+        "header": "Colour",
+        "width": "130px",
+        "type": "color"
+      },
+      {
+        "key": "region",
+        "header": "Region",
+        "width": "110px"
+      },
+      {
+        "key": "cycle",
+        "header": "Cycle",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Daily": "green",
+          "Weekly": "ochre",
+          "On demand": "neutral"
+        }
+      },
+      {
+        "key": "stops",
+        "header": "Stops",
+        "width": "90px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "code",
+        "label": "Code",
+        "type": "text",
+        "required": true,
+        "placeholder": "LN-013",
+        "hint": "Printed on delivery labels. Cannot change later.",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Newtown → Barasat"
+      },
+      {
+        "key": "color",
+        "label": "Colour",
+        "type": "color",
+        "hint": "Shown on the board and the route sheet."
+      },
+      {
+        "key": "region",
+        "label": "Region",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "North",
+            "label": "North"
+          },
+          {
+            "value": "South",
+            "label": "South"
+          },
+          {
+            "value": "East",
+            "label": "East"
+          },
+          {
+            "value": "West",
+            "label": "West"
+          }
+        ]
+      },
+      {
+        "key": "cycle",
+        "label": "Cycle",
+        "type": "select",
+        "options": [
+          {
+            "value": "Daily",
+            "label": "Daily"
+          },
+          {
+            "value": "Weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "On demand",
+            "label": "On demand"
+          }
+        ]
+      },
+      {
+        "key": "stops",
+        "label": "Stops",
+        "type": "number",
+        "placeholder": "12"
+      },
+      {
+        "key": "opened_on",
+        "label": "Opened on",
+        "type": "date"
+      },
+      {
+        "key": "notes",
+        "label": "Notes",
+        "type": "textarea",
+        "placeholder": "Anything a dispatcher should know…"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ln1",
+        "code": "LN-001",
+        "name": "Newtown → Barasat",
+        "region": "South",
+        "cycle": "Weekly",
+        "color": "#a74a2d",
+        "stops": 14,
+        "opened_on": "2025-02-14",
+        "is_active": true
+      },
+      {
+        "id": "ln2",
+        "code": "LN-002",
+        "name": "Salt Lake → Rajarhat",
+        "region": "East",
+        "cycle": "On demand",
+        "color": "#a5711a",
+        "stops": 9,
+        "opened_on": "2025-03-14",
+        "is_active": true
+      },
+      {
+        "id": "ln3",
+        "code": "LN-003",
+        "name": "Howrah → Santragachi",
+        "region": "West",
+        "cycle": "Daily",
+        "color": "#3b6f49",
+        "stops": 6,
+        "opened_on": "2025-04-14",
+        "is_active": true
+      },
+      {
+        "id": "ln4",
+        "code": "LN-004",
+        "name": "Behala → Thakurpukur",
+        "region": "North",
+        "cycle": "Weekly",
+        "color": "#8b3320",
+        "stops": 3,
+        "opened_on": "2025-05-14",
+        "is_active": true,
+        "is_archived": true
+      },
+      {
+        "id": "ln5",
+        "code": "LN-005",
+        "name": "Garia → Sonarpur",
+        "region": "South",
+        "cycle": "On demand",
+        "color": "#6a5acd",
+        "stops": 11,
+        "opened_on": "2025-06-14",
+        "is_active": true
+      },
+      {
+        "id": "ln6",
+        "code": "LN-006",
+        "name": "Dumdum → Madhyamgram",
+        "region": "East",
+        "cycle": "Daily",
+        "color": "#254a33",
+        "stops": 7,
+        "opened_on": "2025-07-14",
+        "is_active": false
+      },
+      {
+        "id": "ln7",
+        "code": "LN-007",
+        "name": "Sealdah → Dhakuria",
+        "region": "West",
+        "cycle": "Weekly",
+        "color": "#a74a2d",
+        "stops": 16,
+        "opened_on": "2025-08-14",
+        "is_active": true
+      },
+      {
+        "id": "ln8",
+        "code": "LN-008",
+        "name": "Park Circus → Tangra",
+        "region": "North",
+        "cycle": "On demand",
+        "color": "#a5711a",
+        "stops": 4,
+        "opened_on": "2025-09-14",
+        "is_active": true
+      },
+      {
+        "id": "ln9",
+        "code": "LN-009",
+        "name": "Kasba → Ruby",
+        "region": "South",
+        "cycle": "Daily",
+        "color": "#3b6f49",
+        "stops": 8,
+        "opened_on": "2025-10-14",
+        "is_active": true
+      },
+      {
+        "id": "ln10",
+        "code": "LN-010",
+        "name": "Barrackpore → Sodepur",
+        "region": "East",
+        "cycle": "Weekly",
+        "color": "#8b3320",
+        "stops": 5,
+        "opened_on": "2025-11-14",
+        "is_active": true
+      },
+      {
+        "id": "ln11",
+        "code": "LN-011",
+        "name": "Maheshtala → Budge Budge",
+        "region": "West",
+        "cycle": "On demand",
+        "color": "#6a5acd",
+        "stops": 2,
+        "opened_on": "2025-12-14",
+        "is_active": true
+      },
+      {
+        "id": "ln12",
+        "code": "LN-012",
+        "name": "Uluberia → Bagnan",
+        "region": "North",
+        "cycle": "Daily",
+        "color": "#254a33",
+        "stops": 6,
+        "opened_on": "2025-01-14",
+        "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "languages",
+    "label": "Languages",
+    "singular": "Language",
+    "module": "Admin",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search languages…",
+    "minWidth": 860,
+    "singleFlag": {
+      "field": "is_default",
+      "label": "Default",
+      "action": "Make default"
+    },
+    "columns": [
+      {
+        "key": "code",
+        "header": "Code",
+        "width": "90px",
+        "type": "code"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(140px, 1.6fr)"
+      },
+      {
+        "key": "google_code",
+        "header": "Google code",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "coverage",
+        "header": "Coverage",
+        "width": "120px",
+        "type": "percent",
+        "align": "right"
+      },
+      {
+        "key": "is_default",
+        "header": "Default",
+        "width": "110px",
+        "type": "flag"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "code",
+        "label": "Code",
+        "type": "text",
+        "required": true,
+        "placeholder": "bn",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Bengali"
+      },
+      {
+        "key": "google_code",
+        "label": "Google code",
+        "type": "text",
+        "placeholder": "bn-IN",
+        "hint": "Used by the translation pipeline."
+      },
+      {
+        "key": "coverage",
+        "label": "Coverage %",
+        "type": "number",
+        "placeholder": "90"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "lg1",
+        "code": "en",
+        "name": "English",
+        "google_code": "en",
+        "coverage": 100,
+        "is_default": true,
+        "is_active": true
+      },
+      {
+        "id": "lg2",
+        "code": "hi",
+        "name": "Hindi",
+        "google_code": "hi-IN",
+        "coverage": 96,
+        "is_default": false,
+        "is_active": true
+      },
+      {
+        "id": "lg3",
+        "code": "bn",
+        "name": "Bengali",
+        "google_code": "bn-IN",
+        "coverage": 94,
+        "is_default": false,
+        "is_active": true
+      },
+      {
+        "id": "lg4",
+        "code": "ta",
+        "name": "Tamil",
+        "google_code": "ta-IN",
+        "coverage": 61,
+        "is_default": false,
+        "is_active": true
+      },
+      {
+        "id": "lg5",
+        "code": "te",
+        "name": "Telugu",
+        "google_code": "te-IN",
+        "coverage": 58,
+        "is_default": false,
+        "is_active": false
+      },
+      {
+        "id": "lg6",
+        "code": "mr",
+        "name": "Marathi",
+        "google_code": "mr-IN",
+        "coverage": 44,
+        "is_default": false,
+        "is_active": false
+      },
+      {
+        "id": "lg7",
+        "code": "gu",
+        "name": "Gujarati",
+        "google_code": "gu-IN",
+        "coverage": 31,
+        "is_default": false,
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "lg8",
+        "code": "or",
+        "name": "Odia",
+        "google_code": "or-IN",
+        "coverage": 12,
+        "is_default": false,
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "locations",
+    "label": "Locations",
+    "singular": "Location",
+    "module": "Admin",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search locations…",
+    "minWidth": 940,
+    "filters": [
+      {
+        "key": "kind",
+        "label": "Kind",
+        "options": [
+          {
+            "value": "Warehouse",
+            "label": "Warehouse"
+          },
+          {
+            "value": "Branch",
+            "label": "Branch"
+          },
+          {
+            "value": "Pickup point",
+            "label": "Pickup point"
+          }
+        ]
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "options": [
+          {
+            "value": "Kolkata",
+            "label": "Kolkata"
+          },
+          {
+            "value": "Howrah",
+            "label": "Howrah"
+          },
+          {
+            "value": "Barasat",
+            "label": "Barasat"
+          },
+          {
+            "value": "Sonarpur",
+            "label": "Sonarpur"
+          },
+          {
+            "value": "Bagnan",
+            "label": "Bagnan"
+          },
+          {
+            "value": "Budge Budge",
+            "label": "Budge Budge"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Sites",
+        "kind": "count"
+      },
+      {
+        "label": "Capacity",
+        "kind": "sum",
+        "field": "capacity"
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "kind",
+        "header": "Kind",
+        "width": "130px",
+        "type": "badge",
+        "tones": {
+          "Warehouse": "green",
+          "Branch": "ochre",
+          "Pickup point": "neutral"
+        }
+      },
+      {
+        "key": "city",
+        "header": "City",
+        "width": "120px"
+      },
+      {
+        "key": "pin",
+        "header": "PIN",
+        "width": "100px",
+        "type": "code"
+      },
+      {
+        "key": "capacity",
+        "header": "Capacity",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Newtown Warehouse"
+      },
+      {
+        "key": "kind",
+        "label": "Kind",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Warehouse",
+            "label": "Warehouse"
+          },
+          {
+            "value": "Branch",
+            "label": "Branch"
+          },
+          {
+            "value": "Pickup point",
+            "label": "Pickup point"
+          }
+        ]
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "type": "text",
+        "required": true,
+        "placeholder": "Kolkata"
+      },
+      {
+        "key": "pin",
+        "label": "PIN",
+        "type": "text",
+        "placeholder": "700156"
+      },
+      {
+        "key": "capacity",
+        "label": "Capacity",
+        "type": "number",
+        "placeholder": "500",
+        "hint": "Crates the site can hold."
+      },
+      {
+        "key": "opened_on",
+        "label": "Opened on",
+        "type": "date"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "lo1",
+        "name": "Newtown Warehouse",
+        "kind": "Warehouse",
+        "city": "Kolkata",
+        "pin": "700120",
+        "capacity": 820,
+        "opened_on": "2025-01-08",
+        "is_active": true
+      },
+      {
+        "id": "lo2",
+        "name": "Salt Lake Branch",
+        "kind": "Branch",
+        "city": "Howrah",
+        "pin": "700121",
+        "capacity": 140,
+        "opened_on": "2025-02-08",
+        "is_active": true
+      },
+      {
+        "id": "lo3",
+        "name": "Howrah Pickup",
+        "kind": "Pickup point",
+        "city": "Barasat",
+        "pin": "700122",
+        "capacity": 40,
+        "opened_on": "2025-03-08",
+        "is_active": true
+      },
+      {
+        "id": "lo4",
+        "name": "Barasat Branch",
+        "kind": "Warehouse",
+        "city": "Sonarpur",
+        "pin": "700123",
+        "capacity": 110,
+        "opened_on": "2025-04-08",
+        "is_active": false
+      },
+      {
+        "id": "lo5",
+        "name": "Rajarhat Warehouse",
+        "kind": "Branch",
+        "city": "Bagnan",
+        "pin": "700124",
+        "capacity": 640,
+        "opened_on": "2025-05-08",
+        "is_active": true
+      },
+      {
+        "id": "lo6",
+        "name": "Behala Pickup",
+        "kind": "Pickup point",
+        "city": "Budge Budge",
+        "pin": "700125",
+        "capacity": 25,
+        "opened_on": "2025-06-08",
+        "is_active": true
+      },
+      {
+        "id": "lo7",
+        "name": "Sonarpur Branch",
+        "kind": "Warehouse",
+        "city": "Kolkata",
+        "pin": "700126",
+        "capacity": 95,
+        "opened_on": "2025-07-08",
+        "is_active": true
+      },
+      {
+        "id": "lo8",
+        "name": "Bagnan Depot",
+        "kind": "Branch",
+        "city": "Howrah",
+        "pin": "700127",
+        "capacity": 300,
+        "opened_on": "2025-08-08",
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "lo9",
+        "name": "Dumdum Branch",
+        "kind": "Pickup point",
+        "city": "Barasat",
+        "pin": "700128",
+        "capacity": 120,
+        "opened_on": "2025-09-08",
+        "is_active": true
+      },
+      {
+        "id": "lo10",
+        "name": "Sealdah Pickup",
+        "kind": "Warehouse",
+        "city": "Sonarpur",
+        "pin": "700129",
+        "capacity": 35,
+        "opened_on": "2025-10-08",
+        "is_active": true
+      },
+      {
+        "id": "lo11",
+        "name": "Budge Budge Depot",
+        "kind": "Branch",
+        "city": "Bagnan",
+        "pin": "700130",
+        "capacity": 260,
+        "opened_on": "2025-11-08",
+        "is_active": true
+      },
+      {
+        "id": "lo12",
+        "name": "Tangra Branch",
+        "kind": "Pickup point",
+        "city": "Budge Budge",
+        "pin": "700131",
+        "capacity": 80,
+        "opened_on": "2025-12-08",
+        "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "missions",
+    "label": "Missions",
+    "singular": "Mission",
+    "module": "OmniVarsity",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search missions…",
+    "minWidth": 860,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(180px, 2fr)"
+      },
+      {
+        "key": "owner",
+        "header": "Owner",
+        "width": "140px",
+        "type": "user"
+      },
+      {
+        "key": "horizon",
+        "header": "Horizon",
+        "width": "130px",
+        "type": "badge",
+        "tones": {
+          "Quarter": "green",
+          "Year": "ochre",
+          "Ongoing": "neutral"
+        }
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Serve 10,000 households"
+      },
+      {
+        "key": "owner",
+        "label": "Owner",
+        "type": "select",
+        "options": [
+          {
+            "value": "Ananya",
+            "label": "Ananya"
+          },
+          {
+            "value": "Bikram",
+            "label": "Bikram"
+          },
+          {
+            "value": "Chandni",
+            "label": "Chandni"
+          },
+          {
+            "value": "Devraj",
+            "label": "Devraj"
+          }
+        ]
+      },
+      {
+        "key": "horizon",
+        "label": "Horizon",
+        "type": "select",
+        "options": [
+          {
+            "value": "Quarter",
+            "label": "Quarter"
+          },
+          {
+            "value": "Year",
+            "label": "Year"
+          },
+          {
+            "value": "Ongoing",
+            "label": "Ongoing"
+          }
+        ]
+      },
+      {
+        "key": "statement",
+        "label": "Statement",
+        "type": "textarea",
+        "placeholder": "One sentence, in plain words."
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ms1",
+        "name": "Serve 10,000 households",
+        "owner": "Ananya",
+        "horizon": "Quarter",
+        "sort_order": 1,
+        "statement": "",
+        "is_active": true
+      },
+      {
+        "id": "ms2",
+        "name": "Zero waste at source",
+        "owner": "Bikram",
+        "horizon": "Year",
+        "sort_order": 2,
+        "statement": "",
+        "is_active": true
+      },
+      {
+        "id": "ms3",
+        "name": "Kaarigar livelihoods",
+        "owner": "Chandni",
+        "horizon": "Ongoing",
+        "sort_order": 3,
+        "statement": "",
+        "is_active": true
+      },
+      {
+        "id": "ms4",
+        "name": "Same-day fulfilment",
+        "owner": "Devraj",
+        "horizon": "Quarter",
+        "sort_order": 4,
+        "statement": "",
+        "is_active": false
+      },
+      {
+        "id": "ms5",
+        "name": "Vernacular first",
+        "owner": "Ananya",
+        "horizon": "Year",
+        "sort_order": 5,
+        "statement": "",
+        "is_active": true
+      },
+      {
+        "id": "ms6",
+        "name": "Founder-free operations",
+        "owner": "Bikram",
+        "horizon": "Ongoing",
+        "sort_order": 6,
+        "statement": "",
+        "is_active": true
+      },
+      {
+        "id": "ms7",
+        "name": "Seasonal produce only",
+        "owner": "Chandni",
+        "horizon": "Quarter",
+        "sort_order": 7,
+        "statement": "",
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "ms8",
+        "name": "Two-hour support reply",
+        "owner": "Devraj",
+        "horizon": "Year",
+        "sort_order": 8,
+        "statement": "",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "task-types",
+    "label": "Task Types",
+    "singular": "Task type",
+    "module": "OmniPulse",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search task types…",
+    "minWidth": 900,
+    "filters": [
+      {
+        "key": "priority",
+        "label": "Priority",
+        "options": [
+          {
+            "value": "High",
+            "label": "High"
+          },
+          {
+            "value": "Normal",
+            "label": "Normal"
+          },
+          {
+            "value": "Low",
+            "label": "Low"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Types",
+        "kind": "count"
+      },
+      {
+        "label": "Needing proof",
+        "kind": "count",
+        "where": {
+          "field": "requires_proof",
+          "value": true
+        }
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "150px",
+        "type": "code"
+      },
+      {
+        "key": "priority",
+        "header": "Priority",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "High": "crit",
+          "Normal": "amber",
+          "Low": "ok"
+        }
+      },
+      {
+        "key": "sla_hours",
+        "header": "SLA (h)",
+        "width": "100px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "requires_proof",
+        "header": "Proof",
+        "width": "90px",
+        "type": "flag"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Site inspection"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "site-inspection",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "priority",
+        "label": "Priority",
+        "type": "select",
+        "options": [
+          {
+            "value": "High",
+            "label": "High"
+          },
+          {
+            "value": "Normal",
+            "label": "Normal"
+          },
+          {
+            "value": "Low",
+            "label": "Low"
+          }
+        ]
+      },
+      {
+        "key": "sla_hours",
+        "label": "SLA (hours)",
+        "type": "number",
+        "placeholder": "24"
+      },
+      {
+        "key": "requires_proof",
+        "label": "Requires proof",
+        "type": "checkbox",
+        "hint": "Assignee must attach a photo or a note."
+      },
+      {
+        "key": "description",
+        "label": "Description",
+        "type": "textarea"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "tt1",
+        "name": "Site inspection",
+        "slug": "site-inspection",
+        "priority": "High",
+        "sla_hours": 24,
+        "requires_proof": true,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt2",
+        "name": "Customer call-back",
+        "slug": "customer-callback",
+        "priority": "Normal",
+        "sla_hours": 8,
+        "requires_proof": false,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt3",
+        "name": "Stock count",
+        "slug": "stock-count",
+        "priority": "Normal",
+        "sla_hours": 48,
+        "requires_proof": true,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt4",
+        "name": "Escalation review",
+        "slug": "escalation-review",
+        "priority": "High",
+        "sla_hours": 4,
+        "requires_proof": false,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt5",
+        "name": "Content approval",
+        "slug": "content-approval",
+        "priority": "Low",
+        "sla_hours": 72,
+        "requires_proof": false,
+        "description": "",
+        "is_active": false
+      },
+      {
+        "id": "tt6",
+        "name": "Vendor onboarding",
+        "slug": "vendor-onboarding",
+        "priority": "Normal",
+        "sla_hours": 96,
+        "requires_proof": true,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt7",
+        "name": "Waste disposal log",
+        "slug": "waste-log",
+        "priority": "Low",
+        "sla_hours": 24,
+        "requires_proof": true,
+        "description": "",
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "tt8",
+        "name": "Route audit",
+        "slug": "route-audit",
+        "priority": "Normal",
+        "sla_hours": 36,
+        "requires_proof": false,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt9",
+        "name": "Training session",
+        "slug": "training-session",
+        "priority": "Low",
+        "sla_hours": 120,
+        "requires_proof": false,
+        "description": "",
+        "is_active": true
+      },
+      {
+        "id": "tt10",
+        "name": "Payment follow-up",
+        "slug": "payment-followup",
+        "priority": "High",
+        "sla_hours": 12,
+        "requires_proof": false,
+        "description": "",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "trade-types",
+    "label": "Trade Types",
+    "singular": "Trade type",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search trade types…",
+    "emptyMessage": "No trade types yet",
+    "emptyHint": "Trade types classify a kaarigar's work — carpentry, plumbing, wiring. Add the first one to get started.",
+    "minWidth": 760,
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "150px",
+        "type": "code"
+      },
+      {
+        "key": "day_rate",
+        "header": "Day rate",
+        "width": "120px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Carpentry"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "carpentry",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "day_rate",
+        "label": "Day rate (₹)",
+        "type": "number",
+        "placeholder": "850"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": []
+  },
+  {
+    "key": "acharya-types",
+    "label": "Acharya Types",
+    "singular": "Acharya type",
+    "module": "OmniVarsity",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search acharya types…",
+    "minWidth": 880,
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(150px, 1.4fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "skills",
+        "header": "Capabilities",
+        "width": "minmax(180px, 2fr)",
+        "type": "chips"
+      },
+      {
+        "key": "rank",
+        "header": "Rank",
+        "width": "80px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Acharya"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "acharya",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "skills",
+        "label": "Capabilities",
+        "type": "multiselect",
+        "hint": "What this type is allowed to do.",
+        "options": [
+          {
+            "value": "Teaching",
+            "label": "Teaching"
+          },
+          {
+            "value": "Mentoring",
+            "label": "Mentoring"
+          },
+          {
+            "value": "Practice",
+            "label": "Practice"
+          },
+          {
+            "value": "Craft",
+            "label": "Craft"
+          },
+          {
+            "value": "Field work",
+            "label": "Field work"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          },
+          {
+            "value": "Learning",
+            "label": "Learning"
+          },
+          {
+            "value": "Review",
+            "label": "Review"
+          },
+          {
+            "value": "Curriculum",
+            "label": "Curriculum"
+          }
+        ]
+      },
+      {
+        "key": "rank",
+        "label": "Rank",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "at1",
+        "name": "Guru",
+        "slug": "guru",
+        "skills": [
+          "Teaching",
+          "Mentoring"
+        ],
+        "rank": 3,
+        "is_active": true
+      },
+      {
+        "id": "at2",
+        "name": "Sadhak",
+        "slug": "sadhak",
+        "skills": [
+          "Practice"
+        ],
+        "rank": 2,
+        "is_active": true
+      },
+      {
+        "id": "at3",
+        "name": "Karigar",
+        "slug": "karigar",
+        "skills": [
+          "Craft",
+          "Field work"
+        ],
+        "rank": 1,
+        "is_active": true
+      },
+      {
+        "id": "at4",
+        "name": "Sevak",
+        "slug": "sevak",
+        "skills": [
+          "Support"
+        ],
+        "rank": 1,
+        "is_active": true
+      },
+      {
+        "id": "at5",
+        "name": "Vidyarthi",
+        "slug": "vidyarthi",
+        "skills": [
+          "Learning"
+        ],
+        "rank": 0,
+        "is_active": false
+      },
+      {
+        "id": "at6",
+        "name": "Acharya",
+        "slug": "acharya",
+        "skills": [
+          "Teaching",
+          "Review",
+          "Curriculum"
+        ],
+        "rank": 4,
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "lead-sources",
+    "label": "Lead Sources",
+    "singular": "Lead source",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search lead sources…",
+    "minWidth": 900,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "summary": [
+      {
+        "label": "Sources",
+        "kind": "count"
+      },
+      {
+        "label": "Leads",
+        "kind": "sum",
+        "field": "leads"
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(160px, 1.6fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "140px",
+        "type": "code"
+      },
+      {
+        "key": "color",
+        "header": "Marker",
+        "width": "130px",
+        "type": "color"
+      },
+      {
+        "key": "leads",
+        "header": "Leads",
+        "width": "100px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Referral"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "referral",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "color",
+        "label": "Marker colour",
+        "type": "color"
+      },
+      {
+        "key": "leads",
+        "label": "Leads",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ls1",
+        "name": "Walk-in",
+        "slug": "walk-in",
+        "color": "#254a33",
+        "leads": 42,
+        "sort_order": 1,
+        "is_active": true
+      },
+      {
+        "id": "ls2",
+        "name": "Referral",
+        "slug": "referral",
+        "color": "#a5711a",
+        "leads": 31,
+        "sort_order": 2,
+        "is_active": true
+      },
+      {
+        "id": "ls3",
+        "name": "Instagram",
+        "slug": "instagram",
+        "color": "#a74a2d",
+        "leads": 27,
+        "sort_order": 3,
+        "is_active": true
+      },
+      {
+        "id": "ls4",
+        "name": "WhatsApp",
+        "slug": "whatsapp",
+        "color": "#3b6f49",
+        "leads": 24,
+        "sort_order": 4,
+        "is_active": true
+      },
+      {
+        "id": "ls5",
+        "name": "Website",
+        "slug": "website",
+        "color": "#6a5acd",
+        "leads": 19,
+        "sort_order": 5,
+        "is_active": true
+      },
+      {
+        "id": "ls6",
+        "name": "Cold call",
+        "slug": "cold-call",
+        "color": "#8b7d60",
+        "leads": 8,
+        "sort_order": 6,
+        "is_active": false
+      },
+      {
+        "id": "ls7",
+        "name": "Exhibition",
+        "slug": "exhibition",
+        "color": "#8b3320",
+        "leads": 5,
+        "sort_order": 7,
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "departments",
+    "label": "Departments",
+    "singular": "Department",
+    "module": "Admin",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search departments…",
+    "minWidth": 940,
+    "summary": [
+      {
+        "label": "Departments",
+        "kind": "count"
+      },
+      {
+        "label": "People",
+        "kind": "sum",
+        "field": "headcount"
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(150px, 1.4fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "120px",
+        "type": "code"
+      },
+      {
+        "key": "head",
+        "header": "Head",
+        "width": "140px",
+        "type": "user"
+      },
+      {
+        "key": "teams",
+        "header": "Teams",
+        "width": "minmax(160px, 1.6fr)",
+        "type": "chips"
+      },
+      {
+        "key": "headcount",
+        "header": "People",
+        "width": "90px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Operations"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "ops",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "head",
+        "label": "Head",
+        "type": "select",
+        "options": [
+          {
+            "value": "Ananya",
+            "label": "Ananya"
+          },
+          {
+            "value": "Bikram",
+            "label": "Bikram"
+          },
+          {
+            "value": "Chandni",
+            "label": "Chandni"
+          },
+          {
+            "value": "Devraj",
+            "label": "Devraj"
+          },
+          {
+            "value": "Esha",
+            "label": "Esha"
+          },
+          {
+            "value": "Gitanjali",
+            "label": "Gitanjali"
+          },
+          {
+            "value": "Harshit",
+            "label": "Harshit"
+          }
+        ]
+      },
+      {
+        "key": "teams",
+        "label": "Teams",
+        "type": "multiselect",
+        "options": [
+          {
+            "value": "Dispatch",
+            "label": "Dispatch"
+          },
+          {
+            "value": "Warehouse",
+            "label": "Warehouse"
+          },
+          {
+            "value": "Content",
+            "label": "Content"
+          },
+          {
+            "value": "Billing",
+            "label": "Billing"
+          },
+          {
+            "value": "Payroll",
+            "label": "Payroll"
+          },
+          {
+            "value": "Web",
+            "label": "Web"
+          },
+          {
+            "value": "Data",
+            "label": "Data"
+          },
+          {
+            "value": "Front desk",
+            "label": "Front desk"
+          },
+          {
+            "value": "Audit",
+            "label": "Audit"
+          }
+        ]
+      },
+      {
+        "key": "headcount",
+        "label": "People",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "dp1",
+        "name": "Operations",
+        "slug": "ops",
+        "head": "Bikram",
+        "teams": [
+          "Dispatch",
+          "Warehouse"
+        ],
+        "headcount": 14,
+        "is_active": true
+      },
+      {
+        "id": "dp2",
+        "name": "Catalogue",
+        "slug": "catalogue",
+        "head": "Chandni",
+        "teams": [
+          "Content"
+        ],
+        "headcount": 6,
+        "is_active": true
+      },
+      {
+        "id": "dp3",
+        "name": "Finance",
+        "slug": "finance",
+        "head": "Devraj",
+        "teams": [
+          "Billing",
+          "Payroll"
+        ],
+        "headcount": 5,
+        "is_active": true
+      },
+      {
+        "id": "dp4",
+        "name": "Platform",
+        "slug": "platform",
+        "head": "Harshit",
+        "teams": [
+          "Web",
+          "Data"
+        ],
+        "headcount": 9,
+        "is_active": true
+      },
+      {
+        "id": "dp5",
+        "name": "Support",
+        "slug": "support",
+        "head": "Esha",
+        "teams": [
+          "Front desk"
+        ],
+        "headcount": 7,
+        "is_active": true
+      },
+      {
+        "id": "dp6",
+        "name": "Quality",
+        "slug": "quality",
+        "head": "Gitanjali",
+        "teams": [
+          "Audit"
+        ],
+        "headcount": 3,
+        "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "pipeline-stages",
+    "label": "Pipeline Stages",
+    "singular": "Stage",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search pipeline stages…",
+    "minWidth": 1000,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "tabs": [
+      {
+        "label": "Standard",
+        "field": "stage_type",
+        "value": "Standard"
+      },
+      {
+        "label": "Terminal",
+        "field": "stage_type",
+        "value": "Terminal"
+      }
+    ],
+    "summary": [
+      {
+        "label": "Stages",
+        "kind": "count"
+      }
+    ],
+    "detail": {
+      "action": "Fields",
+      "title": "Fields captured at {row}",
+      "itemsKey": "fields_captured",
+      "singular": "Field",
+      "emptyMessage": "This stage captures nothing yet",
+      "columns": [
+        {
+          "key": "name",
+          "header": "Field",
+          "width": "minmax(140px, 2fr)"
+        },
+        {
+          "key": "type",
+          "header": "Type",
+          "width": "120px",
+          "type": "badge",
+          "tones": {
+            "Text": "neutral",
+            "Number": "green",
+            "Date": "ochre",
+            "Select": "neutral",
+            "Checkbox": "green",
+            "File": "ochre"
+          }
+        },
+        {
+          "key": "required",
+          "header": "Required",
+          "width": "110px",
+          "type": "flag"
+        }
+      ],
+      "fields": [
+        {
+          "key": "name",
+          "label": "Field name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Site photo"
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "Text",
+              "label": "Text"
+            },
+            {
+              "value": "Number",
+              "label": "Number"
+            },
+            {
+              "value": "Date",
+              "label": "Date"
+            },
+            {
+              "value": "Select",
+              "label": "Select"
+            },
+            {
+              "value": "Checkbox",
+              "label": "Checkbox"
+            },
+            {
+              "value": "File",
+              "label": "File"
+            }
+          ]
+        },
+        {
+          "key": "required",
+          "label": "Required",
+          "type": "checkbox"
+        }
+      ]
+    },
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "label",
+        "header": "Stage",
+        "width": "minmax(160px, 1.8fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "default_probability",
+        "header": "Probability",
+        "width": "120px",
+        "type": "percent",
+        "align": "right"
+      },
+      {
+        "key": "stage_type",
+        "header": "Type",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Standard": "green",
+          "Terminal": "ochre"
+        }
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "label",
+        "label": "Stage",
+        "type": "text",
+        "required": true,
+        "placeholder": "Survey"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "survey",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "default_probability",
+        "label": "Default probability %",
+        "type": "number",
+        "placeholder": "25"
+      },
+      {
+        "key": "stage_type",
+        "label": "Type",
+        "type": "select",
+        "hint": "Terminal stages end the deal and are never reordered into the middle.",
+        "options": [
+          {
+            "value": "Standard",
+            "label": "Standard"
+          },
+          {
+            "value": "Terminal",
+            "label": "Terminal"
+          }
+        ]
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ps1",
+        "label": "Enquiry",
+        "slug": "enquiry",
+        "default_probability": 10,
+        "stage_type": "Standard",
+        "sort_order": 1,
+        "fields_captured": [
+          {
+            "id": "sf-customer-name",
+            "name": "Customer name",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-phone",
+            "name": "Phone",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          },
+          {
+            "id": "sf-source",
+            "name": "Source",
+            "type": "Date",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps2",
+        "label": "Survey",
+        "slug": "survey",
+        "default_probability": 25,
+        "stage_type": "Standard",
+        "sort_order": 2,
+        "fields_captured": [
+          {
+            "id": "sf-site-photo",
+            "name": "Site photo",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-measurements",
+            "name": "Measurements",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          },
+          {
+            "id": "sf-survey-date",
+            "name": "Survey date",
+            "type": "Date",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps3",
+        "label": "Quotation",
+        "slug": "quotation",
+        "default_probability": 45,
+        "stage_type": "Standard",
+        "sort_order": 3,
+        "fields_captured": [
+          {
+            "id": "sf-quote-amount",
+            "name": "Quote amount",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-valid-till",
+            "name": "Valid till",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps4",
+        "label": "Negotiation",
+        "slug": "negotiation",
+        "default_probability": 65,
+        "stage_type": "Standard",
+        "sort_order": 4,
+        "fields_captured": [
+          {
+            "id": "sf-discount-%",
+            "name": "Discount %",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-approver",
+            "name": "Approver",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps5",
+        "label": "Won",
+        "slug": "won",
+        "default_probability": 100,
+        "stage_type": "Terminal",
+        "sort_order": 5,
+        "fields_captured": [
+          {
+            "id": "sf-order-value",
+            "name": "Order value",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-handover-date",
+            "name": "Handover date",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps6",
+        "label": "Lost",
+        "slug": "lost",
+        "default_probability": 0,
+        "stage_type": "Terminal",
+        "sort_order": 6,
+        "fields_captured": [
+          {
+            "id": "sf-reason",
+            "name": "Reason",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "ps7",
+        "label": "On hold",
+        "slug": "on-hold",
+        "default_probability": 30,
+        "stage_type": "Terminal",
+        "sort_order": 7,
+        "fields_captured": [],
+        "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "operation-stages",
+    "label": "Operation Stages",
+    "singular": "Stage",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search operation stages…",
+    "minWidth": 900,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "detail": {
+      "action": "Fields",
+      "title": "Fields captured at {row}",
+      "itemsKey": "fields_captured",
+      "singular": "Field",
+      "emptyMessage": "This stage captures nothing yet",
+      "columns": [
+        {
+          "key": "name",
+          "header": "Field",
+          "width": "minmax(140px, 2fr)"
+        },
+        {
+          "key": "type",
+          "header": "Type",
+          "width": "120px",
+          "type": "badge",
+          "tones": {
+            "Text": "neutral",
+            "Number": "green",
+            "Date": "ochre",
+            "Select": "neutral",
+            "Checkbox": "green",
+            "File": "ochre"
+          }
+        },
+        {
+          "key": "required",
+          "header": "Required",
+          "width": "110px",
+          "type": "flag"
+        }
+      ],
+      "fields": [
+        {
+          "key": "name",
+          "label": "Field name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Site photo"
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "Text",
+              "label": "Text"
+            },
+            {
+              "value": "Number",
+              "label": "Number"
+            },
+            {
+              "value": "Date",
+              "label": "Date"
+            },
+            {
+              "value": "Select",
+              "label": "Select"
+            },
+            {
+              "value": "Checkbox",
+              "label": "Checkbox"
+            },
+            {
+              "value": "File",
+              "label": "File"
+            }
+          ]
+        },
+        {
+          "key": "required",
+          "label": "Required",
+          "type": "checkbox"
+        }
+      ]
+    },
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "label",
+        "header": "Stage",
+        "width": "minmax(160px, 1.8fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "140px",
+        "type": "code"
+      },
+      {
+        "key": "stage_type",
+        "header": "Type",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Standard": "green",
+          "Terminal": "ochre"
+        }
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "label",
+        "label": "Stage",
+        "type": "text",
+        "required": true,
+        "placeholder": "Assigned"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "assigned",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "stage_type",
+        "label": "Type",
+        "type": "select",
+        "options": [
+          {
+            "value": "Standard",
+            "label": "Standard"
+          },
+          {
+            "value": "Terminal",
+            "label": "Terminal"
+          }
+        ]
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "os1",
+        "label": "Booked",
+        "slug": "booked",
+        "stage_type": "Standard",
+        "sort_order": 1,
+        "fields_captured": [
+          {
+            "id": "sf-order-id",
+            "name": "Order id",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-slot",
+            "name": "Slot",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "os2",
+        "label": "Assigned",
+        "slug": "assigned",
+        "stage_type": "Standard",
+        "sort_order": 2,
+        "fields_captured": [
+          {
+            "id": "sf-kaarigar",
+            "name": "Kaarigar",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-date",
+            "name": "Date",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "os3",
+        "label": "In progress",
+        "slug": "in-progress",
+        "stage_type": "Standard",
+        "sort_order": 3,
+        "fields_captured": [
+          {
+            "id": "sf-start-photo",
+            "name": "Start photo",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "os4",
+        "label": "Quality check",
+        "slug": "quality-check",
+        "stage_type": "Standard",
+        "sort_order": 4,
+        "fields_captured": [
+          {
+            "id": "sf-checklist",
+            "name": "Checklist",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-inspector",
+            "name": "Inspector",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "os5",
+        "label": "Delivered",
+        "slug": "delivered",
+        "stage_type": "Terminal",
+        "sort_order": 5,
+        "fields_captured": [
+          {
+            "id": "sf-proof-of-delivery",
+            "name": "Proof of delivery",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          },
+          {
+            "id": "sf-signature",
+            "name": "Signature",
+            "type": "Number",
+            "required": false,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "os6",
+        "label": "Cancelled",
+        "slug": "cancelled",
+        "stage_type": "Terminal",
+        "sort_order": 6,
+        "fields_captured": [
+          {
+            "id": "sf-reason",
+            "name": "Reason",
+            "type": "Text",
+            "required": true,
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "stage-fields",
+    "label": "Stage Fields",
+    "singular": "Stage field",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search stage fields…",
+    "minWidth": 880,
+    "filters": [
+      {
+        "key": "stage",
+        "label": "Stage",
+        "options": [
+          {
+            "value": "Enquiry",
+            "label": "Enquiry"
+          },
+          {
+            "value": "Survey",
+            "label": "Survey"
+          },
+          {
+            "value": "Quotation",
+            "label": "Quotation"
+          },
+          {
+            "value": "Delivered",
+            "label": "Delivered"
+          }
+        ]
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Field",
+        "width": "minmax(160px, 2fr)"
+      },
+      {
+        "key": "stage",
+        "header": "Stage",
+        "width": "140px"
+      },
+      {
+        "key": "type",
+        "header": "Type",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Text": "neutral",
+          "Number": "green",
+          "Date": "ochre",
+          "Select": "neutral",
+          "Checkbox": "green",
+          "File": "ochre"
+        }
+      },
+      {
+        "key": "required",
+        "header": "Required",
+        "width": "110px",
+        "type": "flag"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Field",
+        "type": "text",
+        "required": true,
+        "placeholder": "Site photo"
+      },
+      {
+        "key": "stage",
+        "label": "Stage",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Enquiry",
+            "label": "Enquiry"
+          },
+          {
+            "value": "Survey",
+            "label": "Survey"
+          },
+          {
+            "value": "Quotation",
+            "label": "Quotation"
+          },
+          {
+            "value": "Negotiation",
+            "label": "Negotiation"
+          },
+          {
+            "value": "Delivered",
+            "label": "Delivered"
+          }
+        ]
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Text",
+            "label": "Text"
+          },
+          {
+            "value": "Number",
+            "label": "Number"
+          },
+          {
+            "value": "Date",
+            "label": "Date"
+          },
+          {
+            "value": "Select",
+            "label": "Select"
+          },
+          {
+            "value": "Checkbox",
+            "label": "Checkbox"
+          },
+          {
+            "value": "File",
+            "label": "File"
+          }
+        ]
+      },
+      {
+        "key": "required",
+        "label": "Required",
+        "type": "checkbox"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "sf1",
+        "name": "Customer name",
+        "stage": "Enquiry",
+        "type": "Number",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf2",
+        "name": "Phone",
+        "stage": "Enquiry",
+        "type": "Date",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf3",
+        "name": "Source",
+        "stage": "Enquiry",
+        "type": "Select",
+        "required": true,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf4",
+        "name": "Site photo",
+        "stage": "Survey",
+        "type": "Checkbox",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf5",
+        "name": "Measurements",
+        "stage": "Survey",
+        "type": "File",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf6",
+        "name": "Survey date",
+        "stage": "Survey",
+        "type": "Text",
+        "required": true,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf7",
+        "name": "Quote amount",
+        "stage": "Quotation",
+        "type": "Number",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf8",
+        "name": "Valid till",
+        "stage": "Quotation",
+        "type": "Date",
+        "required": false,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf9",
+        "name": "Proof of delivery",
+        "stage": "Delivered",
+        "type": "Select",
+        "required": true,
+        "options": [],
+        "is_active": true
+      },
+      {
+        "id": "sf10",
+        "name": "Signature",
+        "stage": "Delivered",
+        "type": "Checkbox",
+        "required": false,
+        "options": [],
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "state-codes",
+    "label": "State Codes",
+    "singular": "State",
+    "module": "Admin",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search state codes…",
+    "minWidth": 820,
+    "filters": [
+      {
+        "key": "zone",
+        "label": "Zone",
+        "options": [
+          {
+            "value": "North",
+            "label": "North"
+          },
+          {
+            "value": "South",
+            "label": "South"
+          },
+          {
+            "value": "East",
+            "label": "East"
+          },
+          {
+            "value": "West",
+            "label": "West"
+          },
+          {
+            "value": "North East",
+            "label": "North East"
+          }
+        ]
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "code",
+        "header": "Code",
+        "width": "90px",
+        "type": "code"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "zone",
+        "header": "Zone",
+        "width": "130px",
+        "type": "badge",
+        "tones": {
+          "North": "green",
+          "South": "ochre",
+          "East": "neutral",
+          "West": "green",
+          "North East": "ochre"
+        }
+      },
+      {
+        "key": "gst_code",
+        "header": "GST",
+        "width": "90px",
+        "type": "code"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "code",
+        "label": "Code",
+        "type": "text",
+        "required": true,
+        "placeholder": "WB",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "West Bengal"
+      },
+      {
+        "key": "zone",
+        "label": "Zone",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "North",
+            "label": "North"
+          },
+          {
+            "value": "South",
+            "label": "South"
+          },
+          {
+            "value": "East",
+            "label": "East"
+          },
+          {
+            "value": "West",
+            "label": "West"
+          },
+          {
+            "value": "North East",
+            "label": "North East"
+          }
+        ]
+      },
+      {
+        "key": "gst_code",
+        "label": "GST code",
+        "type": "text",
+        "placeholder": "19"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "st1",
+        "code": "WB",
+        "name": "West Bengal",
+        "zone": "East",
+        "gst_code": "01",
+        "is_active": true
+      },
+      {
+        "id": "st2",
+        "code": "BR",
+        "name": "Bihar",
+        "zone": "East",
+        "gst_code": "02",
+        "is_active": true
+      },
+      {
+        "id": "st3",
+        "code": "OD",
+        "name": "Odisha",
+        "zone": "East",
+        "gst_code": "03",
+        "is_active": true
+      },
+      {
+        "id": "st4",
+        "code": "JH",
+        "name": "Jharkhand",
+        "zone": "East",
+        "gst_code": "04",
+        "is_active": true
+      },
+      {
+        "id": "st5",
+        "code": "AS",
+        "name": "Assam",
+        "zone": "North East",
+        "gst_code": "05",
+        "is_active": true
+      },
+      {
+        "id": "st6",
+        "code": "MN",
+        "name": "Manipur",
+        "zone": "North East",
+        "gst_code": "06",
+        "is_active": true
+      },
+      {
+        "id": "st7",
+        "code": "TR",
+        "name": "Tripura",
+        "zone": "North East",
+        "gst_code": "07",
+        "is_active": true
+      },
+      {
+        "id": "st8",
+        "code": "DL",
+        "name": "Delhi",
+        "zone": "North",
+        "gst_code": "08",
+        "is_active": true
+      },
+      {
+        "id": "st9",
+        "code": "UP",
+        "name": "Uttar Pradesh",
+        "zone": "North",
+        "gst_code": "09",
+        "is_active": true
+      },
+      {
+        "id": "st10",
+        "code": "PB",
+        "name": "Punjab",
+        "zone": "North",
+        "gst_code": "10",
+        "is_active": true
+      },
+      {
+        "id": "st11",
+        "code": "HR",
+        "name": "Haryana",
+        "zone": "North",
+        "gst_code": "11",
+        "is_active": true
+      },
+      {
+        "id": "st12",
+        "code": "RJ",
+        "name": "Rajasthan",
+        "zone": "North",
+        "gst_code": "12",
+        "is_active": true
+      },
+      {
+        "id": "st13",
+        "code": "MH",
+        "name": "Maharashtra",
+        "zone": "West",
+        "gst_code": "13",
+        "is_active": true
+      },
+      {
+        "id": "st14",
+        "code": "GJ",
+        "name": "Gujarat",
+        "zone": "West",
+        "gst_code": "14",
+        "is_active": true
+      },
+      {
+        "id": "st15",
+        "code": "GA",
+        "name": "Goa",
+        "zone": "West",
+        "gst_code": "15",
+        "is_active": true
+      },
+      {
+        "id": "st16",
+        "code": "KA",
+        "name": "Karnataka",
+        "zone": "South",
+        "gst_code": "16",
+        "is_active": true
+      },
+      {
+        "id": "st17",
+        "code": "TN",
+        "name": "Tamil Nadu",
+        "zone": "South",
+        "gst_code": "17",
+        "is_active": true
+      },
+      {
+        "id": "st18",
+        "code": "KL",
+        "name": "Kerala",
+        "zone": "South",
+        "gst_code": "18",
+        "is_active": true
+      },
+      {
+        "id": "st19",
+        "code": "TG",
+        "name": "Telangana",
+        "zone": "South",
+        "gst_code": "19",
+        "is_active": true
+      },
+      {
+        "id": "st20",
+        "code": "AP",
+        "name": "Andhra Pradesh",
+        "zone": "South",
+        "gst_code": "20",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "project-types",
+    "label": "Project Types",
+    "singular": "Project type",
+    "module": "OmniMart",
+    "section": "Masters",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search project types…",
+    "minWidth": 840,
+    "filters": [
+      {
+        "key": "category",
+        "label": "Category",
+        "options": [
+          {
+            "value": "Interior",
+            "label": "Interior"
+          },
+          {
+            "value": "Commercial",
+            "label": "Commercial"
+          },
+          {
+            "value": "Service",
+            "label": "Service"
+          }
+        ]
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(160px, 1.6fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "140px",
+        "type": "code"
+      },
+      {
+        "key": "category",
+        "header": "Category",
+        "width": "130px",
+        "type": "badge",
+        "tones": {
+          "Interior": "green",
+          "Commercial": "ochre",
+          "Service": "neutral"
+        }
+      },
+      {
+        "key": "lead_days",
+        "header": "Lead days",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Kitchen"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "kitchen",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "category",
+        "label": "Category",
+        "type": "select",
+        "options": [
+          {
+            "value": "Interior",
+            "label": "Interior"
+          },
+          {
+            "value": "Commercial",
+            "label": "Commercial"
+          },
+          {
+            "value": "Service",
+            "label": "Service"
+          }
+        ]
+      },
+      {
+        "key": "lead_days",
+        "label": "Lead days",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "pt1",
+        "name": "Kitchen",
+        "slug": "kitchen",
+        "lead_days": 14,
+        "category": "Interior",
+        "is_active": true
+      },
+      {
+        "id": "pt2",
+        "name": "Wardrobe",
+        "slug": "wardrobe",
+        "lead_days": 9,
+        "category": "Interior",
+        "is_active": true
+      },
+      {
+        "id": "pt3",
+        "name": "Full home",
+        "slug": "full-home",
+        "lead_days": 45,
+        "category": "Interior",
+        "is_active": true
+      },
+      {
+        "id": "pt4",
+        "name": "Office fit-out",
+        "slug": "office-fitout",
+        "lead_days": 30,
+        "category": "Commercial",
+        "is_active": true
+      },
+      {
+        "id": "pt5",
+        "name": "Shop counter",
+        "slug": "shop-counter",
+        "lead_days": 7,
+        "category": "Commercial",
+        "is_active": false
+      },
+      {
+        "id": "pt6",
+        "name": "Repair visit",
+        "slug": "repair-visit",
+        "lead_days": 1,
+        "category": "Service",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "users",
+    "label": "Users",
+    "singular": "User",
+    "module": "Admin",
+    "section": "Access",
+    "eyebrow": "People and access",
+    "searchPlaceholder": "Search users…",
+    "minWidth": 1020,
+    "filters": [
+      {
+        "key": "role",
+        "label": "Role",
+        "options": [
+          {
+            "value": "Founder",
+            "label": "Founder"
+          },
+          {
+            "value": "Manager",
+            "label": "Manager"
+          },
+          {
+            "value": "Operator",
+            "label": "Operator"
+          },
+          {
+            "value": "Viewer",
+            "label": "Viewer"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Users",
+        "kind": "count"
+      },
+      {
+        "label": "Founders",
+        "kind": "count",
+        "where": {
+          "field": "role",
+          "value": "Founder"
+        }
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)",
+        "type": "user"
+      },
+      {
+        "key": "username",
+        "header": "Username",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "role",
+        "header": "Role",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Founder": "green",
+          "Manager": "ochre",
+          "Operator": "neutral",
+          "Viewer": "neutral"
+        }
+      },
+      {
+        "key": "teams",
+        "header": "Teams",
+        "width": "minmax(150px, 1.6fr)",
+        "type": "chips"
+      },
+      {
+        "key": "last_seen",
+        "header": "Last seen",
+        "width": "120px"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Ananya Sen"
+      },
+      {
+        "key": "username",
+        "label": "Username",
+        "type": "text",
+        "required": true,
+        "placeholder": "ananya",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "role",
+        "label": "Role",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Founder",
+            "label": "Founder"
+          },
+          {
+            "value": "Manager",
+            "label": "Manager"
+          },
+          {
+            "value": "Operator",
+            "label": "Operator"
+          },
+          {
+            "value": "Viewer",
+            "label": "Viewer"
+          }
+        ]
+      },
+      {
+        "key": "teams",
+        "label": "Teams",
+        "type": "multiselect",
+        "options": [
+          {
+            "value": "Platform",
+            "label": "Platform"
+          },
+          {
+            "value": "Operations",
+            "label": "Operations"
+          },
+          {
+            "value": "Catalogue",
+            "label": "Catalogue"
+          },
+          {
+            "value": "Finance",
+            "label": "Finance"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          },
+          {
+            "value": "Quality",
+            "label": "Quality"
+          },
+          {
+            "value": "Warehouse",
+            "label": "Warehouse"
+          }
+        ]
+      },
+      {
+        "key": "phone",
+        "label": "Phone",
+        "type": "text",
+        "placeholder": "+91 …",
+        "hint": "Used for the login OTP."
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "us1",
+        "name": "Ananya Sen",
+        "username": "ananya",
+        "role": "Manager",
+        "teams": [
+          "Platform",
+          "Operations"
+        ],
+        "phone": "+91 98300 00011",
+        "last_seen": "12 min ago",
+        "is_active": true
+      },
+      {
+        "id": "us2",
+        "name": "Bikram Das",
+        "username": "bikram",
+        "role": "Operator",
+        "teams": [
+          "Operations"
+        ],
+        "phone": "+91 98300 00012",
+        "last_seen": "1 h ago",
+        "is_active": true
+      },
+      {
+        "id": "us3",
+        "name": "Chandni Roy",
+        "username": "chandni",
+        "role": "Manager",
+        "teams": [
+          "Catalogue"
+        ],
+        "phone": "+91 98300 00013",
+        "last_seen": "3 h ago",
+        "is_active": true
+      },
+      {
+        "id": "us4",
+        "name": "Devraj Nair",
+        "username": "devraj",
+        "role": "Operator",
+        "teams": [
+          "Finance"
+        ],
+        "phone": "+91 98300 00014",
+        "last_seen": "Yesterday",
+        "is_active": true
+      },
+      {
+        "id": "us5",
+        "name": "Esha Khan",
+        "username": "esha",
+        "role": "Viewer",
+        "teams": [
+          "Support"
+        ],
+        "phone": "+91 98300 00015",
+        "last_seen": "2 days ago",
+        "is_active": true
+      },
+      {
+        "id": "us6",
+        "name": "Farhan Ali",
+        "username": "farhan",
+        "role": "Operator",
+        "teams": [
+          "Operations",
+          "Warehouse"
+        ],
+        "phone": "+91 98300 00016",
+        "last_seen": "Yesterday",
+        "is_active": true
+      },
+      {
+        "id": "us7",
+        "name": "Gitanjali Bose",
+        "username": "gitanjali",
+        "role": "Viewer",
+        "teams": [
+          "Quality"
+        ],
+        "phone": "+91 98300 00017",
+        "last_seen": "1 week ago",
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "us8",
+        "name": "Harshit Sharma",
+        "username": "harshit",
+        "role": "Founder",
+        "teams": [
+          "Platform"
+        ],
+        "phone": "+91 98300 00000",
+        "last_seen": "Now",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "roles",
+    "label": "Roles",
+    "singular": "Role",
+    "module": "Admin",
+    "section": "Access",
+    "eyebrow": "People and access",
+    "searchPlaceholder": "Search roles…",
+    "minWidth": 760,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "detail": {
+      "action": "Permissions",
+      "title": "What {row} may do",
+      "itemsKey": "permissions",
+      "singular": "Permission",
+      "emptyMessage": "This role has no permissions yet",
+      "columns": [
+        {
+          "key": "area",
+          "header": "Area",
+          "width": "minmax(140px, 2fr)"
+        },
+        {
+          "key": "level",
+          "header": "Level",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "read": "neutral",
+            "create": "green",
+            "update": "ochre",
+            "delete": "crit",
+            "approve": "green"
+          }
+        }
+      ],
+      "fields": [
+        {
+          "key": "area",
+          "label": "Area",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "Masters",
+              "label": "Masters"
+            },
+            {
+              "value": "Pipeline",
+              "label": "Pipeline"
+            },
+            {
+              "value": "Operations",
+              "label": "Operations"
+            },
+            {
+              "value": "Billing",
+              "label": "Billing"
+            },
+            {
+              "value": "Reports",
+              "label": "Reports"
+            },
+            {
+              "value": "Users",
+              "label": "Users"
+            }
+          ]
+        },
+        {
+          "key": "level",
+          "label": "Level",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "read",
+              "label": "read"
+            },
+            {
+              "value": "create",
+              "label": "create"
+            },
+            {
+              "value": "update",
+              "label": "update"
+            },
+            {
+              "value": "delete",
+              "label": "delete"
+            },
+            {
+              "value": "approve",
+              "label": "approve"
+            }
+          ]
+        }
+      ]
+    },
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(150px, 1.4fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "members",
+        "header": "Members",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Manager"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "manager",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "rl1",
+        "name": "Founder",
+        "slug": "founder",
+        "members": 1,
+        "sort_order": 1,
+        "permissions": [
+          {
+            "id": "pm-masters",
+            "area": "Masters",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-pipeline",
+            "area": "Pipeline",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-operations",
+            "area": "Operations",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-billing",
+            "area": "Billing",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-reports",
+            "area": "Reports",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-users",
+            "area": "Users",
+            "level": "approve",
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "rl2",
+        "name": "Manager",
+        "slug": "manager",
+        "members": 3,
+        "sort_order": 2,
+        "permissions": [
+          {
+            "id": "pm-masters",
+            "area": "Masters",
+            "level": "update",
+            "is_active": true
+          },
+          {
+            "id": "pm-pipeline",
+            "area": "Pipeline",
+            "level": "approve",
+            "is_active": true
+          },
+          {
+            "id": "pm-operations",
+            "area": "Operations",
+            "level": "update",
+            "is_active": true
+          },
+          {
+            "id": "pm-billing",
+            "area": "Billing",
+            "level": "read",
+            "is_active": true
+          },
+          {
+            "id": "pm-reports",
+            "area": "Reports",
+            "level": "read",
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "rl3",
+        "name": "Operator",
+        "slug": "operator",
+        "members": 3,
+        "sort_order": 3,
+        "permissions": [
+          {
+            "id": "pm-pipeline",
+            "area": "Pipeline",
+            "level": "update",
+            "is_active": true
+          },
+          {
+            "id": "pm-operations",
+            "area": "Operations",
+            "level": "update",
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      },
+      {
+        "id": "rl4",
+        "name": "Viewer",
+        "slug": "viewer",
+        "members": 1,
+        "sort_order": 4,
+        "permissions": [
+          {
+            "id": "pm-pipeline",
+            "area": "Pipeline",
+            "level": "read",
+            "is_active": true
+          },
+          {
+            "id": "pm-operations",
+            "area": "Operations",
+            "level": "read",
+            "is_active": true
+          },
+          {
+            "id": "pm-reports",
+            "area": "Reports",
+            "level": "read",
+            "is_active": true
+          }
+        ],
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "workspaces",
+    "label": "Workspaces",
+    "singular": "Workspace",
+    "module": "Admin",
+    "section": "Access",
+    "eyebrow": "People and access",
+    "searchPlaceholder": "Search workspaces…",
+    "minWidth": 960,
+    "filters": [
+      {
+        "key": "plan",
+        "label": "Plan",
+        "options": [
+          {
+            "value": "Starter",
+            "label": "Starter"
+          },
+          {
+            "value": "Growth",
+            "label": "Growth"
+          },
+          {
+            "value": "Enterprise",
+            "label": "Enterprise"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Workspaces",
+        "kind": "count"
+      },
+      {
+        "label": "Members",
+        "kind": "sum",
+        "field": "members"
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 1.8fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "150px",
+        "type": "code"
+      },
+      {
+        "key": "owner",
+        "header": "Owner",
+        "width": "160px",
+        "type": "user"
+      },
+      {
+        "key": "plan",
+        "header": "Plan",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Starter": "neutral",
+          "Growth": "ochre",
+          "Enterprise": "green"
+        }
+      },
+      {
+        "key": "members",
+        "header": "Members",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Kolkata HQ"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "kolkata-hq",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "owner",
+        "label": "Owner",
+        "type": "select",
+        "options": [
+          {
+            "value": "Ananya Sen",
+            "label": "Ananya Sen"
+          },
+          {
+            "value": "Bikram Das",
+            "label": "Bikram Das"
+          },
+          {
+            "value": "Chandni Roy",
+            "label": "Chandni Roy"
+          },
+          {
+            "value": "Devraj Nair",
+            "label": "Devraj Nair"
+          },
+          {
+            "value": "Esha Khan",
+            "label": "Esha Khan"
+          },
+          {
+            "value": "Farhan Ali",
+            "label": "Farhan Ali"
+          },
+          {
+            "value": "Gitanjali Bose",
+            "label": "Gitanjali Bose"
+          },
+          {
+            "value": "Harshit Sharma",
+            "label": "Harshit Sharma"
+          }
+        ]
+      },
+      {
+        "key": "plan",
+        "label": "Plan",
+        "type": "select",
+        "options": [
+          {
+            "value": "Starter",
+            "label": "Starter"
+          },
+          {
+            "value": "Growth",
+            "label": "Growth"
+          },
+          {
+            "value": "Enterprise",
+            "label": "Enterprise"
+          }
+        ]
+      },
+      {
+        "key": "created_on",
+        "label": "Created on",
+        "type": "date"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ws1",
+        "name": "Kolkata HQ",
+        "slug": "kolkata-hq",
+        "owner": "Harshit Sharma",
+        "plan": "Enterprise",
+        "members": 24,
+        "created_on": "2025-01-05",
+        "is_active": true
+      },
+      {
+        "id": "ws2",
+        "name": "Howrah Unit",
+        "slug": "howrah-unit",
+        "owner": "Bikram Das",
+        "plan": "Growth",
+        "members": 9,
+        "created_on": "2025-03-05",
+        "is_active": true
+      },
+      {
+        "id": "ws3",
+        "name": "Barasat Pilot",
+        "slug": "barasat-pilot",
+        "owner": "Ananya Sen",
+        "plan": "Starter",
+        "members": 4,
+        "created_on": "2025-05-05",
+        "is_active": true
+      },
+      {
+        "id": "ws4",
+        "name": "Vendor Portal",
+        "slug": "vendor-portal",
+        "owner": "Chandni Roy",
+        "plan": "Starter",
+        "members": 12,
+        "created_on": "2025-07-05",
+        "is_active": true
+      },
+      {
+        "id": "ws5",
+        "name": "Training Sandbox",
+        "slug": "training-sandbox",
+        "owner": "Gitanjali Bose",
+        "plan": "Starter",
+        "members": 6,
+        "created_on": "2025-09-05",
+        "is_active": false
+      }
+    ]
+  }
+]

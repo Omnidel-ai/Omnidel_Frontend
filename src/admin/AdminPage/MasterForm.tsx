@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, Checkbox, CustomSelect, FormField, Input, Modal, Textarea } from "../../components";
+import { Button, Checkbox, CustomSelect, FormField, Input, Modal, MultiSelect, Textarea } from "../../components";
 import type { DemoField, DemoMaster, DemoRow } from "../../data/types";
 
 export interface MasterFormProps {
@@ -46,6 +46,12 @@ export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormPr
     const next: Record<string, string> = {};
     for (const f of master.fields) {
       const raw = values[f.key];
+      if (f.type === "multiselect") {
+        if (f.required && (!Array.isArray(raw) || raw.length === 0)) {
+          next[f.key] = `Pick at least one ${f.label.toLowerCase()}.`;
+        }
+        continue;
+      }
       if (f.required && (raw === "" || raw === null || raw === undefined)) {
         next[f.key] = `${f.label} is required.`;
         continue;
@@ -96,6 +102,41 @@ export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormPr
                 checked={Boolean(value)}
                 onChange={(e) => set(f.key, e.target.checked)}
               />
+            );
+          }
+
+          if (f.type === "multiselect") {
+            const selected = Array.isArray(value) ? (value as string[]) : [];
+            return (
+              <FormField
+                key={f.key}
+                label={f.label}
+                required={f.required}
+                hint={f.hint}
+                error={errors[f.key]}
+              >
+                <MultiSelect
+                  options={f.options ?? []}
+                  value={selected}
+                  onChange={(next) => set(f.key, next)}
+                  placeholder={f.placeholder ?? `Select ${f.label.toLowerCase()}`}
+                  disabled={locked}
+                />
+              </FormField>
+            );
+          }
+
+          if (f.type === "color") {
+            return (
+              <FormField
+                key={f.key}
+                label={f.label}
+                required={f.required}
+                hint={f.hint}
+                error={errors[f.key]}
+              >
+                <ColorPicker value={String(value ?? "")} onChange={(v) => set(f.key, v)} />
+              </FormField>
             );
           }
 
@@ -159,6 +200,60 @@ export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormPr
 
 function defaultFor(f: DemoField): unknown {
   if (f.type === "checkbox") return f.key === "is_active";
-  if (f.type === "number") return "";
+  if (f.type === "multiselect") return [];
   return "";
+}
+
+/** Swatches from the palette, plus whatever value the row already carries. */
+const SWATCHES = [
+  "#254a33",
+  "#376a46",
+  "#a74a2d",
+  "#a5711a",
+  "#8b3320",
+  "#3b6f49",
+  "#6a5acd",
+  "#0f7b6c",
+  "#8b7d60",
+];
+
+function ColorPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const swatches = value && !SWATCHES.includes(value) ? [value, ...SWATCHES] : SWATCHES;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {swatches.map((c) => {
+          const active = c === value;
+          return (
+            <button
+              key={c}
+              type="button"
+              onClick={() => onChange(c)}
+              aria-label={c}
+              aria-pressed={active}
+              title={c}
+              style={{
+                width: 24,
+                height: 24,
+                padding: 0,
+                background: c,
+                border: `2px solid ${active ? "var(--ink)" : "var(--rule-strong)"}`,
+                borderRadius: "var(--r-sm)",
+                cursor: "pointer",
+              }}
+            />
+          );
+        })}
+      </div>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="#254a33"
+        aria-label="Hex value"
+        className="form-input"
+        style={{ width: 110, fontFamily: "var(--mono)", fontSize: 12 }}
+      />
+    </div>
+  );
 }

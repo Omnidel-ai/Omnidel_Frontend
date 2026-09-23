@@ -19,17 +19,39 @@
   },
 
   "nav": [
-    { "label": "Dashboard", "href": "/home", "icon": "home" },
-    { "label": "Components", "href": "/playground", "icon": "grid" },
+    {
+      "label": "Dashboard",
+      "href": "/home",
+      "icon": "home"
+    },
+    {
+      "label": "Components",
+      "href": "/playground",
+      "icon": "grid"
+    },
     {
       "label": "OmniPulse",
       "href": "/omnipulse",
       "icon": "pulse",
       "children": [
-        { "label": "Boards", "href": "/omnipulse/boards", "badge": 6 },
-        { "label": "Tasks", "href": "/omnipulse/tasks", "badge": 23 },
-        { "label": "Schedule", "href": "/omnipulse/schedule" },
-        { "label": "Dashboards", "href": "/omnipulse/dashboards" }
+        {
+          "label": "Boards",
+          "href": "/omnipulse/boards",
+          "badge": 6
+        },
+        {
+          "label": "Tasks",
+          "href": "/omnipulse/tasks",
+          "badge": 23
+        },
+        {
+          "label": "Schedule",
+          "href": "/omnipulse/schedule"
+        },
+        {
+          "label": "Dashboards",
+          "href": "/omnipulse/dashboards"
+        }
       ]
     },
     {
@@ -37,9 +59,19 @@
       "href": "/omnimart",
       "icon": "cart",
       "children": [
-        { "label": "Pipeline", "href": "/omnimart/pipeline", "badge": 4 },
-        { "label": "Operations", "href": "/omnimart/operations" },
-        { "label": "Inventory", "href": "/omnimart/inventory" }
+        {
+          "label": "Pipeline",
+          "href": "/omnimart/pipeline",
+          "badge": 4
+        },
+        {
+          "label": "Operations",
+          "href": "/omnimart/operations"
+        },
+        {
+          "label": "Inventory",
+          "href": "/omnimart/inventory"
+        }
       ]
     },
     {
@@ -47,17 +79,98 @@
       "href": "/admin",
       "icon": "admin",
       "children": [
-        { "label": "Lanes", "href": "/admin/lanes" },
-        { "label": "Languages", "href": "/admin/languages" },
-        { "label": "Task Types", "href": "/admin/task-types" },
-        { "label": "Locations", "href": "/admin/locations" },
-        { "label": "Missions", "href": "/admin/missions" },
-        { "label": "Trade Types", "href": "/admin/trade-types" }
+        {
+          "label": "Lanes",
+          "href": "/admin/lanes"
+        },
+        {
+          "label": "Languages",
+          "href": "/admin/languages"
+        },
+        {
+          "label": "Locations",
+          "href": "/admin/locations"
+        },
+        {
+          "label": "Missions",
+          "href": "/admin/missions"
+        },
+        {
+          "label": "Task Types",
+          "href": "/admin/task-types"
+        },
+        {
+          "label": "Trade Types",
+          "href": "/admin/trade-types"
+        },
+        {
+          "label": "Acharya Types",
+          "href": "/admin/acharya-types"
+        },
+        {
+          "label": "Lead Sources",
+          "href": "/admin/lead-sources"
+        },
+        {
+          "label": "Departments",
+          "href": "/admin/departments"
+        },
+        {
+          "label": "Pipeline Stages",
+          "href": "/admin/pipeline-stages"
+        },
+        {
+          "label": "Operation Stages",
+          "href": "/admin/operation-stages"
+        },
+        {
+          "label": "Stage Fields",
+          "href": "/admin/stage-fields"
+        },
+        {
+          "label": "State Codes",
+          "href": "/admin/state-codes"
+        },
+        {
+          "label": "Project Types",
+          "href": "/admin/project-types"
+        }
       ]
     },
-    { "label": "OmniVarsity", "href": "/omnivarsity", "icon": "book" },
-    { "label": "OmniMoney", "href": "/omnimoney", "icon": "coin" },
-    { "label": "About this demo", "href": "/about", "icon": "book" }
+    {
+      "label": "Access",
+      "href": "/admin/users",
+      "icon": "shield",
+      "children": [
+        {
+          "label": "Users",
+          "href": "/admin/users"
+        },
+        {
+          "label": "Roles",
+          "href": "/admin/roles"
+        },
+        {
+          "label": "Workspaces",
+          "href": "/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "label": "OmniVarsity",
+      "href": "/omnivarsity",
+      "icon": "book"
+    },
+    {
+      "label": "OmniMoney",
+      "href": "/omnimoney",
+      "icon": "coin"
+    },
+    {
+      "label": "About this demo",
+      "href": "/about",
+      "icon": "book"
+    }
   ],
 
   "status": [
@@ -144,250 +257,5 @@
       { "id": "a5", "who": "Ananya", "what": "added mission “Vernacular first”", "at": "Yesterday", "tone": "info" },
       { "id": "a6", "who": "Bikram", "what": "updated SLA on route-audit to 36h", "at": "2 days ago", "tone": "info" }
     ]
-  },
-
-  "masters": [
-    {
-      "key": "lanes",
-      "label": "Lanes",
-      "singular": "Lane",
-      "module": "OmniMart",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search lanes…",
-      "emptyMessage": "No lanes match this view",
-      "minWidth": 900,
-      "columns": [
-        { "key": "code", "header": "Code", "width": "110px", "type": "code" },
-        { "key": "name", "header": "Name", "width": "minmax(180px, 2fr)" },
-        { "key": "region", "header": "Region", "width": "120px" },
-        { "key": "cycle", "header": "Cycle", "width": "120px", "type": "badge", "tones": { "Daily": "green", "Weekly": "ochre", "On demand": "neutral" } },
-        { "key": "stops", "header": "Stops", "width": "90px", "type": "number", "align": "right" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "code", "label": "Code", "type": "text", "required": true, "placeholder": "LN-013", "readOnlyOnEdit": true, "hint": "Printed on delivery labels. Cannot change later." },
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Newtown → Barasat" },
-        { "key": "region", "label": "Region", "type": "select", "required": true, "options": [
-          { "value": "North", "label": "North" }, { "value": "South", "label": "South" },
-          { "value": "East", "label": "East" }, { "value": "West", "label": "West" }
-        ] },
-        { "key": "cycle", "label": "Cycle", "type": "select", "options": [
-          { "value": "Daily", "label": "Daily" }, { "value": "Weekly", "label": "Weekly" }, { "value": "On demand", "label": "On demand" }
-        ] },
-        { "key": "stops", "label": "Stops", "type": "number", "placeholder": "12" },
-        { "key": "opened_on", "label": "Opened on", "type": "date" },
-        { "key": "notes", "label": "Notes", "type": "textarea", "placeholder": "Anything a dispatcher should know…" },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": [
-        { "id": "l1", "code": "LN-001", "name": "Newtown → Barasat", "region": "North", "cycle": "Daily", "stops": 14, "opened_on": "2025-04-02", "notes": "Overnight consolidation.", "is_active": true },
-        { "id": "l2", "code": "LN-002", "name": "Salt Lake → Rajarhat", "region": "North", "cycle": "Daily", "stops": 9, "opened_on": "2025-04-11", "notes": "", "is_active": true },
-        { "id": "l3", "code": "LN-003", "name": "Howrah → Santragachi", "region": "West", "cycle": "Weekly", "stops": 6, "opened_on": "2025-05-20", "notes": "", "is_active": true },
-        { "id": "l4", "code": "LN-004", "name": "Behala → Thakurpukur", "region": "South", "cycle": "On demand", "stops": 3, "opened_on": "2025-06-01", "notes": "Seasonal.", "is_active": false, "is_archived": true },
-        { "id": "l5", "code": "LN-005", "name": "Garia → Sonarpur", "region": "South", "cycle": "Daily", "stops": 11, "opened_on": "2025-06-14", "notes": "", "is_active": true },
-        { "id": "l6", "code": "LN-006", "name": "Dumdum → Madhyamgram", "region": "North", "cycle": "Weekly", "stops": 7, "opened_on": "2025-07-03", "notes": "", "is_active": false },
-        { "id": "l7", "code": "LN-007", "name": "Sealdah → Dhakuria", "region": "East", "cycle": "Daily", "stops": 16, "opened_on": "2025-07-19", "notes": "Highest volume lane.", "is_active": true },
-        { "id": "l8", "code": "LN-008", "name": "Park Circus → Tangra", "region": "East", "cycle": "On demand", "stops": 4, "opened_on": "2025-08-02", "notes": "", "is_active": true },
-        { "id": "l9", "code": "LN-009", "name": "Kasba → Ruby", "region": "East", "cycle": "Daily", "stops": 8, "opened_on": "2025-08-21", "notes": "", "is_active": true },
-        { "id": "l10", "code": "LN-010", "name": "Barrackpore → Sodepur", "region": "North", "cycle": "Weekly", "stops": 5, "opened_on": "2025-09-05", "notes": "", "is_active": false },
-        { "id": "l11", "code": "LN-011", "name": "Maheshtala → Budge Budge", "region": "South", "cycle": "On demand", "stops": 2, "opened_on": "2026-01-12", "notes": "Pilot.", "is_active": true },
-        { "id": "l12", "code": "LN-012", "name": "Uluberia → Bagnan", "region": "West", "cycle": "Weekly", "stops": 6, "opened_on": "2026-02-28", "notes": "", "is_active": true }
-      ]
-    },
-
-    {
-      "key": "languages",
-      "label": "Languages",
-      "singular": "Language",
-      "module": "Admin",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search languages…",
-      "emptyMessage": "No languages match this view",
-      "minWidth": 760,
-      "columns": [
-        { "key": "code", "header": "Code", "width": "90px", "type": "code" },
-        { "key": "name", "header": "Name", "width": "minmax(140px, 1.6fr)" },
-        { "key": "google_code", "header": "Google code", "width": "130px", "type": "code" },
-        { "key": "coverage", "header": "Coverage", "width": "110px", "type": "number", "align": "right" },
-        { "key": "is_default", "header": "Default", "width": "110px", "type": "flag" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "code", "label": "Code", "type": "text", "required": true, "placeholder": "bn", "readOnlyOnEdit": true },
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Bengali" },
-        { "key": "google_code", "label": "Google code", "type": "text", "placeholder": "bn-IN", "hint": "Used by the translation pipeline." },
-        { "key": "coverage", "label": "Coverage %", "type": "number", "placeholder": "90" },
-        { "key": "is_default", "label": "Default", "type": "checkbox" },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": [
-        { "id": "g1", "code": "en", "name": "English", "google_code": "en", "coverage": 100, "is_default": true, "is_active": true },
-        { "id": "g2", "code": "hi", "name": "Hindi", "google_code": "hi-IN", "coverage": 96, "is_default": false, "is_active": true },
-        { "id": "g3", "code": "bn", "name": "Bengali", "google_code": "bn-IN", "coverage": 94, "is_default": false, "is_active": true },
-        { "id": "g4", "code": "ta", "name": "Tamil", "google_code": "ta-IN", "coverage": 61, "is_default": false, "is_active": true },
-        { "id": "g5", "code": "te", "name": "Telugu", "google_code": "te-IN", "coverage": 58, "is_default": false, "is_active": false },
-        { "id": "g6", "code": "mr", "name": "Marathi", "google_code": "mr-IN", "coverage": 44, "is_default": false, "is_active": false },
-        { "id": "g7", "code": "gu", "name": "Gujarati", "google_code": "gu-IN", "coverage": 31, "is_default": false, "is_active": false, "is_archived": true },
-        { "id": "g8", "code": "or", "name": "Odia", "google_code": "or-IN", "coverage": 12, "is_default": false, "is_active": true }
-      ]
-    },
-
-    {
-      "key": "task-types",
-      "label": "Task Types",
-      "singular": "Task type",
-      "module": "OmniPulse",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search task types…",
-      "emptyMessage": "No task types match this view",
-      "minWidth": 860,
-      "columns": [
-        { "key": "name", "header": "Name", "width": "minmax(170px, 2fr)" },
-        { "key": "slug", "header": "Slug", "width": "150px", "type": "code" },
-        { "key": "priority", "header": "Priority", "width": "120px", "type": "badge", "tones": { "High": "crit", "Normal": "amber", "Low": "ok" } },
-        { "key": "sla_hours", "header": "SLA (h)", "width": "100px", "type": "number", "align": "right" },
-        { "key": "requires_proof", "header": "Proof", "width": "100px", "type": "flag" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Site inspection" },
-        { "key": "slug", "label": "Slug", "type": "text", "required": true, "placeholder": "site-inspection", "readOnlyOnEdit": true },
-        { "key": "priority", "label": "Priority", "type": "select", "options": [
-          { "value": "High", "label": "High" }, { "value": "Normal", "label": "Normal" }, { "value": "Low", "label": "Low" }
-        ] },
-        { "key": "sla_hours", "label": "SLA (hours)", "type": "number", "placeholder": "24" },
-        { "key": "requires_proof", "label": "Requires proof", "type": "checkbox", "hint": "Assignee must attach a photo or a note." },
-        { "key": "description", "label": "Description", "type": "textarea" },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": [
-        { "id": "tt1", "name": "Site inspection", "slug": "site-inspection", "priority": "High", "sla_hours": 24, "requires_proof": true, "description": "Visit and photograph the site.", "is_active": true },
-        { "id": "tt2", "name": "Customer call-back", "slug": "customer-callback", "priority": "Normal", "sla_hours": 8, "requires_proof": false, "description": "", "is_active": true },
-        { "id": "tt3", "name": "Stock count", "slug": "stock-count", "priority": "Normal", "sla_hours": 48, "requires_proof": true, "description": "", "is_active": true },
-        { "id": "tt4", "name": "Escalation review", "slug": "escalation-review", "priority": "High", "sla_hours": 4, "requires_proof": false, "description": "", "is_active": true },
-        { "id": "tt5", "name": "Content approval", "slug": "content-approval", "priority": "Low", "sla_hours": 72, "requires_proof": false, "description": "", "is_active": false },
-        { "id": "tt6", "name": "Vendor onboarding", "slug": "vendor-onboarding", "priority": "Normal", "sla_hours": 96, "requires_proof": true, "description": "", "is_active": true },
-        { "id": "tt7", "name": "Waste disposal log", "slug": "waste-log", "priority": "Low", "sla_hours": 24, "requires_proof": true, "description": "", "is_active": false, "is_archived": true },
-        { "id": "tt8", "name": "Route audit", "slug": "route-audit", "priority": "Normal", "sla_hours": 36, "requires_proof": false, "description": "", "is_active": true },
-        { "id": "tt9", "name": "Training session", "slug": "training-session", "priority": "Low", "sla_hours": 120, "requires_proof": false, "description": "", "is_active": true },
-        { "id": "tt10", "name": "Payment follow-up", "slug": "payment-followup", "priority": "High", "sla_hours": 12, "requires_proof": false, "description": "", "is_active": true }
-      ]
-    },
-
-    {
-      "key": "locations",
-      "label": "Locations",
-      "singular": "Location",
-      "module": "Admin",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search locations…",
-      "emptyMessage": "No locations match this view",
-      "minWidth": 880,
-      "columns": [
-        { "key": "name", "header": "Name", "width": "minmax(170px, 2fr)" },
-        { "key": "kind", "header": "Kind", "width": "130px", "type": "badge", "tones": { "Warehouse": "green", "Branch": "ochre", "Pickup point": "neutral" } },
-        { "key": "city", "header": "City", "width": "130px" },
-        { "key": "pin", "header": "PIN", "width": "100px", "type": "code" },
-        { "key": "capacity", "header": "Capacity", "width": "110px", "type": "number", "align": "right" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Newtown Warehouse" },
-        { "key": "kind", "label": "Kind", "type": "select", "required": true, "options": [
-          { "value": "Warehouse", "label": "Warehouse" }, { "value": "Branch", "label": "Branch" }, { "value": "Pickup point", "label": "Pickup point" }
-        ] },
-        { "key": "city", "label": "City", "type": "text", "required": true, "placeholder": "Kolkata" },
-        { "key": "pin", "label": "PIN", "type": "text", "placeholder": "700156" },
-        { "key": "capacity", "label": "Capacity", "type": "number", "placeholder": "500", "hint": "Crates the site can hold." },
-        { "key": "opened_on", "label": "Opened on", "type": "date" },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": [
-        { "id": "lo1", "name": "Newtown Warehouse", "kind": "Warehouse", "city": "Kolkata", "pin": "700156", "capacity": 820, "opened_on": "2024-11-02", "is_active": true },
-        { "id": "lo2", "name": "Salt Lake Branch", "kind": "Branch", "city": "Kolkata", "pin": "700091", "capacity": 140, "opened_on": "2025-01-19", "is_active": true },
-        { "id": "lo3", "name": "Howrah Pickup", "kind": "Pickup point", "city": "Howrah", "pin": "711101", "capacity": 40, "opened_on": "2025-03-08", "is_active": true },
-        { "id": "lo4", "name": "Barasat Branch", "kind": "Branch", "city": "Barasat", "pin": "700124", "capacity": 110, "opened_on": "2025-05-30", "is_active": false },
-        { "id": "lo5", "name": "Rajarhat Warehouse", "kind": "Warehouse", "city": "Kolkata", "pin": "700135", "capacity": 640, "opened_on": "2025-06-15", "is_active": true },
-        { "id": "lo6", "name": "Behala Pickup", "kind": "Pickup point", "city": "Kolkata", "pin": "700034", "capacity": 25, "opened_on": "2025-08-01", "is_active": true },
-        { "id": "lo7", "name": "Sonarpur Branch", "kind": "Branch", "city": "Sonarpur", "pin": "700150", "capacity": 95, "opened_on": "2025-09-12", "is_active": true },
-        { "id": "lo8", "name": "Bagnan Depot", "kind": "Warehouse", "city": "Bagnan", "pin": "711303", "capacity": 300, "opened_on": "2025-10-04", "is_active": false, "is_archived": true },
-        { "id": "lo9", "name": "Dumdum Branch", "kind": "Branch", "city": "Kolkata", "pin": "700028", "capacity": 120, "opened_on": "2026-01-23", "is_active": true },
-        { "id": "lo10", "name": "Sealdah Pickup", "kind": "Pickup point", "city": "Kolkata", "pin": "700014", "capacity": 35, "opened_on": "2026-03-11", "is_active": true },
-        { "id": "lo11", "name": "Budge Budge Depot", "kind": "Warehouse", "city": "Budge Budge", "pin": "700137", "capacity": 260, "opened_on": "2026-04-02", "is_active": true },
-        { "id": "lo12", "name": "Tangra Branch", "kind": "Branch", "city": "Kolkata", "pin": "700015", "capacity": 80, "opened_on": "2026-05-26", "is_active": false }
-      ]
-    },
-
-    {
-      "key": "missions",
-      "label": "Missions",
-      "singular": "Mission",
-      "module": "OmniVarsity",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search missions…",
-      "emptyMessage": "No missions match this view",
-      "minWidth": 800,
-      "columns": [
-        { "key": "name", "header": "Name", "width": "minmax(180px, 2fr)" },
-        { "key": "owner", "header": "Owner", "width": "140px" },
-        { "key": "horizon", "header": "Horizon", "width": "130px", "type": "badge", "tones": { "Quarter": "green", "Year": "ochre", "Ongoing": "neutral" } },
-        { "key": "sort_order", "header": "Rank", "width": "90px", "type": "number", "align": "right" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Serve 10,000 households" },
-        { "key": "owner", "label": "Owner", "type": "select", "options": [
-          { "value": "Ananya", "label": "Ananya" }, { "value": "Bikram", "label": "Bikram" },
-          { "value": "Chandni", "label": "Chandni" }, { "value": "Devraj", "label": "Devraj" }
-        ] },
-        { "key": "horizon", "label": "Horizon", "type": "select", "options": [
-          { "value": "Quarter", "label": "Quarter" }, { "value": "Year", "label": "Year" }, { "value": "Ongoing", "label": "Ongoing" }
-        ] },
-        { "key": "sort_order", "label": "Rank", "type": "number", "hint": "Lower shows first." },
-        { "key": "statement", "label": "Statement", "type": "textarea", "placeholder": "One sentence, in plain words." },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": [
-        { "id": "m1", "name": "Serve 10,000 households", "owner": "Ananya", "horizon": "Year", "sort_order": 1, "statement": "Reach ten thousand regular households in the metro belt.", "is_active": true },
-        { "id": "m2", "name": "Zero waste at source", "owner": "Bikram", "horizon": "Ongoing", "sort_order": 2, "statement": "", "is_active": true },
-        { "id": "m3", "name": "Kaarigar livelihoods", "owner": "Chandni", "horizon": "Year", "sort_order": 3, "statement": "", "is_active": true },
-        { "id": "m4", "name": "Same-day fulfilment", "owner": "Devraj", "horizon": "Quarter", "sort_order": 4, "statement": "", "is_active": false },
-        { "id": "m5", "name": "Vernacular first", "owner": "Ananya", "horizon": "Quarter", "sort_order": 5, "statement": "Every screen readable in Hindi and Bengali.", "is_active": true },
-        { "id": "m6", "name": "Founder-free operations", "owner": "Bikram", "horizon": "Year", "sort_order": 6, "statement": "", "is_active": true },
-        { "id": "m7", "name": "Seasonal produce only", "owner": "Chandni", "horizon": "Ongoing", "sort_order": 7, "statement": "", "is_active": false, "is_archived": true },
-        { "id": "m8", "name": "Two-hour support reply", "owner": "Devraj", "horizon": "Quarter", "sort_order": 8, "statement": "", "is_active": true }
-      ]
-    },
-
-    {
-      "key": "trade-types",
-      "label": "Trade Types",
-      "singular": "Trade type",
-      "module": "OmniMart",
-      "section": "Masters",
-      "eyebrow": "Reference data",
-      "searchPlaceholder": "Search trade types…",
-      "emptyMessage": "No trade types yet",
-      "emptyHint": "Trade types classify a kaarigar's work — carpentry, plumbing, wiring. Add the first one to get started.",
-      "minWidth": 720,
-      "columns": [
-        { "key": "name", "header": "Name", "width": "minmax(170px, 2fr)" },
-        { "key": "slug", "header": "Slug", "width": "150px", "type": "code" },
-        { "key": "day_rate", "header": "Day rate", "width": "120px", "type": "number", "align": "right" },
-        { "key": "is_active", "header": "Status", "width": "110px", "type": "status" }
-      ],
-      "fields": [
-        { "key": "name", "label": "Name", "type": "text", "required": true, "placeholder": "Carpentry" },
-        { "key": "slug", "label": "Slug", "type": "text", "required": true, "placeholder": "carpentry", "readOnlyOnEdit": true },
-        { "key": "day_rate", "label": "Day rate (₹)", "type": "number", "placeholder": "850" },
-        { "key": "is_active", "label": "Active", "type": "checkbox" }
-      ],
-      "rows": []
-    }
-  ]
+  }
 }

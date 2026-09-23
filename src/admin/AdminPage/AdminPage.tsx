@@ -1,32 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  Badge,
   Button,
   ConfirmDialog,
-  CustomSelect,
   PageHeader,
   Pagination,
   StatusToggle,
+  SubTabs,
   Table,
   TableAction,
-  TableAddButton,
-  TableControls,
   TableRowActions,
-  emitToast,
-  type BadgeTone,
   type Column,
 } from "../../components";
-import type { DemoColumn, DemoMaster, DemoRow } from "../../data/types";
+import type { DemoMaster, DemoRow } from "../../data/types";
+import { toColumn } from "./columns";
+import { DetailPanel } from "./DetailPanel";
+import { downloadCsv } from "./exportCsv";
 import { MasterForm } from "./MasterForm";
+import { MasterToolbar, type View } from "./MasterToolbar";
+import { SummaryStrip } from "./SummaryStrip";
+import { useMasterRows } from "./useMasterRows";
 
-type View = "active" | "inactive" | "all" | "archived";
-
-const VIEW_OPTIONS = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-  { value: "all", label: "All" },
-  { value: "archived", label: "Archived" },
-];
+const ALL_TAB = "All";
 
 export interface AdminPageProps {
   master: DemoMaster;
@@ -35,57 +29,68 @@ export interface AdminPageProps {
 }
 
 /**
- * One admin master screen, rendered entirely from a descriptor.
+ * The master screen — one layout for every master in Admin.
  *
- * The application has nine of these pages — 3,564 lines — each re-implementing
- * the same table, dialog, toggle and archive flow against a different table.
- * This is that page written once: columns, form fields and rows all come from
- * `master`, so nothing here names a lane, a language or a mission.
+ * The application has fourteen of these pages, each re-implementing the same
+ * table, dialog, toggle and archive flow against a different table. This is
+ * that page written once, and the parts only some masters need are parameters
+ * on the descriptor rather than forks in the code:
  *
- * Rows are held in component state. Create, edit, activate and archive change
- * that state and nothing else — there is no API in this workspace, and the
- * whole screen resets on reload.
+ *   reorder     up/down arrows that swap a numeric order field
+ *   singleFlag  a flag only one row may hold ("Make default")
+ *   filters     extra equality filters in the toolbar
+ *   tabs        grouping tabs above the toolbar
+ *   summary     counters over the rows in view
+ *   exportable  a CSV download of what the table is showing
+ *   detail      a per-row panel of child records
+ *
+ * A master that declares none of them renders the plain screen. Nothing here
+ * names a lane, a language or a role.
  */
 export function AdminPage({ master, externalSearch }: AdminPageProps) {
-  const [rows, setRows] = useState<DemoRow[]>(master.rows);
+  const label = useMemo(() => (row: DemoRow) => labelOf(row, master), [master]);
+  const api = useMasterRows(master, label);
+
   const [search, setSearch] = useState("");
   const [view, setView] = useState<View>("active");
+  const [tab, setTab] = useState(ALL_TAB);
+  const [extraFilters, setExtraFilters] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [editing, setEditing] = useState<DemoRow | null>(null);
   const [creating, setCreating] = useState(false);
+  const [detailRow, setDetailRow] = useState<DemoRow | null>(null);
   const [pending, setPending] = useState<{ kind: "archive" | "restore"; row: DemoRow } | null>(null);
-  const [togglingId, setTogglingId] = useState<string | null>(null);
-  // Where the read would happen. Held briefly on mount and whenever the screen
-  // switches masters, so the table's skeleton is on the real path rather than
-  // only in the playground.
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    const id = window.setTimeout(() => setLoading(false), 600);
-    return () => window.clearTimeout(id);
-  }, [master.key]);
-
-  // A different master means a different screen: reset the view state rather
-  // than carrying a lanes search over to languages.
+  // A different master is a different screen: reset the view state rather than
+  // carrying a lanes search over to languages.
   const [loadedKey, setLoadedKey] = useState(master.key);
   if (loadedKey !== master.key) {
     setLoadedKey(master.key);
-    setRows(master.rows);
     setSearch("");
     setView("active");
+    setTab(ALL_TAB);
+    setExtraFilters({});
     setPage(1);
   }
 
   const query = (externalSearch?.trim() || search.trim()).toLowerCase();
+  const orderField = master.reorder?.field;
 
   const filtered = useMemo(() => {
-    return rows.filter((r) => {
+    const out = api.rows.filter((r) => {
       const archived = Boolean(r.is_archived);
       if (view === "archived" ? !archived : archived) return false;
       if (view === "active" && !r.is_active) return false;
       if (view === "inactive" && r.is_active) return false;
+
+      const tabDef = master.tabs?.find((t) => t.label === tab);
+      if (tabDef && r[tabDef.field] !== tabDef.value) return false;
+
+      for (const [key, value] of Object.entries(extraFilters)) {
+        if (value && String(r[key] ?? "") !== value) return false;
+      }
+
       if (!query) return true;
       return master.columns.some((c) =>
         String(r[c.key] ?? "")
@@ -93,24 +98,63 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
           .includes(query),
       );
     });
-  }, [rows, view, query, master.columns]);
 
-  // "Narrowed" means the view is empty because of the search or the filter,
-  // not because the master has no rows — the difference decides which empty
-  // state the table shows.
-  const narrowed = Boolean(query) || (view !== "all" && rows.length > 0);
+    // A reorderable master is ordered by its order field — otherwise the arrows
+    // would move a row somewhere the reader cannot see.
+    return orderField
+      ? [...out].sort((a, b) => Number(a[orderField]) - Number(b[orderField]))
+      : out;
+  }, [api.rows, view, tab, extraFilters, query, master.columns, master.tabs, orderField]);
+
+  // "Narrowed" means the view is empty because of a search, a tab or a filter —
+  // not because the master has no rows. The two need different empty states.
+  const narrowed =
+    Boolean(query) ||
+    tab !== ALL_TAB ||
+    Object.values(extraFilters).some(Boolean) ||
+    (view !== "all" && api.rows.length > 0);
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const safePage = Math.min(page, totalPages);
   const paginated = filtered.slice((safePage - 1) * perPage, safePage * perPage);
 
+  // Reordering swaps with the neighbour in the CURRENT list, so it is only
+  // meaningful while the list is the whole, ordered set.
+  const canReorder = Boolean(orderField) && !narrowed && view !== "archived";
+
   const columns: Column<DemoRow>[] = [
-    ...master.columns.map((c) => toColumn(c)),
+    ...(orderField
+      ? [
+          {
+            key: "__order",
+            header: "",
+            width: "52px",
+            render: (row: DemoRow) => {
+              const i = filtered.findIndex((r) => r.id === row.id);
+              return (
+                <ReorderCell
+                  disabled={!canReorder}
+                  atStart={i <= 0}
+                  atEnd={i < 0 || i >= filtered.length - 1}
+                  onUp={() => api.swapOrder(row, filtered[i - 1])}
+                  onDown={() => api.swapOrder(row, filtered[i + 1])}
+                  title={
+                    canReorder
+                      ? undefined
+                      : "Clear the search and filters to reorder"
+                  }
+                />
+              );
+            },
+          } as Column<DemoRow>,
+        ]
+      : []),
+    ...master.columns.map(toColumn),
     {
       key: "__actions",
       header: "Actions",
-      width: "170px",
+      width: master.detail || master.singleFlag ? "250px" : "170px",
       align: "right",
       render: (row) => (
         <TableRowActions nowrap>
@@ -122,10 +166,21 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
             <>
               <StatusToggle
                 active={row.is_active}
-                busy={togglingId === row.id}
+                busy={api.togglingId === row.id}
                 label={row.is_active ? "Deactivate" : "Activate"}
-                onToggle={(next) => toggleActive(row, next)}
+                onToggle={(next) => api.setActive(row, next)}
               />
+              {master.singleFlag && !row[master.singleFlag.field] && (
+                <TableAction onClick={() => api.setDefault(row)}>
+                  {master.singleFlag.action ?? "Make default"}
+                </TableAction>
+              )}
+              {master.detail && (
+                <TableAction onClick={() => setDetailRow(row)}>
+                  {master.detail.action}
+                  <Count n={childCount(row, master.detail.itemsKey)} />
+                </TableAction>
+              )}
               <TableAction onClick={() => setEditing(row)}>Edit</TableAction>
               <TableAction tone="danger" onClick={() => setPending({ kind: "archive", row })}>
                 Archive
@@ -137,52 +192,7 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
     },
   ];
 
-  function toggleActive(row: DemoRow, next: boolean) {
-    setTogglingId(row.id);
-    // A short delay so the busy state is real rather than theoretical — this is
-    // where the write would go.
-    window.setTimeout(() => {
-      setRows((rs) => rs.map((r) => (r.id === row.id ? { ...r, is_active: next } : r)));
-      setTogglingId(null);
-      emitToast(`${labelOf(row, master)} ${next ? "activated" : "deactivated"}`, "success");
-    }, 320);
-  }
-
-  function saveRow(values: Record<string, unknown>) {
-    if (editing) {
-      setRows((rs) => rs.map((r) => (r.id === editing.id ? ({ ...r, ...values } as DemoRow) : r)));
-      emitToast(`${master.singular} updated`, "success");
-      setEditing(null);
-      return;
-    }
-    const created = {
-      ...values,
-      id: `new-${Date.now()}`,
-      is_active: values.is_active !== false,
-      is_archived: false,
-    } as DemoRow;
-    setRows((rs) => [created, ...rs]);
-    emitToast(`${master.singular} created`, "success");
-    setCreating(false);
-    setPage(1);
-  }
-
-  function confirmPending() {
-    if (!pending) return;
-    const archiving = pending.kind === "archive";
-    setRows((rs) =>
-      rs.map((r) =>
-        r.id === pending.row.id
-          ? { ...r, is_archived: archiving, is_active: archiving ? false : r.is_active }
-          : r,
-      ),
-    );
-    emitToast(
-      `${labelOf(pending.row, master)} ${archiving ? "archived" : "restored"}`,
-      archiving ? "info" : "success",
-    );
-    setPending(null);
-  }
+  const liveRows = api.rows.filter((r) => !r.is_archived);
 
   return (
     <div>
@@ -191,54 +201,74 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
         crumbs={[{ label: master.module }, { label: master.section }, { label: master.label }]}
         onNavigate={() => undefined}
         actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
-            {rows.filter((r) => !r.is_archived).length} {master.label.toLowerCase()}
-          </span>
+          <>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+              {liveRows.length} {master.label.toLowerCase()}
+            </span>
+            <Button variant="ghost" size="sm" onClick={api.reload}>
+              Reload
+            </Button>
+          </>
         }
       />
 
-      <div className="table-toolbar">
-        <TableControls
-          search={search}
-          onSearch={(v) => {
-            setSearch(v);
-            setPage(1);
-          }}
-          placeholder={master.searchPlaceholder ?? `Search ${master.label.toLowerCase()}…`}
-          inlineOnMobile
-        >
-          <div className="picker-field">
-            <CustomSelect
-              value={view}
-              onChange={(v) => {
-                setView(v as View);
-                setPage(1);
-              }}
-              options={VIEW_OPTIONS}
-              aria-label="View"
-              compact
-            />
-          </div>
-        </TableControls>
-        <TableAddButton label={`+ Add ${master.singular.toLowerCase()}`} onClick={() => setCreating(true)} />
-      </div>
+      {master.tabs && master.tabs.length > 0 && (
+        <div style={{ marginBottom: 14 }}>
+          <SubTabs
+            tabs={[ALL_TAB, ...master.tabs.map((t) => t.label)]}
+            active={tab}
+            onChange={(t) => {
+              setTab(t);
+              setPage(1);
+            }}
+            ariaLabel={`${master.label} groups`}
+            counts={Object.fromEntries(
+              master.tabs.map((t) => [
+                t.label,
+                liveRows.filter((r) => r[t.field] === t.value).length,
+              ]),
+            )}
+          />
+        </div>
+      )}
+
+      <SummaryStrip master={master} rows={filtered} />
+
+      <MasterToolbar
+        master={master}
+        search={search}
+        onSearch={(v) => {
+          setSearch(v);
+          setPage(1);
+        }}
+        view={view}
+        onView={(v) => {
+          setView(v);
+          setPage(1);
+        }}
+        filters={extraFilters}
+        onFilter={(key, value) => {
+          setExtraFilters((f) => ({ ...f, [key]: value }));
+          setPage(1);
+        }}
+        onAdd={() => setCreating(true)}
+        onExport={() => downloadCsv(`${master.key}.csv`, master.columns, filtered)}
+      />
 
       <Table
         columns={columns}
         data={paginated}
         rowKey={(r) => r.id}
-        loading={loading}
-        minWidth={master.minWidth ?? 820}
-        // Three different messages, because they call for three different
-        // actions: clear the search, widen the view, or create the first row.
+        loading={api.loading}
+        minWidth={(master.minWidth ?? 820) + (orderField ? 60 : 0)}
         emptyVariant={narrowed ? "no-results" : "empty"}
         emptyMessage={
           query
             ? `No ${master.label.toLowerCase()} match “${query}”`
             : view === "archived"
               ? `No archived ${master.label.toLowerCase()}`
-              : view !== "all" && rows.length > 0
-                ? `No ${view} ${master.label.toLowerCase()}`
+              : narrowed
+                ? `No ${master.label.toLowerCase()} in this view`
                 : (master.emptyMessage ?? `No ${master.label.toLowerCase()} yet`)
         }
         emptyHint={
@@ -246,8 +276,8 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
             ? "Check the spelling, or clear the search to see everything."
             : view === "archived"
               ? "Rows archived from this screen can be restored here."
-              : view !== "all" && rows.length > 0
-                ? `There are ${rows.length} in total — switch the view to All.`
+              : narrowed
+                ? `There are ${liveRows.length} in total — widen the filters to see them.`
                 : master.emptyHint
         }
         emptyAction={
@@ -258,6 +288,8 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
               onClick={() => {
                 setSearch("");
                 setView("all");
+                setTab(ALL_TAB);
+                setExtraFilters({});
                 setPage(1);
               }}
             >
@@ -290,11 +322,29 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
           open
           master={master}
           row={editing}
+          onSave={(values) => {
+            if (editing) api.update(editing.id, values);
+            else {
+              api.create(values);
+              setPage(1);
+            }
+            setCreating(false);
+            setEditing(null);
+          }}
           onCancel={() => {
             setCreating(false);
             setEditing(null);
           }}
-          onSave={saveRow}
+        />
+      )}
+
+      {master.detail && detailRow && (
+        <DetailPanel
+          panel={master.detail}
+          row={api.rows.find((r) => r.id === detailRow.id) ?? detailRow}
+          rowLabel={label(detailRow)}
+          onClose={() => setDetailRow(null)}
+          onChange={(items) => api.setChildren(detailRow.id, master.detail!.itemsKey, items)}
         />
       )}
 
@@ -308,89 +358,97 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
         description={
           pending
             ? pending.kind === "restore"
-              ? `Restore “${labelOf(pending.row, master)}” to the working list.`
-              : `Archive “${labelOf(pending.row, master)}”. It leaves the list — you can restore it from the Archived view.`
+              ? `Restore “${label(pending.row)}” to the working list.`
+              : `Archive “${label(pending.row)}”. It leaves the list — you can restore it from the Archived view.`
             : ""
         }
         confirmLabel={pending?.kind === "restore" ? "Restore" : "Archive"}
         confirmTone={pending?.kind === "restore" ? "primary" : "danger"}
         onCancel={() => setPending(null)}
-        onConfirm={confirmPending}
+        onConfirm={() => {
+          if (pending) api.setArchived(pending.row, pending.kind === "archive");
+          setPending(null);
+        }}
       />
     </div>
   );
 }
 
-/** Descriptor column → shared Table column, one renderer per declared type. */
-function toColumn(c: DemoColumn): Column<DemoRow> {
-  const base = { key: c.key, header: c.header, width: c.width, align: c.align };
-
-  switch (c.type) {
-    case "code":
-      return {
-        ...base,
-        render: (r) => (
-          <code style={{ fontFamily: "var(--mono)", fontSize: 12, fontWeight: 600 }}>
-            {String(r[c.key] ?? "—")}
-          </code>
-        ),
-      };
-    case "badge":
-      return {
-        ...base,
-        render: (r) => {
-          const v = String(r[c.key] ?? "");
-          if (!v) return <Muted />;
-          return <Badge tone={(c.tones?.[v] as BadgeTone) ?? "neutral"}>{v}</Badge>;
-        },
-      };
-    case "flag":
-      return {
-        ...base,
-        render: (r) => (r[c.key] ? <Badge tone="green">Yes</Badge> : <Muted />),
-      };
-    case "number":
-      return {
-        ...base,
-        align: c.align ?? "right",
-        render: (r) => (
-          <span style={{ fontFamily: "var(--mono)", fontVariantNumeric: "tabular-nums" }}>
-            {r[c.key] == null || r[c.key] === "" ? "—" : String(r[c.key])}
-          </span>
-        ),
-      };
-    case "date":
-      return {
-        ...base,
-        render: (r) => (
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11.5, color: "var(--ink-soft)" }}>
-            {String(r[c.key] ?? "—")}
-          </span>
-        ),
-      };
-    case "status":
-      return {
-        ...base,
-        render: (r) =>
-          r.is_archived ? (
-            <Badge tone="neutral">Archived</Badge>
-          ) : r.is_active ? (
-            <Badge tone="ok">Active</Badge>
-          ) : (
-            <Badge tone="amber">Inactive</Badge>
-          ),
-      };
-    default:
-      return { ...base, render: (r) => <span>{String(r[c.key] ?? "—")}</span> };
-  }
+/** Up/down arrows, in the leading column of a reorderable master. */
+function ReorderCell({
+  disabled,
+  atStart,
+  atEnd,
+  onUp,
+  onDown,
+  title,
+}: {
+  disabled: boolean;
+  atStart: boolean;
+  atEnd: boolean;
+  onUp: () => void;
+  onDown: () => void;
+  title?: string;
+}) {
+  return (
+    <span style={{ display: "inline-flex", flexDirection: "column", gap: 1 }} title={title}>
+      <button
+        type="button"
+        className="arrow-btn"
+        onClick={onUp}
+        disabled={disabled || atStart}
+        aria-label="Move up"
+      >
+        <Chevron up />
+      </button>
+      <button
+        type="button"
+        className="arrow-btn"
+        onClick={onDown}
+        disabled={disabled || atEnd}
+        aria-label="Move down"
+      >
+        <Chevron />
+      </button>
+    </span>
+  );
 }
 
-function Muted() {
-  return <span style={{ color: "var(--ink-faint)" }}>—</span>;
+function Chevron({ up = false }: { up?: boolean }) {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={up ? "M18 15l-6-6-6 6" : "M6 9l6 6 6-6"} />
+    </svg>
+  );
 }
 
-/** Best human label for a row — the first text column, else the id. */
+function Count({ n }: { n: number }) {
+  if (n === 0) return null;
+  return (
+    <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--ink-mute)", marginLeft: 4 }}>
+      {n}
+    </span>
+  );
+}
+
+function childCount(row: DemoRow, key: string): number {
+  return Array.isArray(row[key]) ? (row[key] as unknown[]).length : 0;
+}
+
+/** Best human label for a row — the first text-ish column, else the id. */
 function labelOf(row: DemoRow, master: DemoMaster): string {
-  const col = master.columns.find((c) => !c.type || c.type === "text") ?? master.columns[0];
+  const col =
+    master.columns.find((c) => !c.type || c.type === "text" || c.type === "user") ??
+    master.columns[0];
   return String(row[col.key] ?? row.id);
 }
