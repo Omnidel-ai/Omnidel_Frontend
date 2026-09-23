@@ -3,8 +3,8 @@
     "key": "lanes",
     "label": "Lanes",
     "singular": "Lane",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search lanes…",
     "minWidth": 980,
@@ -322,7 +322,7 @@
     "label": "Languages",
     "singular": "Language",
     "module": "Admin",
-    "section": "Masters",
+    "section": "System",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search languages…",
     "minWidth": 860,
@@ -481,13 +481,13 @@
     ]
   },
   {
-    "key": "locations",
-    "label": "Locations",
-    "singular": "Location",
+    "key": "branches",
+    "label": "Branches",
+    "singular": "Branch",
     "module": "Admin",
-    "section": "Masters",
+    "section": "Branches & Inventory",
     "eyebrow": "Reference data",
-    "searchPlaceholder": "Search locations…",
+    "searchPlaceholder": "Search branches…",
     "minWidth": 940,
     "filters": [
       {
@@ -541,7 +541,7 @@
     ],
     "summary": [
       {
-        "label": "Sites",
+        "label": "Branches",
         "kind": "count"
       },
       {
@@ -780,8 +780,8 @@
     "key": "missions",
     "label": "Missions",
     "singular": "Mission",
-    "module": "OmniVarsity",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search missions…",
     "minWidth": 860,
@@ -967,8 +967,8 @@
     "key": "task-types",
     "label": "Task Types",
     "singular": "Task type",
-    "module": "OmniPulse",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Tasks & Workflow",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search task types…",
     "minWidth": 900,
@@ -1215,8 +1215,8 @@
     "key": "trade-types",
     "label": "Trade Types",
     "singular": "Trade type",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Tasks & Workflow",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search trade types…",
     "emptyMessage": "No trade types yet",
@@ -1282,8 +1282,8 @@
     "key": "acharya-types",
     "label": "Acharya Types",
     "singular": "Acharya type",
-    "module": "OmniVarsity",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Tasks & Workflow",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search acharya types…",
     "minWidth": 880,
@@ -1461,8 +1461,8 @@
     "key": "lead-sources",
     "label": "Lead Sources",
     "singular": "Lead source",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search lead sources…",
     "minWidth": 900,
@@ -1623,7 +1623,7 @@
     "label": "Departments",
     "singular": "Department",
     "module": "Admin",
-    "section": "Masters",
+    "section": "Teams & Sections",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search departments…",
     "minWidth": 940,
@@ -1857,8 +1857,8 @@
     "key": "pipeline-stages",
     "label": "Pipeline Stages",
     "singular": "Stage",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search pipeline stages…",
     "minWidth": 1000,
@@ -2224,8 +2224,8 @@
     "key": "operation-stages",
     "label": "Operation Stages",
     "singular": "Stage",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search operation stages…",
     "minWidth": 900,
@@ -2522,8 +2522,8 @@
     "key": "stage-fields",
     "label": "Stage Fields",
     "singular": "Stage field",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search stage fields…",
     "minWidth": 880,
@@ -2766,7 +2766,7 @@
     "label": "State Codes",
     "singular": "State",
     "module": "Admin",
-    "section": "Masters",
+    "section": "System",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search state codes…",
     "minWidth": 820,
@@ -3060,8 +3060,8 @@
     "key": "project-types",
     "label": "Project Types",
     "singular": "Project type",
-    "module": "OmniMart",
-    "section": "Masters",
+    "module": "Admin",
+    "section": "Sales & Pipeline",
     "eyebrow": "Reference data",
     "searchPlaceholder": "Search project types…",
     "minWidth": 840,
@@ -3224,7 +3224,7 @@
     "label": "Users",
     "singular": "User",
     "module": "Admin",
-    "section": "Access",
+    "section": "People & Access",
     "eyebrow": "People and access",
     "searchPlaceholder": "Search users…",
     "minWidth": 1020,
@@ -3505,7 +3505,7 @@
     "label": "Roles",
     "singular": "Role",
     "module": "Admin",
-    "section": "Access",
+    "section": "People & Access",
     "eyebrow": "People and access",
     "searchPlaceholder": "Search roles…",
     "minWidth": 760,
@@ -3800,7 +3800,7 @@
     "label": "Workspaces",
     "singular": "Workspace",
     "module": "Admin",
-    "section": "Access",
+    "section": "People & Access",
     "eyebrow": "People and access",
     "searchPlaceholder": "Search workspaces…",
     "minWidth": 960,
@@ -4013,6 +4013,1248 @@
         "members": 6,
         "created_on": "2025-09-05",
         "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "teams",
+    "label": "Teams",
+    "singular": "Team",
+    "module": "Admin",
+    "section": "Teams & Sections",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search teams…",
+    "minWidth": 940,
+    "filters": [
+      {
+        "key": "department",
+        "label": "Department",
+        "options": [
+          {
+            "value": "Operations",
+            "label": "Operations"
+          },
+          {
+            "value": "Catalogue",
+            "label": "Catalogue"
+          },
+          {
+            "value": "Finance",
+            "label": "Finance"
+          },
+          {
+            "value": "Platform",
+            "label": "Platform"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          },
+          {
+            "value": "Quality",
+            "label": "Quality"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Teams",
+        "kind": "count"
+      },
+      {
+        "label": "Members",
+        "kind": "sum",
+        "field": "members"
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(150px, 1.5fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "130px",
+        "type": "code"
+      },
+      {
+        "key": "lead",
+        "header": "Lead",
+        "width": "150px",
+        "type": "user"
+      },
+      {
+        "key": "department",
+        "header": "Department",
+        "width": "130px",
+        "type": "badge",
+        "tones": {
+          "Operations": "green",
+          "Catalogue": "ochre",
+          "Finance": "neutral",
+          "Platform": "green",
+          "Support": "ochre",
+          "Quality": "neutral"
+        }
+      },
+      {
+        "key": "members",
+        "header": "Members",
+        "width": "100px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Dispatch"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "dispatch",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "lead",
+        "label": "Lead",
+        "type": "select",
+        "options": [
+          {
+            "value": "Ananya Sen",
+            "label": "Ananya Sen"
+          },
+          {
+            "value": "Bikram Das",
+            "label": "Bikram Das"
+          },
+          {
+            "value": "Chandni Roy",
+            "label": "Chandni Roy"
+          },
+          {
+            "value": "Devraj Nair",
+            "label": "Devraj Nair"
+          },
+          {
+            "value": "Esha Khan",
+            "label": "Esha Khan"
+          },
+          {
+            "value": "Farhan Ali",
+            "label": "Farhan Ali"
+          },
+          {
+            "value": "Gitanjali Bose",
+            "label": "Gitanjali Bose"
+          },
+          {
+            "value": "Harshit Sharma",
+            "label": "Harshit Sharma"
+          }
+        ]
+      },
+      {
+        "key": "department",
+        "label": "Department",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Operations",
+            "label": "Operations"
+          },
+          {
+            "value": "Catalogue",
+            "label": "Catalogue"
+          },
+          {
+            "value": "Finance",
+            "label": "Finance"
+          },
+          {
+            "value": "Platform",
+            "label": "Platform"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          },
+          {
+            "value": "Quality",
+            "label": "Quality"
+          }
+        ]
+      },
+      {
+        "key": "members",
+        "label": "Members",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "tm1",
+        "name": "Dispatch",
+        "slug": "dispatch",
+        "lead": "Bikram Das",
+        "members": 9,
+        "department": "Operations",
+        "is_active": true
+      },
+      {
+        "id": "tm2",
+        "name": "Warehouse",
+        "slug": "warehouse",
+        "lead": "Farhan Ali",
+        "members": 12,
+        "department": "Operations",
+        "is_active": true
+      },
+      {
+        "id": "tm3",
+        "name": "Content",
+        "slug": "content",
+        "lead": "Chandni Roy",
+        "members": 5,
+        "department": "Catalogue",
+        "is_active": true
+      },
+      {
+        "id": "tm4",
+        "name": "Billing",
+        "slug": "billing",
+        "lead": "Devraj Nair",
+        "members": 4,
+        "department": "Finance",
+        "is_active": true
+      },
+      {
+        "id": "tm5",
+        "name": "Front desk",
+        "slug": "front-desk",
+        "lead": "Esha Khan",
+        "members": 6,
+        "department": "Support",
+        "is_active": true
+      },
+      {
+        "id": "tm6",
+        "name": "Web",
+        "slug": "web",
+        "lead": "Harshit Sharma",
+        "members": 7,
+        "department": "Platform",
+        "is_active": true
+      },
+      {
+        "id": "tm7",
+        "name": "Audit",
+        "slug": "audit",
+        "lead": "Gitanjali Bose",
+        "members": 3,
+        "department": "Quality",
+        "is_active": false
+      }
+    ]
+  },
+  {
+    "key": "sections",
+    "label": "Sections",
+    "singular": "Section",
+    "module": "Admin",
+    "section": "Teams & Sections",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search sections…",
+    "minWidth": 820,
+    "reorder": {
+      "field": "sort_order"
+    },
+    "columns": [
+      {
+        "key": "sort_order",
+        "header": "#",
+        "width": "60px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(160px, 1.6fr)"
+      },
+      {
+        "key": "slug",
+        "header": "Slug",
+        "width": "140px",
+        "type": "code"
+      },
+      {
+        "key": "department",
+        "header": "Department",
+        "width": "140px",
+        "type": "badge",
+        "tones": {
+          "Operations": "green",
+          "Catalogue": "ochre",
+          "Finance": "neutral",
+          "Platform": "green",
+          "Support": "ochre",
+          "Quality": "neutral"
+        }
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Morning shift"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "morning-shift",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "department",
+        "label": "Department",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Operations",
+            "label": "Operations"
+          },
+          {
+            "value": "Catalogue",
+            "label": "Catalogue"
+          },
+          {
+            "value": "Finance",
+            "label": "Finance"
+          },
+          {
+            "value": "Platform",
+            "label": "Platform"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          },
+          {
+            "value": "Quality",
+            "label": "Quality"
+          }
+        ]
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "sc1",
+        "name": "Morning shift",
+        "slug": "morning-shift",
+        "department": "Operations",
+        "sort_order": 1,
+        "is_active": true
+      },
+      {
+        "id": "sc2",
+        "name": "Evening shift",
+        "slug": "evening-shift",
+        "department": "Operations",
+        "sort_order": 2,
+        "is_active": true
+      },
+      {
+        "id": "sc3",
+        "name": "Weekend crew",
+        "slug": "weekend-crew",
+        "department": "Operations",
+        "sort_order": 3,
+        "is_active": false
+      },
+      {
+        "id": "sc4",
+        "name": "Catalogue desk",
+        "slug": "catalogue-desk",
+        "department": "Catalogue",
+        "sort_order": 4,
+        "is_active": true
+      },
+      {
+        "id": "sc5",
+        "name": "Accounts desk",
+        "slug": "accounts-desk",
+        "department": "Finance",
+        "sort_order": 5,
+        "is_active": true
+      },
+      {
+        "id": "sc6",
+        "name": "Support desk",
+        "slug": "support-desk",
+        "department": "Support",
+        "sort_order": 6,
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "inventory-pricing",
+    "label": "Inventory & Pricing",
+    "singular": "Item",
+    "module": "Admin",
+    "section": "Branches & Inventory",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search inventory & pricing…",
+    "minWidth": 960,
+    "filters": [
+      {
+        "key": "category",
+        "label": "Category",
+        "options": [
+          {
+            "value": "Timber",
+            "label": "Timber"
+          },
+          {
+            "value": "Fittings",
+            "label": "Fittings"
+          },
+          {
+            "value": "Finish",
+            "label": "Finish"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Items",
+        "kind": "count"
+      },
+      {
+        "label": "Units",
+        "kind": "sum",
+        "field": "stock"
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "sku",
+        "header": "SKU",
+        "width": "120px",
+        "type": "code"
+      },
+      {
+        "key": "name",
+        "header": "Item",
+        "width": "minmax(180px, 2fr)"
+      },
+      {
+        "key": "category",
+        "header": "Category",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Timber": "green",
+          "Fittings": "ochre",
+          "Finish": "neutral"
+        }
+      },
+      {
+        "key": "price",
+        "header": "Price",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "stock",
+        "header": "In stock",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "sku",
+        "label": "SKU",
+        "type": "text",
+        "required": true,
+        "placeholder": "SKU-1010",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "name",
+        "label": "Item",
+        "type": "text",
+        "required": true,
+        "placeholder": "Teak plank 8ft"
+      },
+      {
+        "key": "category",
+        "label": "Category",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Timber",
+            "label": "Timber"
+          },
+          {
+            "value": "Fittings",
+            "label": "Fittings"
+          },
+          {
+            "value": "Finish",
+            "label": "Finish"
+          }
+        ]
+      },
+      {
+        "key": "price",
+        "label": "Price",
+        "type": "number",
+        "placeholder": "1450",
+        "hint": "In rupees."
+      },
+      {
+        "key": "stock",
+        "label": "In stock",
+        "type": "number",
+        "placeholder": "120"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "iv1",
+        "name": "Teak plank 8ft",
+        "sku": "SKU-1001",
+        "category": "Timber",
+        "price": 1450,
+        "stock": 120,
+        "is_active": true
+      },
+      {
+        "id": "iv2",
+        "name": "Ply board 19mm",
+        "sku": "SKU-1002",
+        "category": "Timber",
+        "price": 980,
+        "stock": 240,
+        "is_active": true
+      },
+      {
+        "id": "iv3",
+        "name": "Brass handle",
+        "sku": "SKU-1003",
+        "category": "Fittings",
+        "price": 210,
+        "stock": 860,
+        "is_active": true
+      },
+      {
+        "id": "iv4",
+        "name": "Soft-close hinge",
+        "sku": "SKU-1004",
+        "category": "Fittings",
+        "price": 340,
+        "stock": 540,
+        "is_active": true
+      },
+      {
+        "id": "iv5",
+        "name": "Laminate sheet",
+        "sku": "SKU-1005",
+        "category": "Finish",
+        "price": 720,
+        "stock": 310,
+        "is_active": true
+      },
+      {
+        "id": "iv6",
+        "name": "Edge banding roll",
+        "sku": "SKU-1006",
+        "category": "Finish",
+        "price": 180,
+        "stock": 90,
+        "is_active": false,
+        "is_archived": true
+      },
+      {
+        "id": "iv7",
+        "name": "Drawer channel",
+        "sku": "SKU-1007",
+        "category": "Fittings",
+        "price": 260,
+        "stock": 410,
+        "is_active": true
+      },
+      {
+        "id": "iv8",
+        "name": "Wood primer 4L",
+        "sku": "SKU-1008",
+        "category": "Finish",
+        "price": 640,
+        "stock": 75,
+        "is_active": true
+      },
+      {
+        "id": "iv9",
+        "name": "Screw pack 100",
+        "sku": "SKU-1009",
+        "category": "Fittings",
+        "price": 95,
+        "stock": 1200,
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "vatika-inventory",
+    "label": "Vatika Inventory",
+    "singular": "Vatika item",
+    "module": "Admin",
+    "section": "Branches & Inventory",
+    "eyebrow": "Reference data",
+    "searchPlaceholder": "Search vatika inventory…",
+    "minWidth": 900,
+    "filters": [
+      {
+        "key": "kind",
+        "label": "Kind",
+        "options": [
+          {
+            "value": "Flowers",
+            "label": "Flowers"
+          },
+          {
+            "value": "Plants",
+            "label": "Plants"
+          },
+          {
+            "value": "Leaves",
+            "label": "Leaves"
+          },
+          {
+            "value": "Soil",
+            "label": "Soil"
+          }
+        ]
+      }
+    ],
+    "columns": [
+      {
+        "key": "code",
+        "header": "Code",
+        "width": "110px",
+        "type": "code"
+      },
+      {
+        "key": "name",
+        "header": "Item",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "kind",
+        "header": "Kind",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Flowers": "ochre",
+          "Plants": "green",
+          "Leaves": "green",
+          "Soil": "neutral"
+        }
+      },
+      {
+        "key": "site",
+        "header": "Site",
+        "width": "minmax(150px, 1.4fr)"
+      },
+      {
+        "key": "stock",
+        "header": "In stock",
+        "width": "110px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "code",
+        "label": "Code",
+        "type": "text",
+        "required": true,
+        "placeholder": "VT-207",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "name",
+        "label": "Item",
+        "type": "text",
+        "required": true,
+        "placeholder": "Marigold tray"
+      },
+      {
+        "key": "kind",
+        "label": "Kind",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Flowers",
+            "label": "Flowers"
+          },
+          {
+            "value": "Plants",
+            "label": "Plants"
+          },
+          {
+            "value": "Leaves",
+            "label": "Leaves"
+          },
+          {
+            "value": "Soil",
+            "label": "Soil"
+          }
+        ]
+      },
+      {
+        "key": "site",
+        "label": "Site",
+        "type": "select",
+        "options": [
+          {
+            "value": "Newtown Warehouse",
+            "label": "Newtown Warehouse"
+          },
+          {
+            "value": "Rajarhat Warehouse",
+            "label": "Rajarhat Warehouse"
+          },
+          {
+            "value": "Bagnan Depot",
+            "label": "Bagnan Depot"
+          }
+        ]
+      },
+      {
+        "key": "stock",
+        "label": "In stock",
+        "type": "number"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "vt1",
+        "name": "Marigold tray",
+        "code": "VT-201",
+        "kind": "Flowers",
+        "stock": 40,
+        "site": "Newtown Warehouse",
+        "is_active": true
+      },
+      {
+        "id": "vt2",
+        "name": "Tulsi sapling",
+        "code": "VT-202",
+        "kind": "Plants",
+        "stock": 25,
+        "site": "Rajarhat Warehouse",
+        "is_active": true
+      },
+      {
+        "id": "vt3",
+        "name": "Banana leaf bundle",
+        "code": "VT-203",
+        "kind": "Leaves",
+        "stock": 60,
+        "site": "Newtown Warehouse",
+        "is_active": true
+      },
+      {
+        "id": "vt4",
+        "name": "Mango sapling",
+        "code": "VT-204",
+        "kind": "Plants",
+        "stock": 18,
+        "site": "Bagnan Depot",
+        "is_active": false
+      },
+      {
+        "id": "vt5",
+        "name": "Rose bunch",
+        "code": "VT-205",
+        "kind": "Flowers",
+        "stock": 75,
+        "site": "Rajarhat Warehouse",
+        "is_active": true
+      },
+      {
+        "id": "vt6",
+        "name": "Compost 5kg",
+        "code": "VT-206",
+        "kind": "Soil",
+        "stock": 32,
+        "site": "Newtown Warehouse",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "pending-setup",
+    "label": "Pending setup",
+    "singular": "Invitation",
+    "module": "Admin",
+    "section": "People & Access",
+    "eyebrow": "People and access",
+    "searchPlaceholder": "Search pending setup…",
+    "emptyMessage": "Nobody is waiting to be set up",
+    "emptyHint": "Invitations still needing a phone verification or a role land here.",
+    "minWidth": 900,
+    "summary": [
+      {
+        "label": "Waiting",
+        "kind": "count"
+      }
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(160px, 1.6fr)",
+        "type": "user"
+      },
+      {
+        "key": "phone",
+        "header": "Phone",
+        "width": "150px",
+        "type": "code"
+      },
+      {
+        "key": "team",
+        "header": "Team",
+        "width": "140px"
+      },
+      {
+        "key": "blocker",
+        "header": "Blocked on",
+        "width": "minmax(150px, 1.4fr)",
+        "type": "badge",
+        "tones": {
+          "Phone not verified": "crit",
+          "Awaiting role": "amber"
+        }
+      },
+      {
+        "key": "invited_on",
+        "header": "Invited",
+        "width": "120px",
+        "type": "date"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Rahul Mondal"
+      },
+      {
+        "key": "phone",
+        "label": "Phone",
+        "type": "text",
+        "required": true,
+        "placeholder": "+91 …"
+      },
+      {
+        "key": "team",
+        "label": "Team",
+        "type": "select",
+        "options": [
+          {
+            "value": "Dispatch",
+            "label": "Dispatch"
+          },
+          {
+            "value": "Warehouse",
+            "label": "Warehouse"
+          },
+          {
+            "value": "Content",
+            "label": "Content"
+          },
+          {
+            "value": "Billing",
+            "label": "Billing"
+          },
+          {
+            "value": "Front desk",
+            "label": "Front desk"
+          },
+          {
+            "value": "Web",
+            "label": "Web"
+          },
+          {
+            "value": "Audit",
+            "label": "Audit"
+          }
+        ]
+      },
+      {
+        "key": "blocker",
+        "label": "Blocked on",
+        "type": "select",
+        "options": [
+          {
+            "value": "Phone not verified",
+            "label": "Phone not verified"
+          },
+          {
+            "value": "Awaiting role",
+            "label": "Awaiting role"
+          }
+        ]
+      },
+      {
+        "key": "invited_on",
+        "label": "Invited on",
+        "type": "date"
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "pd1",
+        "name": "Rahul Mondal",
+        "phone": "+91 98300 00021",
+        "team": "Dispatch",
+        "blocker": "Phone not verified",
+        "invited_on": "2026-09-18",
+        "is_active": true
+      },
+      {
+        "id": "pd2",
+        "name": "Sneha Pal",
+        "phone": "+91 98300 00022",
+        "team": "Warehouse",
+        "blocker": "Awaiting role",
+        "invited_on": "2026-09-18",
+        "is_active": true
+      },
+      {
+        "id": "pd3",
+        "name": "Imran Sheikh",
+        "phone": "+91 98300 00023",
+        "team": "Front desk",
+        "blocker": "Phone not verified",
+        "invited_on": "2026-09-18",
+        "is_active": true
+      }
+    ]
+  },
+  {
+    "key": "reports",
+    "label": "Reports",
+    "singular": "Report",
+    "module": "Admin",
+    "section": "Admin",
+    "eyebrow": "Scheduled reports",
+    "searchPlaceholder": "Search reports…",
+    "minWidth": 960,
+    "filters": [
+      {
+        "key": "cadence",
+        "label": "Cadence",
+        "options": [
+          {
+            "value": "Daily",
+            "label": "Daily"
+          },
+          {
+            "value": "Weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "Monthly",
+            "label": "Monthly"
+          }
+        ]
+      }
+    ],
+    "exportable": true,
+    "columns": [
+      {
+        "key": "name",
+        "header": "Name",
+        "width": "minmax(170px, 2fr)"
+      },
+      {
+        "key": "area",
+        "header": "Area",
+        "width": "130px"
+      },
+      {
+        "key": "cadence",
+        "header": "Cadence",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Daily": "green",
+          "Weekly": "ochre",
+          "Monthly": "neutral"
+        }
+      },
+      {
+        "key": "owner",
+        "header": "Owner",
+        "width": "150px",
+        "type": "user"
+      },
+      {
+        "key": "last_run",
+        "header": "Last run",
+        "width": "130px"
+      },
+      {
+        "key": "is_active",
+        "header": "Status",
+        "width": "110px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Daily dispatch"
+      },
+      {
+        "key": "slug",
+        "label": "Slug",
+        "type": "text",
+        "required": true,
+        "placeholder": "daily-dispatch",
+        "readOnlyOnEdit": true
+      },
+      {
+        "key": "area",
+        "label": "Area",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Operations",
+            "label": "Operations"
+          },
+          {
+            "value": "Finance",
+            "label": "Finance"
+          },
+          {
+            "value": "Catalogue",
+            "label": "Catalogue"
+          },
+          {
+            "value": "Support",
+            "label": "Support"
+          }
+        ]
+      },
+      {
+        "key": "cadence",
+        "label": "Cadence",
+        "type": "select",
+        "options": [
+          {
+            "value": "Daily",
+            "label": "Daily"
+          },
+          {
+            "value": "Weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "Monthly",
+            "label": "Monthly"
+          }
+        ]
+      },
+      {
+        "key": "owner",
+        "label": "Owner",
+        "type": "select",
+        "options": [
+          {
+            "value": "Ananya Sen",
+            "label": "Ananya Sen"
+          },
+          {
+            "value": "Bikram Das",
+            "label": "Bikram Das"
+          },
+          {
+            "value": "Chandni Roy",
+            "label": "Chandni Roy"
+          },
+          {
+            "value": "Devraj Nair",
+            "label": "Devraj Nair"
+          },
+          {
+            "value": "Esha Khan",
+            "label": "Esha Khan"
+          },
+          {
+            "value": "Farhan Ali",
+            "label": "Farhan Ali"
+          },
+          {
+            "value": "Gitanjali Bose",
+            "label": "Gitanjali Bose"
+          },
+          {
+            "value": "Harshit Sharma",
+            "label": "Harshit Sharma"
+          }
+        ]
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "rows": [
+      {
+        "id": "rp1",
+        "name": "Daily dispatch",
+        "slug": "daily-dispatch",
+        "area": "Operations",
+        "cadence": "Daily",
+        "owner": "Bikram Das",
+        "last_run": "Today 06:00",
+        "is_active": true
+      },
+      {
+        "id": "rp2",
+        "name": "Lane utilisation",
+        "slug": "lane-utilisation",
+        "area": "Operations",
+        "cadence": "Weekly",
+        "owner": "Ananya Sen",
+        "last_run": "Mon 07:00",
+        "is_active": true
+      },
+      {
+        "id": "rp3",
+        "name": "Revenue by branch",
+        "slug": "revenue-by-branch",
+        "area": "Finance",
+        "cadence": "Monthly",
+        "owner": "Devraj Nair",
+        "last_run": "1 Sep",
+        "is_active": true
+      },
+      {
+        "id": "rp4",
+        "name": "Kaarigar payouts",
+        "slug": "kaarigar-payouts",
+        "area": "Finance",
+        "cadence": "Monthly",
+        "owner": "Devraj Nair",
+        "last_run": "1 Sep",
+        "is_active": true
+      },
+      {
+        "id": "rp5",
+        "name": "Catalogue coverage",
+        "slug": "catalogue-coverage",
+        "area": "Catalogue",
+        "cadence": "Weekly",
+        "owner": "Chandni Roy",
+        "last_run": "Mon 07:00",
+        "is_active": false
+      },
+      {
+        "id": "rp6",
+        "name": "Support backlog",
+        "slug": "support-backlog",
+        "area": "Support",
+        "cadence": "Daily",
+        "owner": "Esha Khan",
+        "last_run": "Today 06:00",
+        "is_active": true
       }
     ]
   }

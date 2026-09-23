@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Button, Checkbox, CustomSelect, FormField, Input, Modal, MultiSelect, Textarea } from "../../components";
-import type { DemoField, DemoMaster, DemoRow } from "../../data/types";
+import { Button, Modal } from "../../components";
+import type { DemoMaster, DemoRow } from "../../data/types";
+import { FieldControl, coerce, defaultFor, validate } from "../fields";
 
 export interface MasterFormProps {
   master: DemoMaster;
@@ -14,12 +15,10 @@ export interface MasterFormProps {
 /**
  * Create/edit dialog built from a master's `fields`.
  *
- * Nine admin pages in the application each hand-roll this dialog against a
+ * Fourteen admin pages in the application each hand-roll this dialog against a
  * different table. Here the field list is data, so one component covers all of
- * them: adding a master is an entry in demo.json, not a new form.
- *
- * Validation is only what the descriptor states — `required`, and numbers must
- * parse. Anything domain-specific belongs to whoever owns the data.
+ * them — and the controls themselves come from `fields.tsx`, which the settings
+ * pages and the child-record panel share.
  */
 export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormProps) {
   const isEdit = row != null;
@@ -43,34 +42,12 @@ export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormPr
   }
 
   function submit() {
-    const next: Record<string, string> = {};
-    for (const f of master.fields) {
-      const raw = values[f.key];
-      if (f.type === "multiselect") {
-        if (f.required && (!Array.isArray(raw) || raw.length === 0)) {
-          next[f.key] = `Pick at least one ${f.label.toLowerCase()}.`;
-        }
-        continue;
-      }
-      if (f.required && (raw === "" || raw === null || raw === undefined)) {
-        next[f.key] = `${f.label} is required.`;
-        continue;
-      }
-      if (f.type === "number" && raw !== "" && raw != null && Number.isNaN(Number(raw))) {
-        next[f.key] = "Enter a number.";
-      }
-    }
-    if (Object.keys(next).some((k) => next[k])) {
+    const next = validate(master.fields, values);
+    if (Object.keys(next).length > 0) {
       setErrors(next);
       return;
     }
-    const out: Record<string, unknown> = { ...values };
-    for (const f of master.fields) {
-      if (f.type === "number" && out[f.key] !== "" && out[f.key] != null) {
-        out[f.key] = Number(out[f.key]);
-      }
-    }
-    onSave(out);
+    onSave(coerce(master.fields, values));
   }
 
   return (
@@ -89,171 +66,17 @@ export function MasterForm({ master, row, open, onCancel, onSave }: MasterFormPr
       }
     >
       <div style={{ display: "grid", gap: 16 }}>
-        {master.fields.map((f) => {
-          const locked = isEdit && f.readOnlyOnEdit;
-          const value = values[f.key];
-
-          if (f.type === "checkbox") {
-            return (
-              <Checkbox
-                key={f.key}
-                label={f.label}
-                hint={f.hint}
-                checked={Boolean(value)}
-                onChange={(e) => set(f.key, e.target.checked)}
-              />
-            );
-          }
-
-          if (f.type === "multiselect") {
-            const selected = Array.isArray(value) ? (value as string[]) : [];
-            return (
-              <FormField
-                key={f.key}
-                label={f.label}
-                required={f.required}
-                hint={f.hint}
-                error={errors[f.key]}
-              >
-                <MultiSelect
-                  options={f.options ?? []}
-                  value={selected}
-                  onChange={(next) => set(f.key, next)}
-                  placeholder={f.placeholder ?? `Select ${f.label.toLowerCase()}`}
-                  disabled={locked}
-                />
-              </FormField>
-            );
-          }
-
-          if (f.type === "color") {
-            return (
-              <FormField
-                key={f.key}
-                label={f.label}
-                required={f.required}
-                hint={f.hint}
-                error={errors[f.key]}
-              >
-                <ColorPicker value={String(value ?? "")} onChange={(v) => set(f.key, v)} />
-              </FormField>
-            );
-          }
-
-          if (f.type === "select") {
-            return (
-              <FormField
-                key={f.key}
-                label={f.label}
-                required={f.required}
-                hint={f.hint}
-                error={errors[f.key]}
-              >
-                <CustomSelect
-                  value={String(value ?? "")}
-                  onChange={(v) => set(f.key, v)}
-                  options={f.options ?? []}
-                  placeholder={f.placeholder ?? `Select ${f.label.toLowerCase()}`}
-                  disabled={locked}
-                  aria-label={f.label}
-                  allowDeselect={!f.required}
-                />
-              </FormField>
-            );
-          }
-
-          if (f.type === "textarea") {
-            return (
-              <Textarea
-                key={f.key}
-                label={f.label}
-                required={f.required}
-                hint={f.hint}
-                error={errors[f.key]}
-                placeholder={f.placeholder}
-                value={String(value ?? "")}
-                onChange={(e) => set(f.key, e.target.value)}
-              />
-            );
-          }
-
-          return (
-            <Input
-              key={f.key}
-              label={f.label}
-              required={f.required}
-              hint={locked ? `${f.hint ?? ""}`.trim() || "Set at creation." : f.hint}
-              error={errors[f.key]}
-              type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
-              placeholder={f.placeholder}
-              readOnly={locked}
-              disabled={locked}
-              value={String(value ?? "")}
-              onChange={(e) => set(f.key, e.target.value)}
-            />
-          );
-        })}
+        {master.fields.map((f) => (
+          <FieldControl
+            key={f.key}
+            field={f}
+            value={values[f.key]}
+            error={errors[f.key]}
+            locked={isEdit && f.readOnlyOnEdit}
+            onChange={(v) => set(f.key, v)}
+          />
+        ))}
       </div>
     </Modal>
-  );
-}
-
-function defaultFor(f: DemoField): unknown {
-  if (f.type === "checkbox") return f.key === "is_active";
-  if (f.type === "multiselect") return [];
-  return "";
-}
-
-/** Swatches from the palette, plus whatever value the row already carries. */
-const SWATCHES = [
-  "#254a33",
-  "#376a46",
-  "#a74a2d",
-  "#a5711a",
-  "#8b3320",
-  "#3b6f49",
-  "#6a5acd",
-  "#0f7b6c",
-  "#8b7d60",
-];
-
-function ColorPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const swatches = value && !SWATCHES.includes(value) ? [value, ...SWATCHES] : SWATCHES;
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-        {swatches.map((c) => {
-          const active = c === value;
-          return (
-            <button
-              key={c}
-              type="button"
-              onClick={() => onChange(c)}
-              aria-label={c}
-              aria-pressed={active}
-              title={c}
-              style={{
-                width: 24,
-                height: 24,
-                padding: 0,
-                background: c,
-                border: `2px solid ${active ? "var(--ink)" : "var(--rule-strong)"}`,
-                borderRadius: "var(--r-sm)",
-                cursor: "pointer",
-              }}
-            />
-          );
-        })}
-      </div>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="#254a33"
-        aria-label="Hex value"
-        className="form-input"
-        style={{ width: 110, fontFamily: "var(--mono)", fontSize: 12 }}
-      />
-    </div>
   );
 }

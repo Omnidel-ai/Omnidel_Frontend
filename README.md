@@ -14,7 +14,7 @@ Omnidel_Frontend/
 │   ├── components/     ← 1. shared UI components
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
 │   ├── data/           ← 3. demo data (demo.json + masters.json)
-│   ├── admin/          ← 5. the admin screens, one layout
+│   ├── admin/          ← 5. the admin screens, two layouts
 │   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
@@ -65,7 +65,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 20 screens — shell, playground, dashboard and all 17 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
+| `npm run smoke` | Server-renders all 27 screens — shell, playground, dashboard and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -78,15 +78,17 @@ fall back to Georgia / system sans / a mono face and nothing else changes.
   range filter and a table view, pipeline-by-stage bars, a status breakdown and
   an activity feed. **Reload** replays the loading state so the skeletons show.
 * **About this demo** — what the workspace is, with the masters one click away.
-* **Masters (14 screens) and Access (3 screens)** — the complete admin area,
-  every screen the same component with a different descriptor: search, filter
-  by Active / Inactive / All / Archived, add, edit, activate, archive, restore,
-  paginate. Worth opening in particular:
+* **Admin** — one sidebar item, seven groups, 23 list screens and one settings
+  screen. Every list screen is the same component with a different descriptor:
+  search, filter by Active / Inactive / All / Archived, add, edit, activate,
+  archive, restore, paginate. Worth opening in particular:
   * **Lead Sources / Missions / Roles** — reorder arrows
   * **Pipeline Stages** — reorder + group tabs + per-row **Fields** panel
   * **Languages** — "Make default", which clears the flag everywhere else
   * **Lanes / State Codes / Users** — **Download CSV** of what the table shows
   * **Trade Types** — no rows, so this is where the empty state lives
+  * **System → Business Details** — the *other* admin layout: one record, field
+    groups, save-in-place
   Every screen opens through a skeleton; search for nonsense anywhere to see
   the `no-results` empty state.
 * **Components** — the playground, every shared component in every state.
@@ -212,19 +214,32 @@ breakdown is the one exception and uses the reserved status tokens with a text
 label beside each mark. Marks are thin, data-ends carry a 2px radius, bars are
 separated by a 2px gap, and the grid is recessive.
 
-## 5. Admin — `src/admin/AdminPage/`, 17 screens, one layout
+## 5. Admin — `src/admin/`, 24 screens, two layouts
+
+The sidebar is the application's: one **Admin** item, seven groups, pages
+inside them.
+
+```
+Admin
+├── Dashboard                 → the dashboard component, reused
+├── Reports
+├── Sales & Pipeline          → Pipeline Stages · Operation Stages · Lead Sources ·
+│                               Lanes · Missions · Stage Fields · Project Types
+├── Tasks & Workflow          → Task Types · Trade Types · Acharya Types
+├── Teams & Sections          → Teams · Sections · Departments
+├── Branches & Inventory      → Branches · Inventory & Pricing · Vatika Inventory
+├── People & Access           → Users & Access · Pending setup · Roles & Perms · Workspaces
+└── System                    → Languages · Business Details · State Codes
+```
+
+### The master layout
 
 The application has fourteen admin master pages — 3,564 lines — each
 re-implementing the same table, dialog, toggle and archive flow against a
 different table. This is that page written **once**, and every admin screen in
 the workspace is it:
 
-**Masters (14)** — Lanes, Languages, Locations, Missions, Task Types, Trade
-Types, Acharya Types, Lead Sources, Departments, Pipeline Stages, Operation
-Stages, Stage Fields, State Codes, Project Types.
-**Access (3)** — Users, Roles, Workspaces.
-
-The shared layout is: page header · optional group tabs · optional summary ·
+23 of the 24 screens are it. The shared layout is: page header · optional group tabs · optional summary ·
 toolbar (search + view + extra filters + export + add) · table · pagination,
 with the create/edit dialog, the archive/restore confirm and the toasts behind
 it.
@@ -261,6 +276,14 @@ rather than silently doing nothing, as the real screens do.
 | `DetailPanel.tsx` | child records for one row |
 | `SummaryStrip.tsx` | the counters |
 | `exportCsv.ts` | client-side CSV, no request |
+| `../fields.tsx` | **one control per field type** — shared by the master dialog, the child panel and the settings pages |
+
+### The settings layout
+
+`SettingsPage` is the other shape: one record, groups of fields, saved in
+place, with the save bar appearing only once something has changed. Business
+Details uses it — 19 fields in 4 groups. It shares `fields.tsx` with the master
+dialog, so a new field type appears in both at once.
 
 Column types: `text · code · badge · flag · number · percent · date · status ·
 color · chips · user`. Field types: `text · textarea · number · select ·

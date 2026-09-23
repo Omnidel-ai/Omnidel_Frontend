@@ -75,84 +75,146 @@
       ]
     },
     {
-      "label": "Masters",
+      "label": "Admin",
       "href": "/admin",
       "icon": "admin",
       "children": [
         {
-          "label": "Lanes",
-          "href": "/admin/lanes"
+          "label": "Dashboard",
+          "href": "/admin/dashboard"
         },
         {
-          "label": "Languages",
-          "href": "/admin/languages"
+          "label": "Reports",
+          "href": "/admin/reports"
         },
         {
-          "label": "Locations",
-          "href": "/admin/locations"
+          "label": "Sales & Pipeline",
+          "href": "/admin/sales-pipeline",
+          "children": [
+            {
+              "label": "Pipeline Stages",
+              "href": "/admin/pipeline-stages"
+            },
+            {
+              "label": "Operation Stages",
+              "href": "/admin/operation-stages"
+            },
+            {
+              "label": "Lead Sources",
+              "href": "/admin/lead-sources"
+            },
+            {
+              "label": "Lanes",
+              "href": "/admin/lanes"
+            },
+            {
+              "label": "Missions",
+              "href": "/admin/missions"
+            },
+            {
+              "label": "Stage Fields",
+              "href": "/admin/stage-fields"
+            },
+            {
+              "label": "Project Types",
+              "href": "/admin/project-types"
+            }
+          ]
         },
         {
-          "label": "Missions",
-          "href": "/admin/missions"
+          "label": "Tasks & Workflow",
+          "href": "/admin/tasks-workflow",
+          "children": [
+            {
+              "label": "Task Types",
+              "href": "/admin/task-types"
+            },
+            {
+              "label": "Trade Types",
+              "href": "/admin/trade-types"
+            },
+            {
+              "label": "Acharya Types",
+              "href": "/admin/acharya-types"
+            }
+          ]
         },
         {
-          "label": "Task Types",
-          "href": "/admin/task-types"
+          "label": "Teams & Sections",
+          "href": "/admin/teams-sections",
+          "children": [
+            {
+              "label": "Teams",
+              "href": "/admin/teams"
+            },
+            {
+              "label": "Sections",
+              "href": "/admin/sections"
+            },
+            {
+              "label": "Departments",
+              "href": "/admin/departments"
+            }
+          ]
         },
         {
-          "label": "Trade Types",
-          "href": "/admin/trade-types"
+          "label": "Branches & Inventory",
+          "href": "/admin/branches-inventory",
+          "children": [
+            {
+              "label": "Branches",
+              "href": "/admin/branches"
+            },
+            {
+              "label": "Inventory & Pricing",
+              "href": "/admin/inventory-pricing"
+            },
+            {
+              "label": "Vatika Inventory",
+              "href": "/admin/vatika-inventory"
+            }
+          ]
         },
         {
-          "label": "Acharya Types",
-          "href": "/admin/acharya-types"
+          "label": "People & Access",
+          "href": "/admin/people-access",
+          "children": [
+            {
+              "label": "Users & Access",
+              "href": "/admin/users"
+            },
+            {
+              "label": "Pending setup",
+              "href": "/admin/pending-setup",
+              "badge": 3
+            },
+            {
+              "label": "Roles & Perms",
+              "href": "/admin/roles"
+            },
+            {
+              "label": "Workspaces",
+              "href": "/admin/workspaces"
+            }
+          ]
         },
         {
-          "label": "Lead Sources",
-          "href": "/admin/lead-sources"
-        },
-        {
-          "label": "Departments",
-          "href": "/admin/departments"
-        },
-        {
-          "label": "Pipeline Stages",
-          "href": "/admin/pipeline-stages"
-        },
-        {
-          "label": "Operation Stages",
-          "href": "/admin/operation-stages"
-        },
-        {
-          "label": "Stage Fields",
-          "href": "/admin/stage-fields"
-        },
-        {
-          "label": "State Codes",
-          "href": "/admin/state-codes"
-        },
-        {
-          "label": "Project Types",
-          "href": "/admin/project-types"
-        }
-      ]
-    },
-    {
-      "label": "Access",
-      "href": "/admin/users",
-      "icon": "shield",
-      "children": [
-        {
-          "label": "Users",
-          "href": "/admin/users"
-        },
-        {
-          "label": "Roles",
-          "href": "/admin/roles"
-        },
-        {
-          "label": "Workspaces",
-          "href": "/admin/workspaces"
+          "label": "System",
+          "href": "/admin/system",
+          "children": [
+            {
+              "label": "Languages",
+              "href": "/admin/languages"
+            },
+            {
+              "label": "Business Details",
+              "href": "/admin/business-details"
+            },
+            {
+              "label": "State Codes",
+              "href": "/admin/state-codes"
+            }
+          ]
         }
       ]
     },
@@ -205,6 +267,267 @@
     ],
     "fallback": "This is a demo assistant — it answers from a small canned set. Try one of the suggestions above, or ask about the masters, the shell, the shared components or the backend."
   },
+
+  "settings": [
+    {
+      "key": "business-details",
+      "label": "Business Details",
+      "module": "Admin",
+      "section": "System",
+      "eyebrow": "One record",
+      "description": "The company behind every invoice, delivery note and outgoing message. One record — so this screen is the other admin layout: field groups instead of a table, saved in place.",
+      "groups": [
+        {
+          "title": "Identity",
+          "description": "How the business is named on anything a customer sees.",
+          "fields": [
+            {
+              "key": "legal_name",
+              "label": "Legal name",
+              "type": "text",
+              "required": true,
+              "placeholder": "OmniDel Technologies Pvt Ltd"
+            },
+            {
+              "key": "trading_name",
+              "label": "Trading name",
+              "type": "text",
+              "placeholder": "OmniDEL.ai"
+            },
+            {
+              "key": "brand_color",
+              "label": "Brand colour",
+              "type": "color",
+              "hint": "Used on invoices and the login screen."
+            },
+            {
+              "key": "founded_on",
+              "label": "Founded on",
+              "type": "date"
+            },
+            {
+              "key": "about",
+              "label": "About",
+              "type": "textarea",
+              "placeholder": "One paragraph, used on the public pages."
+            }
+          ]
+        },
+        {
+          "title": "Registration",
+          "description": "Statutory identifiers. These print on every tax document.",
+          "fields": [
+            {
+              "key": "gstin",
+              "label": "GSTIN",
+              "type": "text",
+              "required": true,
+              "placeholder": "19AABCU9603R1ZM"
+            },
+            {
+              "key": "pan",
+              "label": "PAN",
+              "type": "text",
+              "placeholder": "AABCU9603R"
+            },
+            {
+              "key": "cin",
+              "label": "CIN",
+              "type": "text",
+              "placeholder": "U72900WB2024PTC000000"
+            },
+            {
+              "key": "state",
+              "label": "Registered state",
+              "type": "select",
+              "required": true,
+              "options": [
+                {
+                  "value": "West Bengal",
+                  "label": "West Bengal"
+                },
+                {
+                  "value": "Maharashtra",
+                  "label": "Maharashtra"
+                },
+                {
+                  "value": "Karnataka",
+                  "label": "Karnataka"
+                },
+                {
+                  "value": "Delhi",
+                  "label": "Delhi"
+                },
+                {
+                  "value": "Tamil Nadu",
+                  "label": "Tamil Nadu"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Contact",
+          "description": "Where replies and returns go.",
+          "fields": [
+            {
+              "key": "email",
+              "label": "Email",
+              "type": "text",
+              "required": true,
+              "placeholder": "hello@omnidel.ai"
+            },
+            {
+              "key": "phone",
+              "label": "Phone",
+              "type": "text",
+              "placeholder": "+91 …"
+            },
+            {
+              "key": "website",
+              "label": "Website",
+              "type": "text",
+              "placeholder": "https://omnidel.ai"
+            },
+            {
+              "key": "address",
+              "label": "Registered address",
+              "type": "textarea",
+              "placeholder": "Street, city, PIN"
+            }
+          ]
+        },
+        {
+          "title": "Operations",
+          "description": "Defaults applied wherever nothing more specific is set.",
+          "fields": [
+            {
+              "key": "currency",
+              "label": "Currency",
+              "type": "select",
+              "options": [
+                {
+                  "value": "INR",
+                  "label": "INR"
+                },
+                {
+                  "value": "USD",
+                  "label": "USD"
+                },
+                {
+                  "value": "EUR",
+                  "label": "EUR"
+                }
+              ]
+            },
+            {
+              "key": "timezone",
+              "label": "Time zone",
+              "type": "select",
+              "options": [
+                {
+                  "value": "Asia/Kolkata",
+                  "label": "Asia/Kolkata"
+                },
+                {
+                  "value": "Asia/Dubai",
+                  "label": "Asia/Dubai"
+                },
+                {
+                  "value": "UTC",
+                  "label": "UTC"
+                }
+              ]
+            },
+            {
+              "key": "week_start",
+              "label": "Week starts",
+              "type": "select",
+              "options": [
+                {
+                  "value": "Monday",
+                  "label": "Monday"
+                },
+                {
+                  "value": "Sunday",
+                  "label": "Sunday"
+                }
+              ]
+            },
+            {
+              "key": "financial_year",
+              "label": "Financial year starts",
+              "type": "select",
+              "options": [
+                {
+                  "value": "April",
+                  "label": "April"
+                },
+                {
+                  "value": "January",
+                  "label": "January"
+                }
+              ]
+            },
+            {
+              "key": "channels",
+              "label": "Notification channels",
+              "type": "multiselect",
+              "hint": "Where system messages may be sent.",
+              "options": [
+                {
+                  "value": "Email",
+                  "label": "Email"
+                },
+                {
+                  "value": "WhatsApp",
+                  "label": "WhatsApp"
+                },
+                {
+                  "value": "Telegram",
+                  "label": "Telegram"
+                },
+                {
+                  "value": "SMS",
+                  "label": "SMS"
+                }
+              ]
+            },
+            {
+              "key": "maintenance",
+              "label": "Maintenance mode",
+              "type": "checkbox",
+              "hint": "Shows a banner and blocks writes for everyone but founders."
+            }
+          ]
+        }
+      ],
+      "values": {
+        "legal_name": "OmniDel Technologies Pvt Ltd",
+        "trading_name": "OmniDEL.ai",
+        "brand_color": "#254a33",
+        "founded_on": "2024-08-19",
+        "about": "Kaarigar-led interiors and daily essentials, run on one platform.",
+        "gstin": "19AABCU9603R1ZM",
+        "pan": "AABCU9603R",
+        "cin": "U72900WB2024PTC000000",
+        "state": "West Bengal",
+        "email": "hello@omnidel.ai",
+        "phone": "+91 98300 00000",
+        "website": "https://omnidel.ai",
+        "address": "DN-51, Salt Lake Sector V, Kolkata 700091",
+        "currency": "INR",
+        "timezone": "Asia/Kolkata",
+        "week_start": "Monday",
+        "financial_year": "April",
+        "channels": [
+          "Email",
+          "WhatsApp"
+        ],
+        "maintenance": false
+      }
+    }
+  ],
 
   "dashboard": {
     "greeting": "Good morning, Harshit",
