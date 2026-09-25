@@ -1,0 +1,135 @@
+{
+  "teams": {
+    "label": "Teams",
+    "singular": "Team",
+    "searchPlaceholder": "Search teams...",
+    "emptyMessage": "No teams yet",
+    "emptyHint": "A team holds projects and the people who work on them.",
+    "toggles": [
+      { "key": "withProjects", "label": "With projects", "title": "On: only teams that already have a project. Off: all your teams, including empty ones." },
+      { "key": "archived", "label": "Archived", "title": "Show archived teams instead of active ones." }
+    ],
+    "rows": [
+      { "id": "w1", "name": "Operations", "slug": "operations", "lead": "Bikram Das", "projects": 5, "members": 12, "archived": false },
+      { "id": "w2", "name": "Catalogue", "slug": "catalogue", "lead": "Chandni Roy", "projects": 3, "members": 6, "archived": false },
+      { "id": "w3", "name": "Platform", "slug": "platform", "lead": "Harshit Sharma", "projects": 4, "members": 7, "archived": false },
+      { "id": "w4", "name": "Finance", "slug": "finance", "lead": "Devraj Nair", "projects": 2, "members": 5, "archived": false },
+      { "id": "w5", "name": "Support", "slug": "support", "lead": "Esha Khan", "projects": 0, "members": 6, "archived": false },
+      { "id": "w6", "name": "Quality", "slug": "quality", "lead": "Gitanjali Bose", "projects": 1, "members": 3, "archived": false },
+      { "id": "w7", "name": "Diwali Pop-up", "slug": "diwali-popup", "lead": "Ananya Sen", "projects": 2, "members": 9, "archived": true }
+    ]
+  },
+
+  "projects": {
+    "label": "Projects",
+    "singular": "Project",
+    "searchPlaceholder": "Search projects...",
+    "emptyMessage": "No projects yet",
+    "emptyHint": "A project is a board: lists of tasks that move left to right.",
+    "columns": [
+      { "key": "name", "header": "Project name", "width": "minmax(180px, 1.7fr)", "sortable": true },
+      { "key": "team", "header": "Team name", "width": "minmax(130px, 1fr)", "sortable": true },
+      { "key": "total", "header": "Total tasks", "width": "112px", "align": "right", "sortable": true },
+      { "key": "mine", "header": "My tasks", "width": "96px", "align": "right", "sortable": true },
+      { "key": "progress", "header": "Status", "width": "minmax(180px, 0.9fr)" }
+    ],
+    "rows": [
+      { "id": "b1", "name": "Newtown rollout", "team": "Operations", "teamId": "w1", "lead": "Bikram Das", "visibility": "Team", "description": "Lane LN-001 through LN-004, phase two.", "total": 24, "mine": 6, "done": 11, "doing": 7, "todo": 6, "archived": false },
+      { "id": "b2", "name": "Warehouse intake", "team": "Operations", "teamId": "w1", "lead": "Farhan Ali", "visibility": "Team", "description": "Receiving, counting and putaway.", "total": 18, "mine": 2, "done": 9, "doing": 4, "todo": 5, "archived": false },
+      { "id": "b3", "name": "Catalogue refresh", "team": "Catalogue", "teamId": "w2", "lead": "Chandni Roy", "visibility": "Everyone", "description": "412 items re-shot and re-described.", "total": 31, "mine": 9, "done": 20, "doing": 6, "todo": 5, "archived": false },
+      { "id": "b4", "name": "Festive pricing", "team": "Finance", "teamId": "w4", "lead": "Devraj Nair", "visibility": "Private", "description": "", "total": 12, "mine": 3, "done": 3, "doing": 5, "todo": 4, "archived": false },
+      { "id": "b5", "name": "Karigar onboarding", "team": "Operations", "teamId": "w1", "lead": "Ananya Sen", "visibility": "Team", "description": "Phone verification, trade test, first task.", "total": 15, "mine": 5, "done": 6, "doing": 3, "todo": 6, "archived": false },
+      { "id": "b6", "name": "Shared UI", "team": "Platform", "teamId": "w3", "lead": "Harshit Sharma", "visibility": "Everyone", "description": "The component workspace you are looking at.", "total": 27, "mine": 14, "done": 19, "doing": 5, "todo": 3, "archived": false },
+      { "id": "b7", "name": "Backend split", "team": "Platform", "teamId": "w3", "lead": "Harshit Sharma", "visibility": "Team", "description": "apps/api and apps/web.", "total": 22, "mine": 8, "done": 4, "doing": 9, "todo": 9, "archived": false },
+      { "id": "b8", "name": "Support playbook", "team": "Support", "teamId": "w5", "lead": "Esha Khan", "visibility": "Team", "description": "", "total": 9, "mine": 1, "done": 7, "doing": 1, "todo": 1, "archived": false },
+      { "id": "b9", "name": "Audit trail", "team": "Quality", "teamId": "w6", "lead": "Gitanjali Bose", "visibility": "Team", "description": "One logAdminAction, not thirty.", "total": 7, "mine": 2, "done": 2, "doing": 2, "todo": 3, "archived": false },
+      { "id": "b10", "name": "Diwali stall", "team": "Diwali Pop-up", "teamId": "w7", "lead": "Ananya Sen", "visibility": "Team", "description": "Closed after the season.", "total": 14, "mine": 0, "done": 14, "doing": 0, "todo": 0, "archived": true }
+    ]
+  },
+
+  "review": {
+    "label": "Review",
+    "searchPlaceholder": "Search submissions...",
+    "emptyMessage": "Nothing waiting for review",
+    "emptyHint": "Submissions land here when a karigar marks a task done with proof.",
+    "tabs": [
+      { "label": "Pending", "field": "status", "value": "Pending" },
+      { "label": "Approved", "field": "status", "value": "Approved" },
+      { "label": "Returned", "field": "status", "value": "Returned" }
+    ],
+    "rows": [
+      { "id": "e1", "seq": 118, "task": "Site photo — Newtown block C", "karigar": "Rahul Mondal", "score": 92, "project": "Newtown rollout", "team": "Operations", "date": "Today 09:14", "status": "Pending", "note": "Three photos, all legible. Measurements match the survey sheet.", "attachments": 3 },
+      { "id": "e2", "seq": 117, "task": "Stock count — Rajarhat", "karigar": "Sneha Pal", "score": 74, "project": "Warehouse intake", "team": "Operations", "date": "Today 08:02", "status": "Pending", "note": "Count sheet photographed at an angle; two rows unreadable.", "attachments": 1 },
+      { "id": "e3", "seq": 116, "task": "Product shot — teak plank", "karigar": "Imran Sheikh", "score": 88, "project": "Catalogue refresh", "team": "Catalogue", "date": "Yesterday 17:40", "status": "Pending", "note": "Background clean, white balance slightly warm.", "attachments": 4 },
+      { "id": "e4", "seq": 115, "task": "Quality check — wardrobe", "karigar": "Rahul Mondal", "score": 96, "project": "Audit trail", "team": "Quality", "date": "Yesterday 15:20", "status": "Approved", "note": "Checklist complete, inspector signed.", "attachments": 2 },
+      { "id": "e5", "seq": 114, "task": "Delivery proof — LN-007", "karigar": "Farhan Ali", "score": 81, "project": "Newtown rollout", "team": "Operations", "date": "Yesterday 12:05", "status": "Approved", "note": "Signature captured.", "attachments": 2 },
+      { "id": "e6", "seq": 113, "task": "Trade test — carpentry", "karigar": "Sneha Pal", "score": 48, "project": "Karigar onboarding", "team": "Operations", "date": "2 days ago", "status": "Returned", "note": "Joint finish below standard. Asked to redo with a photo of the jig.", "attachments": 1 },
+      { "id": "e7", "seq": 112, "task": "Price sheet — festive", "karigar": "Devraj Nair", "score": 90, "project": "Festive pricing", "team": "Finance", "date": "2 days ago", "status": "Approved", "note": "", "attachments": 1 },
+      { "id": "e8", "seq": 111, "task": "Site photo — Barasat", "karigar": "Imran Sheikh", "score": 63, "project": "Newtown rollout", "team": "Operations", "date": "3 days ago", "status": "Returned", "note": "Only one photo; the brief asks for three angles.", "attachments": 1 }
+    ]
+  },
+
+  "boards": [
+    {
+      "id": "b1",
+      "name": "Newtown rollout",
+      "team": "Operations",
+      "lead": "Bikram Das",
+      "lists": [
+        {
+          "id": "l1",
+          "title": "Backlog",
+          "cards": [
+            { "id": "c1", "title": "Confirm lane timings with dispatch", "labels": ["Ops"], "priority": "Normal", "due": "2026-10-02", "assignees": ["Bikram Das"], "comments": 2, "attachments": 0, "done": false },
+            { "id": "c2", "title": "Print route sheets for block C", "labels": [], "priority": "Low", "due": "", "assignees": [], "comments": 0, "attachments": 1, "done": false },
+            { "id": "c3", "title": "Ask Finance for the fuel budget", "labels": ["Finance"], "priority": "Low", "due": "", "assignees": ["Devraj Nair"], "comments": 1, "attachments": 0, "done": false }
+          ]
+        },
+        {
+          "id": "l2",
+          "title": "This week",
+          "cards": [
+            { "id": "c4", "title": "Survey block C — 14 households", "labels": ["Field", "Urgent"], "priority": "High", "due": "2026-09-27", "assignees": ["Rahul Mondal", "Sneha Pal"], "comments": 5, "attachments": 3, "done": false },
+            { "id": "c5", "title": "Verify PIN codes against state master", "labels": ["Data"], "priority": "Normal", "due": "2026-09-28", "assignees": ["Ananya Sen"], "comments": 0, "attachments": 0, "done": false }
+          ]
+        },
+        {
+          "id": "l3",
+          "title": "In progress",
+          "cards": [
+            { "id": "c6", "title": "Photograph the Newtown hub", "labels": ["Field"], "priority": "High", "due": "2026-09-26", "assignees": ["Imran Sheikh"], "comments": 3, "attachments": 4, "done": false },
+            { "id": "c7", "title": "Load the first 40 crates", "labels": [], "priority": "Normal", "due": "", "assignees": ["Farhan Ali"], "comments": 1, "attachments": 0, "done": false },
+            { "id": "c8", "title": "Call back the three missed households", "labels": ["Support"], "priority": "Normal", "due": "2026-09-26", "assignees": ["Esha Khan"], "comments": 0, "attachments": 0, "done": false }
+          ]
+        },
+        {
+          "id": "l4",
+          "title": "Review",
+          "cards": [
+            { "id": "c9", "title": "Site photo — Newtown block C", "labels": ["Proof"], "priority": "High", "due": "", "assignees": ["Rahul Mondal"], "comments": 2, "attachments": 3, "done": false }
+          ]
+        },
+        {
+          "id": "l5",
+          "title": "Done",
+          "cards": [
+            { "id": "c10", "title": "Agree the lane code with Ops", "labels": ["Ops"], "priority": "Normal", "due": "2026-09-20", "assignees": ["Bikram Das"], "comments": 4, "attachments": 1, "done": true },
+            { "id": "c11", "title": "Hire two karigars for block B", "labels": ["People"], "priority": "Normal", "due": "2026-09-18", "assignees": ["Ananya Sen"], "comments": 6, "attachments": 0, "done": true },
+            { "id": "c12", "title": "Draft the delivery-note template", "labels": [], "priority": "Low", "due": "2026-09-15", "assignees": ["Chandni Roy"], "comments": 0, "attachments": 2, "done": true }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "labelTones": {
+    "Ops": "green",
+    "Field": "ochre",
+    "Urgent": "crit",
+    "Data": "neutral",
+    "Finance": "neutral",
+    "Support": "ochre",
+    "Proof": "green",
+    "People": "green"
+  }
+}

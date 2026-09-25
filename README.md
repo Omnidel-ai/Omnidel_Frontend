@@ -1,8 +1,8 @@
 # OmniDel — Shared Components, Shell & Admin UI
 
 An **isolated** frontend workspace: shared UI components, the application
-shell, a dashboard home page and the complete admin area — all running on demo
-data. There is no API, no database and no auth here, by design.
+shell, a dashboard, the complete admin area and the OmniPulse screens — all
+running on demo data. There is no API, no database and no auth here, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
@@ -14,8 +14,9 @@ Omnidel_Frontend/
 │   ├── components/     ← 1. shared UI components
 │   │   └── acharya-app/   ← reference copy, excluded from the build
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
-│   ├── data/           ← 3. demo data (demo.json + masters.json)
+│   ├── data/           ← 3. demo data (demo.json + masters.json + omnipulse.json)
 │   ├── admin/          ← 5. the admin screens, two layouts
+│   ├── omnipulse/      ← teams, projects, review queue, board
 │   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
@@ -66,7 +67,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 27 screens — shell, playground, dashboard and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
+| `npm run smoke` | Server-renders all 31 screens — shell, playground, dashboard, the four OmniPulse screens and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -211,6 +212,28 @@ dependency, because introducing one would be a decision for the real app.
 
 The topbar search is passed into the admin screen, so the shell's search
 actually filters the table rather than being decoration.
+
+## OmniPulse — `src/omnipulse/`
+
+The module's own screens, matching the application's nav (`Teams`, `Projects`,
+`Review` — "Tasks" is permission-only there and renders no row):
+
+| Screen | Shape | Why not a master table |
+|---|---|---|
+| **Teams** | card grid | A team is a name, a lead and two counts — a tile, as in the app |
+| **Projects** | card grid **or** table, your choice | Both views read the same descriptor; the table sorts on every column marked `sortable` |
+| **Review** | queue table + tabs | Eight columns a reviewer scans; opening a row gives the submission and the two decisions |
+| **Board** | kanban | Lists of cards, left to right |
+
+`cards.tsx` is to these screens what `columns.tsx` is to the admin tables: one
+small vocabulary — `Card`, `CardGrid`, `CardTitle`, `CardMeta`, `QuickToggle`,
+`ViewToggle`, `TaskProgress`, `Avatars` — shared between them and knowing
+nothing about what a team or a project is. Everything else comes from the
+shared components.
+
+Cards move between lists with the card menu rather than by dragging: drag and
+drop needs `@dnd-kit`, and a workspace that exists to show the design should
+not take a dependency to fake one.
 
 ## Dashboard home — `src/dashboard/`
 

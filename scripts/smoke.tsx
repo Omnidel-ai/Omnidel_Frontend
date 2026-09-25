@@ -14,11 +14,15 @@ import { App } from "../src/App";
 import { Playground } from "../src/playground/Playground";
 import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
+import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "../src/omnipulse";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
+import omnipulse from "../src/data/omnipulse.json";
 import type { DemoData, DemoMaster } from "../src/data/types";
+import type { OmniPulseData } from "../src/omnipulse";
 
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
+const PULSE = omnipulse as OmniPulseData;
 
 interface Screen {
   name: string;
@@ -79,6 +83,65 @@ const screens: Screen[] = [
   // Every master, through the one shared page — and each optional parameter
   // asserted on the masters that declare it, so the layout staying shared does
   // not mean the extras quietly stopped rendering.
+  {
+    // OmniPulse renders in its loading state on the server, like the admin
+    // screens did before their rows were ready — so these assert the chrome
+    // and the skeletons.
+    name: "omnipulse/teams",
+    html: renderToString(<TeamsPage data={PULSE.teams} onOpen={() => undefined} />),
+    markers: [
+      ["toolbar", "opx-toolbar"],
+      ["search", PULSE.teams.searchPlaceholder],
+      ["quick toggle", PULSE.teams.toggles[0].label],
+      ["new team", "+ New team"],
+      ["a team card", PULSE.teams.rows[0].name],
+      ["member count", "members"],
+    ],
+  },
+  {
+    name: "omnipulse/projects",
+    html: renderToString(
+      <ProjectsPage
+        data={PULSE.projects}
+        teams={PULSE.teams.rows}
+        onTeamChange={() => undefined}
+        onOpen={() => undefined}
+      />,
+    ),
+    markers: [
+      ["toolbar", "opx-toolbar"],
+      ["view toggle", "Table"],
+      ["team filter", "Any team"],
+      ["new project", "+ New project"],
+      ["a project card", PULSE.projects.rows[0].name],
+      ["progress bar", "done"],
+    ],
+  },
+  {
+    name: "omnipulse/review",
+    html: renderToString(<ReviewPage data={PULSE.review} />),
+    markers: [
+      ["queue table", "table-header"],
+      ["tabs", PULSE.review.tabs[0].label],
+      ["karigar column", "Karigar"],
+      ["score column", "Score"],
+      ["a submission", PULSE.review.rows[0].task],
+    ],
+  },
+  {
+    name: "omnipulse/board",
+    html: renderToString(
+      <BoardPage board={PULSE.boards[0]} labelTones={PULSE.labelTones} onBack={() => undefined} />,
+    ),
+    markers: [
+      ["board", "opx-board"],
+      ["list", "opx-list"],
+      ["board name", PULSE.boards[0].name],
+      ["a list", PULSE.boards[0].lists[0].title],
+      ["a card", PULSE.boards[0].lists[0].cards[0].title],
+      ["add a card", "+ Add a card"],
+    ],
+  },
   ...DATA.settings.map((st) => ({
     name: `admin/${st.key}`,
     html: renderToString(<SettingsPage settings={st} />),

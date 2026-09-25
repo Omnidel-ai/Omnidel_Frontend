@@ -35,22 +35,17 @@
       "icon": "pulse",
       "children": [
         {
-          "label": "Boards",
-          "href": "/omnipulse/boards",
-          "badge": 6
+          "label": "Teams",
+          "href": "/omnipulse/boards"
         },
         {
-          "label": "Tasks",
-          "href": "/omnipulse/tasks",
-          "badge": 23
+          "label": "Projects",
+          "href": "/omnipulse/projects"
         },
         {
-          "label": "Schedule",
-          "href": "/omnipulse/schedule"
-        },
-        {
-          "label": "Dashboards",
-          "href": "/omnipulse/dashboards"
+          "label": "Review",
+          "href": "/omnipulse/review",
+          "badge": 3
         }
       ]
     },
