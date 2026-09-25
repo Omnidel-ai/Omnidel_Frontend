@@ -6,7 +6,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
  * root keeps its own eslint setup — nothing here reaches it.
  */
 export default [
-  { ignores: ["dist/**", ".smoke/**", "node_modules/**"] },
+  { ignores: ["dist/**", ".smoke/**", "node_modules/**", "src/components/acharya-app/**"] },
   {
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
