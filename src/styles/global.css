@@ -660,3 +660,490 @@ input, button, select, textarea { font-family: var(--sans); }
 @media (max-width: 767px) {
   .settings-grid { grid-template-columns: 1fr; }
 }
+
+/* ─── OmniPulse ─────────────────────────────────────────────────────────── */
+
+/* A board's title is the page heading: serif, full size, with the trail's
+   earlier segments recessive and the current one in ink. */
+.opx-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--serif);
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+.opx-title__sep { color: var(--ink-faint); font-weight: 400; }
+.opx-title__link {
+  font: inherit;
+  color: var(--ink-mute);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.opx-title__link:hover { color: var(--green-deep); }
+.opx-title__current { color: var(--ink); }
+.opx-subtitle {
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+.opx-visibility {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 3px 9px;
+  border-radius: var(--r-sm);
+  background: var(--ochre-wash);
+  color: var(--ochre);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.opx-brief {
+  margin-top: 10px;
+  max-width: 96ch;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* Toolbar above a card grid: search left, controls right, one line on a
+   phone (the search shrinks rather than the row wrapping). */
+.opx-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.opx-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+@media (max-width: 767px) {
+  .opx-toolbar { flex-wrap: nowrap; }
+  .opx-toolbar > *:first-child { flex: 1 1 auto; min-width: 0; }
+  .opx-toolbar__actions { flex-shrink: 0; }
+}
+
+/* The board's own bar: view tabs and the task count on the left, search +
+   actions on the right. */
+.opx-boardbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0 14px;
+}
+.opx-boardbar__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.opx-taskcount {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+
+.opx-sort {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.opx-counts {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  justify-content: flex-end;
+}
+.opx-counts i { color: var(--ink-faint); font-style: normal; }
+.opx-counts b { font-weight: 500; }
+
+/* ── Card grid ─────────────────────────────────────────────────────────── */
+.opx-card:hover { border-color: var(--rule-strong); }
+.opx-card:focus-visible { outline: 2px solid var(--rule-strong); outline-offset: 2px; }
+
+.opx-proj {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+}
+.opx-proj__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  text-align: left;
+  font: inherit;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  cursor: pointer;
+  min-width: 0;
+  overflow: hidden;
+}
+.opx-proj__body:hover { border-color: var(--rule-strong); }
+.opx-proj__name {
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.2;
+  padding-right: 52px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.opx-proj__vis {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-deep);
+}
+.opx-proj__desc {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.opx-proj__work { width: 100%; margin-top: auto; padding-top: 10px; }
+.opx-proj__counts {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+.opx-proj__actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  z-index: 2;
+}
+
+.opx-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--r-sm);
+  background: var(--green-wash);
+  color: var(--green-deep);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.opx-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.opx-status--off { background: var(--surface-sunk); color: var(--ink-mute); }
+
+.opx-bar {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+  width: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.opx-bar > span { border-radius: 2px; }
+.opx-bar--empty { background: var(--surface-sunk); }
+
+.opx-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+}
+.opx-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.opx-legend__dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+/* ── Kanban ────────────────────────────────────────────────────────────── */
+.opx-board {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+.opx-list {
+  flex: 0 0 286px;
+  max-width: 286px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 360px);
+}
+/* Columns are tinted by what the stage means: neutral while queued, ochre
+   while in flight, green once it is ready. */
+.opx-list--neutral { background: var(--surface-sunk); }
+.opx-list--ochre { background: var(--ochre-wash); border-color: var(--rule-strong); }
+.opx-list--green { background: var(--green-wash); border-color: var(--green-soft); }
+
+.opx-list__head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 2px 9px;
+}
+.opx-list__dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.opx-dot--neutral { background: var(--ink-mute); }
+.opx-dot--ochre { background: var(--ochre); }
+.opx-dot--green { background: var(--ok); }
+.opx-list__title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.opx-list__count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+.opx-list__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 8px;
+}
+.opx-list__drop {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  padding: 8px 2px 4px;
+}
+.opx-list__add {
+  margin-top: 8px;
+  padding: 8px;
+  width: 100%;
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.opx-list__add:hover { background: rgba(255, 255, 255, 0.5); color: var(--ink); }
+
+.opx-addlist {
+  flex: 0 0 180px;
+  align-self: stretch;
+  min-height: 120px;
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink-mute);
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+}
+.opx-addlist:hover { background: var(--surface); color: var(--ink); }
+
+.opx-card-item {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 10px 10px 9px 12px;
+}
+.opx-card-item:hover { border-color: var(--rule-strong); }
+.opx-card-item__foot {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
+/* Card chips: priority, then the due date, then the note counts. */
+.opx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.opx-chip--high { background: var(--terra-wash); color: var(--terracotta); }
+.opx-chip--med { background: var(--ochre-wash); color: var(--ochre); }
+.opx-chip--low { background: var(--surface-sunk); color: var(--ink-mute); }
+.opx-chip--due { background: var(--ok-wash); color: var(--ok); text-transform: none; letter-spacing: 0.02em; }
+.opx-chip--overdue { background: var(--crit-wash); color: var(--crit); }
+
+.opx-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+
+/* ── Calendar view ─────────────────────────────────────────────────────── */
+.opx-cal__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.opx-cal__nav {
+  width: 30px;
+  height: 30px;
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.opx-cal__nav:hover { background: var(--surface-sunk); }
+.opx-cal__month { font-family: var(--serif); font-size: 19px; }
+.opx-cal__today {
+  padding: 5px 11px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.opx-cal__today:hover { background: var(--surface-sunk); }
+.opx-cal__hint {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.opx-cal {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--rule);
+  gap: 1px;
+}
+.opx-cal__head {
+  background: var(--surface-sunk);
+  padding: 8px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.opx-cal__cell {
+  background: var(--page);
+  min-height: 78px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+.opx-cal__cell--today { background: var(--ochre-wash); }
+.opx-cal__date {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+.opx-cal__date--today {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--green-deep);
+  color: var(--page);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.opx-cal__task {
+  width: 100%;
+  text-align: left;
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.opx-cal__empty {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+  .opx-list { flex-basis: 84vw; max-width: 84vw; max-height: none; }
+  .opx-cal__cell { min-height: 56px; padding: 4px; }
+  .opx-cal__task { font-size: 9.5px; }
+  .opx-cal__hint { display: none; }
+}
