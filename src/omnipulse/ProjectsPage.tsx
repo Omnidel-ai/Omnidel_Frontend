@@ -2,36 +2,20 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
   Button,
-  CustomSelect,
   EmptyState,
-  PageHeader,
-  SearchBar,
+  Menu,
+  MultiFilter,
+  Pagination,
+  PinButton,
   SkeletonCard,
   Table,
-  TableAction,
-  TableRowActions,
   emitToast,
-  type BadgeTone,
+  usePagination,
   type Column,
 } from "../components";
 import type { OmniPulseProject, OmniPulseProjectsData, OmniPulseTeam } from "./types";
-import {
-  BoardGlyph,
-  Card,
-  CardDesc,
-  CardGrid,
-  CardIcon,
-  CardTitle,
-  QuickToggle,
-  TaskProgress,
-  ViewToggle,
-} from "./cards";
-
-const VISIBILITY_TONE: Record<string, BadgeTone> = {
-  Team: "neutral",
-  Private: "terra",
-  Everyone: "green",
-};
+import { CardGrid, ViewToggle } from "./cards";
+import { ProjectCard } from "./ProjectCard";
 
 export interface ProjectsPageProps {
   data: OmniPulseProjectsData;
@@ -46,18 +30,23 @@ export interface ProjectsPageProps {
 /**
  * Projects — the same records as cards or as a table.
  *
- * The application offers both and remembers which you picked; the table sorts
- * on every column it says is sortable. Both views read the same descriptor, so
- * a column added to `columns` shows up in the table and nowhere else has to
- * change.
+ * The table is the application's: the team as a chip, the task total and my
+ * share, then planned / doing / done as three numbers rather than a bar, and
+ * View · pin · ⋯ in the actions column. Every column the descriptor marks
+ * sortable sorts, and the footer counts and pages exactly as the admin tables
+ * do — it is the same `Pagination`.
  */
 export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }: ProjectsPageProps) {
-  const [view, setView] = useState("Grid");
+  const [view, setView] = useState("Table");
   const [search, setSearch] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [teamFilter, setTeamFilter] = useState<string[]>([]);
+  const [pinned, setPinned] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(data.rows.filter((r) => r.pinned).map((r) => [r.id, true])),
+  );
   const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" }>({ key: "name", dir: "asc" });
-  // Loaded on the server (the rows are already in hand); in the browser the
-  // screen opens through its skeleton, which is where the read will go.
+  const [perPage, setPerPage] = useState(10);
+  // Loaded on the server; in the browser the screen opens through its skeleton.
   const [loading, setLoading] = useState(() => typeof window !== "undefined");
 
   useEffect(() => {
@@ -66,11 +55,13 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
   }, []);
 
   const q = search.trim().toLowerCase();
+  const teamName = teams.find((t) => t.id === teamId)?.name;
 
   const filtered = useMemo(() => {
     const rows = data.rows.filter((p) => {
       if (Boolean(p.archived) !== showArchived) return false;
       if (teamId && p.teamId !== teamId) return false;
+      if (teamFilter.length > 0 && !teamFilter.includes(p.team)) return false;
       if (!q) return true;
       return (
         p.name.toLowerCase().includes(q) ||
@@ -85,10 +76,10 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x ?? "").localeCompare(String(y ?? "")) * dir;
     });
-  }, [data.rows, showArchived, teamId, q, sort]);
+  }, [data.rows, showArchived, teamId, teamFilter, q, sort]);
 
-  const narrowed = Boolean(q) || showArchived || Boolean(teamId);
-  const teamName = teams.find((t) => t.id === teamId)?.name;
+  const { page, setPage, paginated, total } = usePagination(filtered, perPage);
+  const narrowed = Boolean(q) || showArchived || Boolean(teamId) || teamFilter.length > 0;
 
   function toggleSort(key: string) {
     setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
@@ -100,23 +91,9 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
       width: c.width,
       align: c.align,
       header: c.sortable ? (
-        <button
-          type="button"
-          onClick={() => toggleSort(c.key)}
-          style={{
-            background: "transparent",
-            border: "none",
-            padding: 0,
-            font: "inherit",
-            color: sort.key === c.key ? "var(--ink)" : "inherit",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
+        <button type="button" onClick={() => toggleSort(c.key)} className="opx-sort">
           {c.header}
-          <span style={{ opacity: sort.key === c.key ? 1 : 0.25 }}>
+          <span style={{ opacity: sort.key === c.key ? 1 : 0.3 }}>
             {sort.key === c.key && sort.dir === "desc" ? "▾" : "▴"}
           </span>
         </button>
@@ -124,7 +101,18 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
         c.header
       ),
       render: (p: OmniPulseProject) => {
-        if (c.key === "progress") return <TaskProgress done={p.done} doing={p.doing} todo={p.todo} compact />;
+        if (c.key === "team") return <Badge tone="green">{p.team}</Badge>;
+        if (c.key === "counts") {
+          return (
+            <span className="opx-counts">
+              <b>{p.planned}</b>
+              <i>/</i>
+              <b>{p.doing}</b>
+              <i>/</i>
+              <b>{p.done}</b>
+            </span>
+          );
+        }
         if (c.key === "total" || c.key === "mine") {
           return (
             <span style={{ fontFamily: "var(--mono)", fontVariantNumeric: "tabular-nums" }}>
@@ -138,75 +126,112 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
     {
       key: "__actions",
       header: "Actions",
-      width: "128px",
+      width: "150px",
       align: "right",
       render: (p) => (
-        <TableRowActions nowrap>
-          <TableAction onClick={() => onOpen(p)}>Open board</TableAction>
-        </TableRowActions>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 4, justifyContent: "flex-end" }}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpen(p);
+            }}
+          >
+            View
+          </Button>
+          <PinButton
+            pinned={Boolean(pinned[p.id])}
+            onToggle={(next) => setPinned((v) => ({ ...v, [p.id]: next }))}
+            label={p.name}
+            size="sm"
+          />
+          <Menu
+            size="sm"
+            label={`${p.name} actions`}
+            items={[
+              { label: "Open board", onClick: () => onOpen(p) },
+              { label: "Project settings", onClick: () => emitToast("Settings — demo", "info") },
+              { label: "Archive project", onClick: () => emitToast("Archive — demo", "info"), tone: "danger", separated: true },
+            ]}
+          />
+        </span>
       ),
     },
   ];
 
   return (
     <div>
-      <PageHeader
-        eyebrow="OmniPulse"
-        crumbs={[
-          { label: "OmniPulse" },
-          ...(teamName ? [{ label: "Teams", href: "/omnipulse/boards" }] : []),
-          { label: teamName ? `${teamName} · ${data.label}` : data.label },
-        ]}
-        onNavigate={() => onTeamChange("")}
-        actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
-            {filtered.length} of {data.rows.length}
-          </span>
-        }
-      />
+      <header style={{ marginBottom: 16 }}>
+        <h1 className="opx-title">
+          <span>OmniPulse</span>
+          <span className="opx-title__sep">/</span>
+          {teamName ? (
+            <>
+              <button type="button" className="opx-title__link" onClick={() => onTeamChange("")}>
+                Teams
+              </button>
+              <span className="opx-title__sep">/</span>
+              <span className="opx-title__current">{teamName} Projects</span>
+            </>
+          ) : (
+            <span className="opx-title__current">{data.label}</span>
+          )}
+        </h1>
+        <p className="opx-subtitle">
+          {teamName
+            ? `${filtered.length} projects · ${teams.find((t) => t.id === teamId)?.members ?? 0} members`
+            : data.subtitle}
+        </p>
+      </header>
 
       <div className="opx-toolbar">
-        <SearchBar value={search} onChange={setSearch} placeholder={data.searchPlaceholder} width={280} />
+        <MultiFilter
+          searchInput={search}
+          onSearchChange={setSearch}
+          searchPlaceholder={data.searchPlaceholder}
+          sections={[
+            {
+              kind: "checklist",
+              key: "team",
+              label: "Team",
+              selected: teamFilter,
+              onChange: setTeamFilter,
+              options: teams.map((t) => ({ value: t.name, label: t.name })),
+            },
+            {
+              kind: "toggle",
+              key: "archived",
+              label: "Archived",
+              checked: showArchived,
+              onChange: setShowArchived,
+            },
+          ]}
+        />
         <div className="opx-toolbar__actions">
-          <div className="picker-field" style={{ width: 170 }}>
-            <CustomSelect
-              value={teamId}
-              onChange={onTeamChange}
-              options={teams.map((t) => ({ value: t.id, label: t.name }))}
-              placeholder="Any team"
-              aria-label="Team"
-              allowDeselect
-              compact
-            />
-          </div>
-          <QuickToggle
-            label="Archived"
-            active={showArchived}
-            onClick={() => setShowArchived((v) => !v)}
-          />
-          <ViewToggle value={view} onChange={setView} />
-          <Button size="sm" onClick={() => emitToast("Demo — projects are read-only here", "info")}>
-            + New project
+          <ViewToggle value={view} onChange={setView} options={["Card", "Table"]} />
+          <Button size="sm" onClick={() => emitToast("New project — demo", "info")}>
+            + New Project
           </Button>
         </div>
       </div>
 
       {loading ? (
-        view === "Grid" ? (
+        view === "Card" ? (
           <CardGrid>
-            {[0, 1, 2, 3, 4, 5].map((i) => (
+            {[0, 1, 2, 3].map((i) => (
               <SkeletonCard key={i} lines={3} />
             ))}
           </CardGrid>
         ) : (
-          <Table columns={columns} data={[]} loading minWidth={900} />
+          <Table columns={columns} data={[]} loading minWidth={1040} />
         )
       ) : filtered.length === 0 ? (
         <EmptyState
           size="card"
           variant={narrowed ? "no-results" : "empty"}
           title={narrowed ? "No projects match this view" : data.emptyMessage}
-          description={narrowed ? "Clear the search, the team and the toggles." : data.emptyHint}
+          description={narrowed ? "Clear the search and the filters." : data.emptyHint}
           action={
             narrowed ? (
               <Button
@@ -215,6 +240,7 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
                 onClick={() => {
                   setSearch("");
                   setShowArchived(false);
+                  setTeamFilter([]);
                   onTeamChange("");
                 }}
               >
@@ -225,34 +251,39 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
             )
           }
         />
-      ) : view === "Grid" ? (
+      ) : view === "Card" ? (
         <CardGrid>
           {filtered.map((p) => (
-            <Card key={p.id} onClick={() => onOpen(p)} muted={p.archived} title={`Open ${p.name}`}>
-              <span style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 40 }}>
-                <CardIcon tone="ochre">
-                  <BoardGlyph />
-                </CardIcon>
-                <CardTitle pad={false}>{p.name}</CardTitle>
-              </span>
-              <span style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
-                <Badge tone={p.archived ? "amber" : "ok"}>{p.archived ? "Archived" : "Active"}</Badge>
-                <Badge tone={VISIBILITY_TONE[p.visibility] ?? "neutral"}>{p.visibility}</Badge>
-                <Badge tone="neutral">{p.lead}</Badge>
-              </span>
-              {p.description && <CardDesc>{p.description}</CardDesc>}
-              <TaskProgress done={p.done} doing={p.doing} todo={p.todo} />
-            </Card>
+            <ProjectCard
+              key={p.id}
+              project={p}
+              pinned={Boolean(pinned[p.id])}
+              onPinChange={(next) => setPinned((v) => ({ ...v, [p.id]: next }))}
+              onOpen={() => onOpen(p)}
+            />
           ))}
         </CardGrid>
       ) : (
-        <Table
-          columns={columns}
-          data={filtered}
-          rowKey={(p) => p.id}
-          minWidth={980}
-          onRowClick={onOpen}
-        />
+        <>
+          <Table
+            columns={columns}
+            data={paginated}
+            rowKey={(p) => p.id}
+            minWidth={1100}
+            onRowClick={onOpen}
+          />
+          <Pagination
+            page={page}
+            total={total}
+            perPage={perPage}
+            onChange={setPage}
+            onPerPageChange={(n) => {
+              setPerPage(n);
+              setPage(1);
+            }}
+            label="projects"
+          />
+        </>
       )}
     </div>
   );

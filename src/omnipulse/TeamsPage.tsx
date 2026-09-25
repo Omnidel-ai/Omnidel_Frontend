@@ -3,8 +3,9 @@ import {
   Badge,
   Button,
   EmptyState,
-  PageHeader,
-  SearchBar,
+  Menu,
+  MultiFilter,
+  PinButton,
   SkeletonCard,
   emitToast,
 } from "../components";
@@ -30,6 +31,7 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
   const [toggles, setToggles] = useState<Record<string, boolean>>({});
   // Loaded on the server (the rows are already in hand); in the browser the
   // screen opens through its skeleton, which is where the read will go.
+  const [pinned, setPinned] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(() => typeof window !== "undefined");
 
   useEffect(() => {
@@ -56,22 +58,29 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
 
   return (
     <div>
-      <PageHeader
-        eyebrow="OmniPulse"
-        crumbs={[{ label: "OmniPulse" }, { label: data.label }]}
-        actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
-            {data.rows.filter((t) => !t.archived).length} teams
-          </span>
-        }
-      />
+      <header style={{ marginBottom: 16 }}>
+        <h1 className="opx-title">
+          <span>OmniPulse</span>
+          <span className="opx-title__sep">/</span>
+          <span className="opx-title__current">{data.label}</span>
+        </h1>
+        <p className="opx-subtitle">
+          {data.rows.filter((t) => !t.archived).length} teams you can open.
+        </p>
+      </header>
 
       <div className="opx-toolbar">
-        <SearchBar
-          value={search}
-          onChange={setSearch}
-          placeholder={data.searchPlaceholder}
-          width={280}
+        <MultiFilter
+          searchInput={search}
+          onSearchChange={setSearch}
+          searchPlaceholder={data.searchPlaceholder}
+          sections={data.toggles.map((t) => ({
+            kind: "toggle" as const,
+            key: t.key,
+            label: t.label,
+            checked: Boolean(toggles[t.key]),
+            onChange: (next: boolean) => setToggles((v) => ({ ...v, [t.key]: next })),
+          }))}
         />
         <div className="opx-toolbar__actions">
           {data.toggles.map((t) => (
@@ -83,8 +92,8 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
               onClick={() => setToggles((v) => ({ ...v, [t.key]: !v[t.key] }))}
             />
           ))}
-          <Button size="sm" onClick={() => emitToast("Demo — teams are read-only here", "info")}>
-            + New team
+          <Button size="sm" onClick={() => emitToast("New team — demo", "info")}>
+            + New Team
           </Button>
         </div>
       </div>
@@ -127,6 +136,25 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
               muted={t.archived}
               title={`Open ${t.name}`}
               accent={t.archived ? "var(--rule-strong)" : undefined}
+              actions={
+                <>
+                  <Menu
+                    size="sm"
+                    label={`${t.name} actions`}
+                    items={[
+                      { label: "Open projects", onClick: () => onOpen(t) },
+                      { label: "Team settings", onClick: () => emitToast("Settings — demo", "info") },
+                      { label: "Archive team", onClick: () => emitToast("Archive — demo", "info"), tone: "danger", separated: true },
+                    ]}
+                  />
+                  <PinButton
+                    pinned={Boolean(pinned[t.id])}
+                    onToggle={(next) => setPinned((v) => ({ ...v, [t.id]: next }))}
+                    label={t.name}
+                    size="sm"
+                  />
+                </>
+              }
             >
               <span style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 40 }}>
                 <CardIcon>
@@ -139,7 +167,7 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
                   {t.projects} {t.projects === 1 ? "project" : "projects"}
                 </span>
                 <span>
-                  {t.members} {t.members === 1 ? "member" : "members"}
+                  {t.members === 0 ? "No members yet" : `${t.members} ${t.members === 1 ? "member" : "members"}`}
                 </span>
               </CardMeta>
               <span style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>

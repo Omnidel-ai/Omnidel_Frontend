@@ -80,7 +80,7 @@ export function App() {
           boardId ? (
             <BoardPage
               board={PULSE.boards.find((b) => b.id === boardId) ?? PULSE.boards[0]}
-              labelTones={PULSE.labelTones}
+              data={PULSE}
               onBack={() => setBoardId(null)}
             />
           ) : (

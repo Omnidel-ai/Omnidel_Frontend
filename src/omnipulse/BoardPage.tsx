@@ -1,46 +1,51 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  AvatarStack,
   Badge,
   Button,
   CustomSelect,
-  EmptyState,
+  DragHandle,
   Input,
+  Menu,
   Modal,
-  PageHeader,
-  SearchBar,
+  MultiFilter,
   Skeleton,
+  SubTabs,
+  Table,
   emitToast,
   type BadgeTone,
+  type Column,
 } from "../components";
-import type { OmniPulseBoard, OmniPulseCard, OmniPulseList } from "./types";
-import { Avatars } from "./cards";
+import type { OmniPulseBoard, OmniPulseCard, OmniPulseData, OmniPulseList } from "./types";
+import { BoardHeader } from "./BoardHeader";
+import { CardChips, listToneClass } from "./boardBits";
 
-const PRIORITY_TONE: Record<string, BadgeTone> = {
-  High: "crit",
-  Normal: "amber",
-  Low: "neutral",
-};
+const VIEWS = ["Card", "Table", "Calendar"];
 
 export interface BoardPageProps {
   board: OmniPulseBoard;
-  labelTones: Record<string, string>;
+  data: OmniPulseData;
   onBack: () => void;
 }
 
 /**
- * A project board — lists of cards, left to right.
+ * A project board — three views of the same lists.
+ *
+ * Card is the kanban, Table is every task flat with its list as a column, and
+ * Calendar plots the dated ones on a month grid. The application offers the
+ * same three from the same strip, and they read one set of lists, so nothing
+ * has to be kept in step between them.
  *
  * Cards move with the card menu rather than by dragging: drag-and-drop needs
- * `@dnd-kit`, and a demo workspace that exists to show the design should not
- * take a dependency to fake one. Everything else a board does at rest is here
- * — counts, labels, priority, due dates, assignees, comment and attachment
- * badges, add-a-card, and the done state.
+ * `@dnd-kit`, and a workspace that exists to show the design should not take a
+ * dependency to fake one.
  */
-export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
+export function BoardPage({ board, data, onBack }: BoardPageProps) {
   const [lists, setLists] = useState<OmniPulseList[]>(board.lists);
+  const [view, setView] = useState("Card");
   const [search, setSearch] = useState("");
-// Loaded on the server (the rows are already in hand); in the browser the
-  // screen opens through its skeleton, which is where the read will go.
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(() => typeof window !== "undefined");
   const [adding, setAdding] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -54,11 +59,31 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
   }, [board]);
 
   const q = search.trim().toLowerCase();
-  const total = useMemo(() => lists.reduce((n, l) => n + l.cards.length, 0), [lists]);
-  const doneCount = useMemo(
-    () => lists.reduce((n, l) => n + l.cards.filter((c) => c.done).length, 0),
-    [lists],
+
+  const match = useMemo(
+    () => (c: OmniPulseCard) => {
+      if (q && !c.title.toLowerCase().includes(q)) return false;
+      const pri = filters.priority ?? [];
+      if (pri.length > 0 && !pri.includes(c.priority)) return false;
+      const who = filters.assignee ?? [];
+      if (who.length > 0 && !c.assignees.some((a) => who.includes(a))) return false;
+      const lab = filters.label ?? [];
+      if (lab.length > 0 && !c.labels.some((l) => lab.includes(l))) return false;
+      return true;
+    },
+    [q, filters],
   );
+
+  const visible = useMemo(
+    () => lists.map((l) => ({ ...l, cards: l.cards.filter(match) })),
+    [lists, match],
+  );
+  const flat = useMemo(
+    () => visible.flatMap((l) => l.cards.map((c) => ({ ...c, list: l.title }))),
+    [visible],
+  );
+  const shownCount = flat.length;
+  const narrowed = Boolean(q) || Object.values(filters).some((v) => v.length > 0);
 
   function addCard(listId: string) {
     const title = draft.trim();
@@ -68,14 +93,16 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
         l.id === listId
           ? {
               ...l,
+              count: (l.count ?? l.cards.length) + 1,
               cards: [
                 ...l.cards,
                 {
                   id: `new-${Date.now()}`,
                   title,
                   labels: [],
-                  priority: "Normal",
+                  priority: "Med",
                   due: "",
+                  overdue: false,
                   assignees: [],
                   comments: 0,
                   attachments: 0,
@@ -88,15 +115,19 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
     );
     setDraft("");
     setAdding(null);
-    emitToast("Card added", "success");
+    emitToast("Task added", "success");
   }
 
   function moveCard(card: OmniPulseCard, fromId: string, toId: string) {
     if (fromId === toId) return;
     setLists((ls) =>
       ls.map((l) => {
-        if (l.id === fromId) return { ...l, cards: l.cards.filter((c) => c.id !== card.id) };
-        if (l.id === toId) return { ...l, cards: [...l.cards, card] };
+        if (l.id === fromId) {
+          return { ...l, count: Math.max(0, (l.count ?? l.cards.length) - 1), cards: l.cards.filter((c) => c.id !== card.id) };
+        }
+        if (l.id === toId) {
+          return { ...l, count: (l.count ?? l.cards.length) + 1, cards: [...l.cards, card] };
+        }
         return l;
       }),
     );
@@ -114,28 +145,88 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
     );
   }
 
+  const tableColumns: Column<OmniPulseCard & { list: string }>[] = [
+    { key: "title", header: "Task", width: "minmax(220px, 2.4fr)" },
+    { key: "list", header: "List", width: "150px", render: (c) => <Badge tone="neutral">{c.list}</Badge> },
+    {
+      key: "priority",
+      header: "Priority",
+      width: "110px",
+      render: (c) => <Badge tone={priorityTone(c.priority)}>{c.priority}</Badge>,
+    },
+    {
+      key: "due",
+      header: "Due",
+      width: "130px",
+      render: (c) =>
+        c.due ? (
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: 11.5,
+              color: c.overdue ? "var(--crit)" : "var(--ink-soft)",
+            }}
+          >
+            {formatDue(c.due)}
+          </span>
+        ) : (
+          <span style={{ color: "var(--ink-faint)" }}>—</span>
+        ),
+    },
+    {
+      key: "assignees",
+      header: "Assignees",
+      width: "140px",
+      render: (c) => <AvatarStack names={c.assignees} size={22} max={3} />,
+    },
+    {
+      key: "meta",
+      header: "Notes",
+      width: "110px",
+      align: "right",
+      render: (c) => (
+        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+          {c.comments > 0 && `💬 ${c.comments} `}
+          {c.attachments > 0 && `📎 ${c.attachments}`}
+          {c.comments === 0 && c.attachments === 0 && "—"}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div>
-      <PageHeader
-        eyebrow={`${board.team} · ${board.lead}`}
-        crumbs={[
-          { label: "OmniPulse" },
-          { label: "Projects", href: "/omnipulse/projects" },
-          { label: board.name },
-        ]}
-        onNavigate={onBack}
-        actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
-            {doneCount} / {total} done
-          </span>
-        }
-      />
+      <BoardHeader board={board} shown={shownCount} onBack={onBack} />
 
-      <div className="opx-toolbar">
-        <SearchBar value={search} onChange={setSearch} placeholder="Search cards..." width={280} />
-        <div className="opx-toolbar__actions">
-          <Button variant="secondary" size="sm" onClick={onBack}>
-            All projects
+      <div className="opx-boardbar">
+        <SubTabs tabs={VIEWS} active={view} onChange={setView} ariaLabel="Board view" />
+        <span className="opx-taskcount">
+          {narrowed ? `${shownCount} of ${board.taskCount}` : `${board.taskCount}`} tasks
+        </span>
+
+        <div className="opx-boardbar__right">
+          <MultiFilter
+            searchInput={search}
+            onSearchChange={setSearch}
+            searchPlaceholder="Search tasks & filters..."
+            align="right"
+            sections={(data.boardFilters ?? []).map((f) => ({
+              kind: "checklist" as const,
+              key: f.key,
+              label: f.label,
+              selected: filters[f.key] ?? [],
+              onChange: (next: string[]) => setFilters((v) => ({ ...v, [f.key]: next })),
+              options: f.options.map((o) => ({ value: o, label: o })),
+            }))}
+          />
+          <Button size="sm" onClick={() => setAdding(lists[0]?.id ?? null)}>
+            + Add Task
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => emitToast("Board settings — demo", "info")}>
+            Settings
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setCollapsed((c) => !c)}>
+            {collapsed ? "Expand" : "Collapse"}
           </Button>
         </div>
       </div>
@@ -143,169 +234,162 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
       {loading ? (
         <div className="opx-board">
           {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="opx-list">
+            <div key={i} className="opx-list opx-list--neutral">
               <Skeleton width="50%" height={11} />
               <Skeleton shape="block" height={72} style={{ marginTop: 12 }} />
               <Skeleton shape="block" height={72} style={{ marginTop: 8 }} />
             </div>
           ))}
         </div>
+      ) : view === "Table" ? (
+        <Table
+          columns={tableColumns}
+          data={flat}
+          rowKey={(c) => c.id}
+          minWidth={1000}
+          emptyVariant={narrowed ? "no-results" : "empty"}
+          emptyMessage={narrowed ? "No tasks match this view" : "This board has no tasks yet"}
+          emptyHint={narrowed ? "Clear the search and the filters." : "Add one to the first list."}
+        />
+      ) : view === "Calendar" ? (
+        <CalendarView cards={flat} />
       ) : (
         <div className="opx-board themed-scroll-x">
-          {lists.map((list) => {
-            const cards = q
-              ? list.cards.filter((c) => c.title.toLowerCase().includes(q))
-              : list.cards;
-            return (
-              <section key={list.id} className="opx-list" aria-label={list.title}>
-                <header className="opx-list__head">
-                  <span className="opx-list__title">{list.title}</span>
-                  <span className="opx-list__count">{cards.length}</span>
-                </header>
+          {visible.map((list) => (
+            <section key={list.id} className={`opx-list ${listToneClass(list.tone)}`} aria-label={list.title}>
+              <header className="opx-list__head">
+                <DragHandle label={`Reorder ${list.title}`} />
+                <span className={`opx-list__dot opx-dot--${list.tone ?? "neutral"}`} aria-hidden="true" />
+                <span className="opx-list__title">{list.title}</span>
+                <span className="opx-list__count">{narrowed ? list.cards.length : (list.count ?? list.cards.length)}</span>
+                <Menu
+                  size="sm"
+                  label={`${list.title} actions`}
+                  items={[
+                    { label: "Add a task", onClick: () => setAdding(list.id) },
+                    { label: "Rename list", onClick: () => emitToast("Rename — demo", "info") },
+                    { label: "Archive list", onClick: () => emitToast("Archive — demo", "info"), tone: "danger", separated: true },
+                  ]}
+                />
+              </header>
 
-                <div className="opx-list__cards">
-                  {cards.length === 0 ? (
-                    <p
-                      style={{
-                        fontSize: 12,
-                        color: "var(--ink-faint)",
-                        padding: "10px 2px",
-                        lineHeight: 1.5,
+              {!collapsed && (
+                <>
+                  <div className="opx-list__cards">
+                    {list.cards.length === 0 ? (
+                      <p className="opx-list__drop">{narrowed ? "No matching tasks" : "Drop tasks here"}</p>
+                    ) : (
+                      list.cards.map((card) => (
+                        <article key={card.id} className="opx-card-item">
+                          {card.labels.length > 0 && (
+                            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 }}>
+                              {card.labels.map((l) => (
+                                <Badge key={l} tone={(data.labelTones[l] as BadgeTone) ?? "neutral"}>
+                                  {l}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+
+                          <div style={{ display: "flex", alignItems: "flex-start", gap: 6 }}>
+                            <span
+                              style={{
+                                flex: 1,
+                                fontSize: 13.5,
+                                lineHeight: 1.4,
+                                color: card.done ? "var(--ink-mute)" : "var(--ink)",
+                                textDecoration: card.done ? "line-through" : "none",
+                              }}
+                            >
+                              {card.title}
+                            </span>
+                            <Menu
+                              size="sm"
+                              label={`${card.title} actions`}
+                              items={[
+                                {
+                                  label: card.done ? "Mark not done" : "Mark done",
+                                  onClick: () => toggleDone(card, list.id),
+                                },
+                                { label: "Move to list…", onClick: () => setMoving({ card, listId: list.id }) },
+                                {
+                                  label: "Archive task",
+                                  onClick: () => emitToast("Archive — demo", "info"),
+                                  tone: "danger",
+                                  separated: true,
+                                },
+                              ]}
+                            />
+                          </div>
+
+                          <CardChips card={card} />
+                        </article>
+                      ))
+                    )}
+                  </div>
+
+                  {adding === list.id ? (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        addCard(list.id);
+                      }}
+                      style={{ display: "grid", gap: 6, marginTop: 8 }}
+                    >
+                      <Input
+                        autoFocus
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        placeholder="Task title"
+                        aria-label="Task title"
+                      />
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <Button size="sm" type="submit">
+                          Add
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setAdding(null);
+                            setDraft("");
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  ) : (
+                    <button
+                      type="button"
+                      className="opx-list__add"
+                      onClick={() => {
+                        setAdding(list.id);
+                        setDraft("");
                       }}
                     >
-                      {q ? "No cards match the search." : "Nothing here."}
-                    </p>
-                  ) : (
-                    cards.map((card) => (
-                      <article key={card.id} className="opx-card-item">
-                        {card.labels.length > 0 && (
-                          <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 }}>
-                            {card.labels.map((l) => (
-                              <Badge key={l} tone={(labelTones[l] as BadgeTone) ?? "neutral"}>
-                                {l}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-
-                        <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                          <input
-                            type="checkbox"
-                            checked={card.done}
-                            onChange={() => toggleDone(card, list.id)}
-                            aria-label={card.done ? `Reopen ${card.title}` : `Mark ${card.title} done`}
-                            style={{ accentColor: "var(--green-deep)", marginTop: 2, flexShrink: 0 }}
-                          />
-                          <span
-                            style={{
-                              flex: 1,
-                              fontSize: 13,
-                              lineHeight: 1.45,
-                              color: card.done ? "var(--ink-mute)" : "var(--ink)",
-                              textDecoration: card.done ? "line-through" : "none",
-                            }}
-                          >
-                            {card.title}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setMoving({ card, listId: list.id })}
-                            aria-label={`Move ${card.title}`}
-                            title="Move to another list"
-                            style={{
-                              background: "transparent",
-                              border: "none",
-                              color: "var(--ink-mute)",
-                              cursor: "pointer",
-                              padding: 0,
-                              lineHeight: 1,
-                              fontSize: 15,
-                              flexShrink: 0,
-                            }}
-                          >
-                            ⋯
-                          </button>
-                        </div>
-
-                        <footer className="opx-card-item__foot">
-                          {card.priority !== "Normal" && (
-                            <Badge tone={PRIORITY_TONE[card.priority] ?? "neutral"}>
-                              {card.priority}
-                            </Badge>
-                          )}
-                          {card.due && <span className="opx-meta">Due {card.due.slice(5)}</span>}
-                          {card.comments > 0 && <span className="opx-meta">💬 {card.comments}</span>}
-                          {card.attachments > 0 && <span className="opx-meta">📎 {card.attachments}</span>}
-                          <span style={{ marginLeft: "auto" }}>
-                            <Avatars names={card.assignees} size={20} />
-                          </span>
-                        </footer>
-                      </article>
-                    ))
+                      + Add a task
+                    </button>
                   )}
-                </div>
+                </>
+              )}
+            </section>
+          ))}
 
-                {adding === list.id ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      addCard(list.id);
-                    }}
-                    style={{ display: "grid", gap: 6, marginTop: 8 }}
-                  >
-                    <Input
-                      autoFocus
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Card title"
-                      aria-label="Card title"
-                    />
-                    <div style={{ display: "flex", gap: 6 }}>
-                      <Button size="sm" type="submit">
-                        Add
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setAdding(null);
-                          setDraft("");
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </form>
-                ) : (
-                  <button
-                    type="button"
-                    className="opx-list__add"
-                    onClick={() => {
-                      setAdding(list.id);
-                      setDraft("");
-                    }}
-                  >
-                    + Add a card
-                  </button>
-                )}
-              </section>
-            );
-          })}
+          <button
+            type="button"
+            className="opx-addlist"
+            onClick={() => emitToast("New list — demo", "info")}
+          >
+            + Add list
+          </button>
         </div>
-      )}
-
-      {!loading && total === 0 && (
-        <EmptyState
-          size="card"
-          title="This board has no cards yet"
-          description="Add one to the first list to get started."
-        />
       )}
 
       <Modal
         open={moving != null}
         onClose={() => setMoving(null)}
-        title="Move card"
+        title="Move task"
         description={moving?.card.title}
         footer={
           <Button variant="ghost" onClick={() => setMoving(null)}>
@@ -329,4 +413,140 @@ export function BoardPage({ board, labelTones, onBack }: BoardPageProps) {
       </Modal>
     </div>
   );
+}
+
+/**
+ * Month grid of the dated tasks — the board's third view.
+ *
+ * Today is a filled circle on a tinted cell, the date sits top-right, and days
+ * outside the month are dimmed rather than hidden, so the grid keeps its shape
+ * from month to month.
+ */
+function CalendarView({ cards }: { cards: (OmniPulseCard & { list: string })[] }) {
+  const dated = cards.filter((c) => c.due);
+  const [cursor, setCursor] = useState(() => startOfMonth(new Date()));
+
+  const days = useMemo(() => {
+    const first = startOfMonth(cursor);
+    // Monday-first, padded with the neighbouring days.
+    const offset = (first.getDay() + 6) % 7;
+    const start = new Date(first);
+    start.setDate(first.getDate() - offset);
+    return Array.from({ length: 42 }, (_, i) => {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      return d;
+    });
+  }, [cursor]);
+
+  const byDay = useMemo(() => {
+    const map = new Map<string, (OmniPulseCard & { list: string })[]>();
+    for (const c of dated) {
+      const list = map.get(c.due) ?? [];
+      list.push(c);
+      map.set(c.due, list);
+    }
+    return map;
+  }, [dated]);
+
+  const todayIso = isoOf(new Date());
+  const undated = cards.length - dated.length;
+
+  return (
+    <div>
+      <div className="opx-cal__bar">
+        <button
+          type="button"
+          className="opx-cal__nav"
+          aria-label="Previous month"
+          onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          className="opx-cal__nav"
+          aria-label="Next month"
+          onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
+        >
+          ›
+        </button>
+        <span className="opx-cal__month">
+          {cursor.toLocaleString("en-GB", { month: "long", year: "numeric" })}
+        </span>
+        <button type="button" className="opx-cal__today" onClick={() => setCursor(startOfMonth(new Date()))}>
+          Today
+        </button>
+        <span className="opx-cal__hint">
+          {undated > 0 ? `${undated} with no due date · ` : ""}dated tasks only
+        </span>
+      </div>
+
+      <div className="opx-cal">
+        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+          <div key={d} className="opx-cal__head">
+            {d}
+          </div>
+        ))}
+        {days.map((d) => {
+          const iso = isoOf(d);
+          const items = byDay.get(iso) ?? [];
+          const dim = d.getMonth() !== cursor.getMonth();
+          const isToday = iso === todayIso;
+          return (
+            <div
+              key={iso}
+              className={`opx-cal__cell${isToday ? " opx-cal__cell--today" : ""}`}
+              style={{ opacity: dim ? 0.45 : 1 }}
+            >
+              <span className={`opx-cal__date${isToday ? " opx-cal__date--today" : ""}`}>
+                {d.getDate()}
+              </span>
+              {items.map((c) => (
+                <span
+                  key={c.id}
+                  className="opx-cal__task"
+                  title={`${c.title} · ${c.list}`}
+                  style={{
+                    background: c.overdue ? "var(--crit-wash)" : "var(--green-wash)",
+                    color: c.overdue ? "var(--crit)" : "var(--green-deep)",
+                  }}
+                >
+                  {c.title}
+                </span>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {dated.length === 0 && (
+        <p className="opx-cal__empty">
+          No task on this board carries a due date, so the grid is empty. Dates set on a card show
+          up here.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function startOfMonth(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+/** Local-time ISO — `toISOString()` would shift the day either side of UTC. */
+function isoOf(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function priorityTone(priority: string): BadgeTone {
+  if (priority === "High") return "crit";
+  if (priority === "Low") return "neutral";
+  return "ochre";
+}
+
+export function formatDue(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }

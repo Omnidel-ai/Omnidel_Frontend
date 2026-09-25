@@ -93,7 +93,7 @@ const screens: Screen[] = [
       ["toolbar", "opx-toolbar"],
       ["search", PULSE.teams.searchPlaceholder],
       ["quick toggle", PULSE.teams.toggles[0].label],
-      ["new team", "+ New team"],
+      ["new team", "+ New Team"],
       ["a team card", PULSE.teams.rows[0].name],
       ["member count", "members"],
     ],
@@ -111,10 +111,12 @@ const screens: Screen[] = [
     markers: [
       ["toolbar", "opx-toolbar"],
       ["view toggle", "Table"],
-      ["team filter", "Any team"],
-      ["new project", "+ New project"],
-      ["a project card", PULSE.projects.rows[0].name],
-      ["progress bar", "done"],
+      ["subtitle", PULSE.projects.subtitle],
+      ["new project", "+ New Project"],
+      ["planned/doing/done", "opx-counts"],
+      ["row actions", "View"],
+      ["a project row", PULSE.projects.rows[0].name],
+      ["team chip", PULSE.projects.rows[0].team],
     ],
   },
   {
@@ -131,7 +133,7 @@ const screens: Screen[] = [
   {
     name: "omnipulse/board",
     html: renderToString(
-      <BoardPage board={PULSE.boards[0]} labelTones={PULSE.labelTones} onBack={() => undefined} />,
+      <BoardPage board={PULSE.boards[0]} data={PULSE} onBack={() => undefined} />,
     ),
     markers: [
       ["board", "opx-board"],
@@ -139,7 +141,15 @@ const screens: Screen[] = [
       ["board name", PULSE.boards[0].name],
       ["a list", PULSE.boards[0].lists[0].title],
       ["a card", PULSE.boards[0].lists[0].cards[0].title],
-      ["add a card", "+ Add a card"],
+      ["tinted list", "opx-list--ochre"],
+      ["view tabs", "Calendar"],
+      ["task count", `${PULSE.boards[0].taskCount}`],
+      ["add a task", "+ Add a task"],
+      ["add list", "+ Add list"],
+      ["drop hint", "Drop tasks here"],
+      ["priority chip", "opx-chip--med"],
+      ["overdue chip", "opx-chip--overdue"],
+      ["members", PULSE.boards[0].members[0]],
     ],
   },
   ...DATA.settings.map((st) => ({

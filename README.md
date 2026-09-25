@@ -126,7 +126,9 @@ the data.
 | `Toast/` | `Toaster`, `emitToast` |
 | `PageHeader/` | `PageHeader`, `BreadcrumbTrail` |
 | `NoAccessScreen/` | `NoAccessScreen` |
+| `Avatar/` | `Avatar`, `AvatarStack` — initials, colour derived from the name, +N overflow |
 | `Badge/` | `Badge` — 7 tones |
+| `Menu/` | `Menu` (the ⋯ actions menu, portalled), `PinButton`, `DragHandle` |
 | `EmptyState/` | `EmptyState` — `empty` / `no-results` / `error`, three sizes |
 | `Skeleton/` | `Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonRows` |
 | `StatusToggle/` | `StatusToggle` |
@@ -223,7 +225,7 @@ The module's own screens, matching the application's nav (`Teams`, `Projects`,
 | **Teams** | card grid | A team is a name, a lead and two counts — a tile, as in the app |
 | **Projects** | card grid **or** table, your choice | Both views read the same descriptor; the table sorts on every column marked `sortable` |
 | **Review** | queue table + tabs | Eight columns a reviewer scans; opening a row gives the submission and the two decisions |
-| **Board** | kanban | Lists of cards, left to right |
+| **Board** | kanban · table · calendar | Three views of the same lists, from one strip |
 
 `cards.tsx` is to these screens what `columns.tsx` is to the admin tables: one
 small vocabulary — `Card`, `CardGrid`, `CardTitle`, `CardMeta`, `QuickToggle`,
@@ -231,9 +233,17 @@ small vocabulary — `Card`, `CardGrid`, `CardTitle`, `CardMeta`, `QuickToggle`,
 nothing about what a team or a project is. Everything else comes from the
 shared components.
 
+The board carries what the application's does: a serif trail with the team
+picked out, the visibility chip, the brief, the member stack, CARD / TABLE /
+CALENDAR with a task count, search-with-FILTERS, and columns tinted by what
+their stage means — neutral while queued, ochre while in flight, green once
+ready. Cards show priority, a due chip that turns crit when overdue, comment
+and attachment counts, and their assignees.
+
 Cards move between lists with the card menu rather than by dragging: drag and
 drop needs `@dnd-kit`, and a workspace that exists to show the design should
-not take a dependency to fake one.
+not take a dependency to fake one. The calendar likewise plots due dates but
+does not reschedule by dragging.
 
 ## Dashboard home — `src/dashboard/`
 
