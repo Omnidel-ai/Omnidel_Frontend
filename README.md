@@ -12,6 +12,7 @@ to accommodate, and published here so it can be worked on on its own.
 Omnidel_Frontend/
 ├── src/
 │   ├── components/     ← 1. shared UI components
+│   │   └── acharya-app/   ← reference copy, excluded from the build
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
 │   ├── data/           ← 3. demo data (demo.json + masters.json)
 │   ├── admin/          ← 5. the admin screens, two layouts
@@ -137,6 +138,17 @@ feature-owned, not shared: `master-form`, `export-csv-modal`, `task-checklist`,
 `dash-charts`, the `mahacharya/*` cards, `recurring-select`, and the
 13-component Collaboration cluster (comments, mentions, rich text, share
 sheet) — each carries domain knowledge or a heavy dependency.
+
+### `components/acharya-app/` — reference only
+
+The Acharya karigar portal's complete `src/components` tree (64 files, 19k
+lines), copied in so the shared-UI work can see what it will eventually cover.
+It is written for Next.js and reaches for that app's `@/lib`, `@/hooks` and its
+AI/voice packages, so it **does not compile here** and is excluded in
+`tsconfig.json` and `eslint.config.js`. Nothing imports it; the build output is
+byte-identical with and without it. It is the source to port *from* — see
+`src/components/acharya-app/README.md` for the inventory and which 16 files are
+portable as they stand.
 
 ## 2. Shell components — `src/shell/`
 
