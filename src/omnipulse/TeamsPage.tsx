@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  Badge,
   Button,
   EmptyState,
-  Menu,
-  MultiFilter,
   PinButton,
+  SearchBar,
   SkeletonCard,
   emitToast,
 } from "../components";
 import type { OmniPulseTeam, OmniPulseTeamsData } from "./types";
-import { Card, CardGrid, CardIcon, CardMeta, CardTitle, QuickToggle, TeamGlyph } from "./cards";
+import { Card, CardGrid, CardIcon, CardMeta, CardTitle, PeopleGlyph, QuickToggle, TeamGlyph } from "./cards";
 
 export interface TeamsPageProps {
   data: OmniPulseTeamsData;
@@ -64,23 +62,15 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
           <span className="opx-title__sep">/</span>
           <span className="opx-title__current">{data.label}</span>
         </h1>
-        <p className="opx-subtitle">
-          {data.rows.filter((t) => !t.archived).length} teams you can open.
-        </p>
+        <p className="opx-subtitle">{data.subtitle}</p>
       </header>
 
       <div className="opx-toolbar">
-        <MultiFilter
-          searchInput={search}
-          onSearchChange={setSearch}
-          searchPlaceholder={data.searchPlaceholder}
-          sections={data.toggles.map((t) => ({
-            kind: "toggle" as const,
-            key: t.key,
-            label: t.label,
-            checked: Boolean(toggles[t.key]),
-            onChange: (next: boolean) => setToggles((v) => ({ ...v, [t.key]: next })),
-          }))}
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder={data.searchPlaceholder}
+          width={400}
         />
         <div className="opx-toolbar__actions">
           {data.toggles.map((t) => (
@@ -136,44 +126,35 @@ export function TeamsPage({ data, onOpen }: TeamsPageProps) {
               muted={t.archived}
               title={`Open ${t.name}`}
               accent={t.archived ? "var(--rule-strong)" : undefined}
+              accentCard={t.systemGenerated}
               actions={
-                <>
-                  <Menu
-                    size="sm"
-                    label={`${t.name} actions`}
-                    items={[
-                      { label: "Open projects", onClick: () => onOpen(t) },
-                      { label: "Team settings", onClick: () => emitToast("Settings — demo", "info") },
-                      { label: "Archive team", onClick: () => emitToast("Archive — demo", "info"), tone: "danger", separated: true },
-                    ]}
-                  />
-                  <PinButton
-                    pinned={Boolean(pinned[t.id])}
-                    onToggle={(next) => setPinned((v) => ({ ...v, [t.id]: next }))}
-                    label={t.name}
-                    size="sm"
-                  />
-                </>
+                <PinButton
+                  pinned={Boolean(pinned[t.id])}
+                  onToggle={(next) => setPinned((v) => ({ ...v, [t.id]: next }))}
+                  label={t.name}
+                  size="sm"
+                />
               }
             >
-              <span style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 40 }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 12, paddingRight: 34 }}>
                 <CardIcon>
                   <TeamGlyph />
                 </CardIcon>
-                <CardTitle pad={false}>{t.name}</CardTitle>
+                <span style={{ minWidth: 0 }}>
+                  <CardTitle pad={false}>{t.name}</CardTitle>
+                  {t.systemGenerated && <span className="opx-sysgen">System generated</span>}
+                </span>
               </span>
               <CardMeta>
                 <span>
                   {t.projects} {t.projects === 1 ? "project" : "projects"}
                 </span>
-                <span>
-                  {t.members === 0 ? "No members yet" : `${t.members} ${t.members === 1 ? "member" : "members"}`}
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                  <PeopleGlyph />
+                  {t.members} {t.members === 1 ? "member" : "members"}
                 </span>
+                {t.archived && <span style={{ color: "var(--amber)" }}>Archived</span>}
               </CardMeta>
-              <span style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
-                <Badge tone="neutral">{t.lead}</Badge>
-                {t.archived && <Badge tone="amber">Archived</Badge>}
-              </span>
             </Card>
           ))}
         </CardGrid>

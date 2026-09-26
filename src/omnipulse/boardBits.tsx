@@ -52,11 +52,18 @@ export function CardChips({ card }: { card: OmniPulseCard }) {
   );
 }
 
-/** "23 Sept" — the day and the short month, as the board shows it. */
+/**
+ * "23 Sept" — the day and the short month, as the board writes it.
+ *
+ * Spelled out rather than taken from `toLocaleString`, which gives "Sep" for
+ * September where the application shows "Sept".
+ */
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
 export function formatDue(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return `${d.getDate()} ${d.toLocaleString("en-GB", { month: "short" })}`;
+  return `${d.getDate()} ${MONTHS[d.getMonth()]}`;
 }
 
 function ClockGlyph() {

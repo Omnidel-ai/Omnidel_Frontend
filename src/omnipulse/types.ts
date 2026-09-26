@@ -13,12 +13,15 @@ export interface OmniPulseTeam {
   lead: string;
   projects: number;
   members: number;
+  /** Created by the system rather than by a person — labelled, and tinted. */
+  systemGenerated?: boolean;
   archived?: boolean;
 }
 
 export interface OmniPulseTeamsData {
   label: string;
   singular: string;
+  subtitle: string;
   searchPlaceholder: string;
   emptyMessage: string;
   emptyHint: string;
@@ -102,11 +105,31 @@ export interface OmniPulseCard {
   done: boolean;
 }
 
+/** What the task sheet shows beyond what a card carries on the board. */
+export interface OmniPulseTaskMeta {
+  description?: string;
+  taskType?: string;
+  acharya?: string;
+  mission?: string;
+  missionImpact?: string;
+  assignedBy?: string;
+  assignDate?: string;
+  created?: string;
+  sessions?: number;
+  breaks?: number;
+  /** Option lists for the sheet's selects. */
+  taskTypes?: string[];
+  acharyas?: string[];
+  missions?: string[];
+}
+
 export interface OmniPulseList {
   id: string;
   title: string;
   /** Column tint and dot colour. */
   tone?: "neutral" | "ochre" | "green";
+  /** What a card in this list counts as: Planned, Doing or Done. */
+  status?: string;
   /** Total on the server; the rendered cards may be a filtered subset. */
   count?: number;
   cards: OmniPulseCard[];
@@ -131,6 +154,10 @@ export interface OmniPulseData {
   boards: OmniPulseBoard[];
   /** Filter sections offered in the board's FILTERS popover. */
   boardFilters: { key: string; label: string; options: string[] }[];
+  /** Defaults and option lists for the task sheet. */
+  taskMeta: OmniPulseTaskMeta;
+  /** Everyone who can be assigned, for the sheet's people picker. */
+  people: string[];
   /** Label → badge tone, so a card's labels are coloured from data. */
   labelTones: Record<string, string>;
 }
