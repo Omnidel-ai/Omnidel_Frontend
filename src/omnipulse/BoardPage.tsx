@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  AvatarStack,
   Badge,
   Button,
   CustomSelect,
@@ -10,7 +9,6 @@ import {
   Modal,
   MultiFilter,
   Skeleton,
-  SubTabs,
   Table,
   emitToast,
   type BadgeTone,
@@ -18,9 +16,14 @@ import {
 } from "../components";
 import type { OmniPulseBoard, OmniPulseCard, OmniPulseData, OmniPulseList } from "./types";
 import { BoardHeader } from "./BoardHeader";
-import { CardChips, listToneClass } from "./boardBits";
+import { ViewToggle } from "./cards";
+import { CardChips, formatDue, listToneClass } from "./boardBits";
+import { TaskModal } from "./TaskModal";
 
 const VIEWS = ["Card", "Table", "Calendar"];
+
+/** A card flattened out of its list, for the table and calendar views. */
+type BoardRow = OmniPulseCard & { list: string; listId: string; status: string };
 
 export interface BoardPageProps {
   board: OmniPulseBoard;
@@ -50,6 +53,7 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
   const [adding, setAdding] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [moving, setMoving] = useState<{ card: OmniPulseCard; listId: string } | null>(null);
+  const [openTask, setOpenTask] = useState<{ card: OmniPulseCard; listId: string } | null>(null);
 
   useEffect(() => {
     setLists(board.lists);
@@ -78,8 +82,11 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
     () => lists.map((l) => ({ ...l, cards: l.cards.filter(match) })),
     [lists, match],
   );
-  const flat = useMemo(
-    () => visible.flatMap((l) => l.cards.map((c) => ({ ...c, list: l.title }))),
+  const flat: BoardRow[] = useMemo(
+    () =>
+      visible.flatMap((l) =>
+        l.cards.map((c) => ({ ...c, list: l.title, listId: l.id, status: l.status ?? "Planned" })),
+      ),
     [visible],
   );
   const shownCount = flat.length;
@@ -145,18 +152,79 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
     );
   }
 
-  const tableColumns: Column<OmniPulseCard & { list: string }>[] = [
-    { key: "title", header: "Task", width: "minmax(220px, 2.4fr)" },
-    { key: "list", header: "List", width: "150px", render: (c) => <Badge tone="neutral">{c.list}</Badge> },
+  const tableColumns: Column<BoardRow>[] = [
+    {
+      key: "seq",
+      header: "#",
+      width: "56px",
+      render: (_c, i) => (
+        <span style={{ fontFamily: "var(--mono)", fontSize: 11.5, color: "var(--ink-mute)" }}>
+          {i + 1}
+        </span>
+      ),
+    },
+    {
+      key: "title",
+      header: "Title",
+      width: "minmax(240px, 2.4fr)",
+      render: (c) => (
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={c.done}
+            aria-label={c.done ? `Reopen ${c.title}` : `Mark ${c.title} done`}
+            className={`tsk__check tsk__check--sm${c.done ? " tsk__check--on" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleDone(c, c.listId);
+            }}
+          >
+            {c.done && (
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
+          </button>
+          <span
+            className="picker-truncate"
+            style={{
+              color: c.done ? "var(--ink-mute)" : "var(--ink)",
+              textDecoration: c.done ? "line-through" : "none",
+            }}
+          >
+            {c.title}
+          </span>
+        </span>
+      ),
+    },
+    { key: "list", header: "Card", width: "150px", render: (c) => <span className="opx-tag">{c.list}</span> },
+    {
+      key: "status",
+      header: "Status",
+      width: "130px",
+      render: (c) => <span className={`opx-tag opx-tag--${c.status.toLowerCase()}`}>{c.status}</span>,
+    },
     {
       key: "priority",
       header: "Priority",
-      width: "110px",
-      render: (c) => <Badge tone={priorityTone(c.priority)}>{c.priority}</Badge>,
+      width: "120px",
+      render: (c) => <span className={`opx-pill opx-pill--${c.priority.toLowerCase()}`}>{longPriority(c.priority)}</span>,
+    },
+    {
+      key: "owner",
+      header: "Owner",
+      width: "minmax(150px, 1fr)",
+      render: (c) =>
+        c.assignees.length > 0 ? (
+          <span className="opx-owner">{c.assignees[0]}</span>
+        ) : (
+          <span style={{ color: "var(--ink-faint)" }}>—</span>
+        ),
     },
     {
       key: "due",
-      header: "Due",
+      header: "Deadline",
       width: "130px",
       render: (c) =>
         c.due ? (
@@ -174,22 +242,21 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
         ),
     },
     {
-      key: "assignees",
-      header: "Assignees",
-      width: "140px",
-      render: (c) => <AvatarStack names={c.assignees} size={22} max={3} />,
-    },
-    {
-      key: "meta",
-      header: "Notes",
+      key: "__actions",
+      header: "Actions",
       width: "110px",
       align: "right",
       render: (c) => (
-        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
-          {c.comments > 0 && `💬 ${c.comments} `}
-          {c.attachments > 0 && `📎 ${c.attachments}`}
-          {c.comments === 0 && c.attachments === 0 && "—"}
-        </span>
+        <button
+          type="button"
+          className="opx-view"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenTask({ card: c, listId: c.listId });
+          }}
+        >
+          View
+        </button>
       ),
     },
   ];
@@ -199,7 +266,7 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
       <BoardHeader board={board} shown={shownCount} onBack={onBack} />
 
       <div className="opx-boardbar">
-        <SubTabs tabs={VIEWS} active={view} onChange={setView} ariaLabel="Board view" />
+        <ViewToggle value={view} onChange={setView} options={VIEWS} label="Board view" />
         <span className="opx-taskcount">
           {narrowed ? `${shownCount} of ${board.taskCount}` : `${board.taskCount}`} tasks
         </span>
@@ -252,7 +319,7 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
           emptyHint={narrowed ? "Clear the search and the filters." : "Add one to the first list."}
         />
       ) : view === "Calendar" ? (
-        <CalendarView cards={flat} />
+        <CalendarView cards={flat} onOpen={(c) => setOpenTask({ card: c, listId: c.listId })} />
       ) : (
         <div className="opx-board themed-scroll-x">
           {visible.map((list) => (
@@ -292,21 +359,22 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
                           )}
 
                           <div style={{ display: "flex", alignItems: "flex-start", gap: 6 }}>
-                            <span
+                            <button
+                              type="button"
+                              className="opx-card-item__title"
+                              onClick={() => setOpenTask({ card, listId: list.id })}
                               style={{
-                                flex: 1,
-                                fontSize: 13.5,
-                                lineHeight: 1.4,
                                 color: card.done ? "var(--ink-mute)" : "var(--ink)",
                                 textDecoration: card.done ? "line-through" : "none",
                               }}
                             >
                               {card.title}
-                            </span>
+                            </button>
                             <Menu
                               size="sm"
                               label={`${card.title} actions`}
                               items={[
+                                { label: "Open task", onClick: () => setOpenTask({ card, listId: list.id }) },
                                 {
                                   label: card.done ? "Mark not done" : "Mark done",
                                   onClick: () => toggleDone(card, list.id),
@@ -386,6 +454,28 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
         </div>
       )}
 
+      {openTask && (
+        <TaskModal
+          card={openTask.card}
+          status={lists.find((l) => l.id === openTask.listId)?.status ?? "Planned"}
+          meta={data.taskMeta}
+          people={data.people}
+          onClose={() => setOpenTask(null)}
+          onSave={(next) =>
+            setLists((ls) =>
+              ls.map((l) =>
+                l.id === openTask.listId
+                  ? {
+                      ...l,
+                      cards: l.cards.map((c) => (c.id === openTask.card.id ? { ...c, ...next } : c)),
+                    }
+                  : l,
+              ),
+            )
+          }
+        />
+      )}
+
       <Modal
         open={moving != null}
         onClose={() => setMoving(null)}
@@ -422,7 +512,7 @@ export function BoardPage({ board, data, onBack }: BoardPageProps) {
  * outside the month are dimmed rather than hidden, so the grid keeps its shape
  * from month to month.
  */
-function CalendarView({ cards }: { cards: (OmniPulseCard & { list: string })[] }) {
+function CalendarView({ cards, onOpen }: { cards: BoardRow[]; onOpen?: (c: BoardRow) => void }) {
   const dated = cards.filter((c) => c.due);
   const [cursor, setCursor] = useState(() => startOfMonth(new Date()));
 
@@ -440,7 +530,7 @@ function CalendarView({ cards }: { cards: (OmniPulseCard & { list: string })[] }
   }, [cursor]);
 
   const byDay = useMemo(() => {
-    const map = new Map<string, (OmniPulseCard & { list: string })[]>();
+    const map = new Map<string, BoardRow[]>();
     for (const c of dated) {
       const list = map.get(c.due) ?? [];
       list.push(c);
@@ -477,9 +567,7 @@ function CalendarView({ cards }: { cards: (OmniPulseCard & { list: string })[] }
         <button type="button" className="opx-cal__today" onClick={() => setCursor(startOfMonth(new Date()))}>
           Today
         </button>
-        <span className="opx-cal__hint">
-          {undated > 0 ? `${undated} with no due date · ` : ""}dated tasks only
-        </span>
+        <span className="opx-cal__hint">dated tasks only · click one to open it</span>
       </div>
 
       <div className="opx-cal">
@@ -503,27 +591,26 @@ function CalendarView({ cards }: { cards: (OmniPulseCard & { list: string })[] }
                 {d.getDate()}
               </span>
               {items.map((c) => (
-                <span
+                <button
                   key={c.id}
+                  type="button"
                   className="opx-cal__task"
                   title={`${c.title} · ${c.list}`}
-                  style={{
-                    background: c.overdue ? "var(--crit-wash)" : "var(--green-wash)",
-                    color: c.overdue ? "var(--crit)" : "var(--green-deep)",
-                  }}
+                  onClick={() => onOpen?.(c)}
                 >
-                  {c.title}
-                </span>
+                  <span className="opx-cal__task-day">{d.getDate()}</span>
+                  <span className="picker-truncate">{c.title}</span>
+                </button>
               ))}
             </div>
           );
         })}
       </div>
 
-      {dated.length === 0 && (
+      {undated > 0 && (
         <p className="opx-cal__empty">
-          No task on this board carries a due date, so the grid is empty. Dates set on a card show
-          up here.
+          {undated} {undated === 1 ? "task has" : "tasks have"} no deadline (not shown). Set a
+          deadline to place one on the calendar.
         </p>
       )}
     </div>
@@ -539,14 +626,9 @@ function isoOf(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function priorityTone(priority: string): BadgeTone {
-  if (priority === "High") return "crit";
-  if (priority === "Low") return "neutral";
-  return "ochre";
+/** The table spells the priority out where the card abbreviates it. */
+function longPriority(p: string): string {
+  if (p === "Med") return "Medium";
+  return p;
 }
 
-export function formatDue(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-}

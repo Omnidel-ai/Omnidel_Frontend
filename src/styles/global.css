@@ -8,7 +8,11 @@
    so a component lifted from here drops into the app without a restyle.
    ───────────────────────────────────────────────────────────────────────── */
 
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+/* The same three faces the application loads, with the same axes and
+   weights: Fraunces variable on its optical-size axis, Inter Tight
+   400–700, JetBrains Mono 400–500. Matching the axes matters — Fraunces
+   at a fixed weight renders visibly different from the variable cut. */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,100..900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 :root {
   /* Surfaces */
@@ -451,6 +455,13 @@ input, button, select, textarea { font-family: var(--sans); }
 .modal-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 .modal-card--sm { width: 380px; }
 .modal-card--lg { width: 640px; }
+/* The task sheet: wide enough for two columns of fields beside the comments,
+   and tall enough that the form scrolls inside the card rather than the page. */
+.modal-card--xl {
+  width: min(1080px, 100%);
+  padding: 0;
+  max-height: calc(100vh - 48px);
+}
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -787,6 +798,15 @@ input, button, select, textarea { font-family: var(--sans); }
 
 /* ── Card grid ─────────────────────────────────────────────────────────── */
 .opx-card:hover { border-color: var(--rule-strong); }
+.opx-sysgen {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ok);
+}
 .opx-card:focus-visible { outline: 2px solid var(--rule-strong); outline-offset: 2px; }
 
 .opx-proj {
@@ -1147,3 +1167,223 @@ input, button, select, textarea { font-family: var(--sans); }
   .opx-cal__task { font-size: 9.5px; }
   .opx-cal__hint { display: none; }
 }
+
+/* ─── Task sheet ────────────────────────────────────────────────────────── */
+.tsk { display: flex; flex-direction: column; max-height: calc(100vh - 48px); }
+.tsk__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 10px;
+}
+.tsk__check {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule-strong);
+  background: transparent;
+  color: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.tsk__check--sm { width: 19px; height: 19px; }
+.tsk__check--on { background: var(--green-deep); border-color: var(--green-deep); }
+.tsk__title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  padding: 2px 6px;
+}
+.tsk__title:hover { border-color: var(--rule); }
+.tsk__title:focus { outline: none; border-color: var(--green-deep); background: var(--surface); }
+.tsk__close {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tsk__close:hover { background: var(--surface-sunk); }
+
+.tsk__chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 14px 58px;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.tsk__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tsk__chip--status { background: var(--surface-sunk); color: var(--ink-mute); }
+.tsk__chip--pri { background: var(--ochre); color: var(--page); }
+
+.tsk__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 18px 20px 22px;
+  overflow-y: auto;
+  min-height: 0;
+}
+.tsk__main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.tsk__side { min-width: 0; }
+.tsk__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+.tsk__empty { font-size: 13px; color: var(--ink-mute); }
+.tsk__file {
+  padding: 6px 10px;
+  background: var(--surface-sunk);
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.tsk__comment {
+  background: var(--surface-sunk);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+.tsk__comment-who {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.tsk__comment-body { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .tsk__body { grid-template-columns: 1fr; }
+  .tsk__grid { grid-template-columns: 1fr; }
+  .tsk__title { font-size: 20px; }
+  .tsk__chips { padding-left: 20px; }
+}
+
+/* ─── Board table view ──────────────────────────────────────────────────── */
+.opx-card-item__title {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  /* Long titles wrap rather than truncate — a task you cannot read is a task
+     you have to open. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.opx-card-item__title:hover { text-decoration: underline; }
+
+.opx-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: var(--r-sm);
+  background: var(--surface-sunk);
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.opx-tag--doing { background: var(--ochre-wash); color: var(--ochre); }
+.opx-tag--done { background: var(--ok-wash); color: var(--ok); }
+.opx-tag--planned { background: var(--surface-sunk); color: var(--ink-mute); }
+
+.opx-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.opx-pill--high { color: var(--crit); }
+.opx-pill--med { color: var(--ochre); }
+.opx-pill--low { color: var(--ink-mute); }
+
+.opx-owner {
+  display: inline-block;
+  max-width: 100%;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-sunk);
+  color: var(--ink-soft);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opx-view {
+  padding: 4px 12px;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.opx-view:hover { background: var(--surface-sunk); color: var(--ink); }
+
+/* Calendar task pills carry the date, then the title. */
+.opx-cal__task {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  padding: 3px 7px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: var(--crit);
+  color: var(--page);
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.35;
+  cursor: pointer;
+  overflow: hidden;
+}
+.opx-cal__task:hover { background: #74291a; }
+.opx-cal__task-day { font-family: var(--mono); font-size: 10px; opacity: 0.8; flex-shrink: 0; }

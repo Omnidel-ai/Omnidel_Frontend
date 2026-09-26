@@ -15,6 +15,7 @@ export { BoardPage } from "./BoardPage";
 export type { BoardPageProps } from "./BoardPage";
 export { ProjectCard } from "./ProjectCard";
 export { BoardHeader } from "./BoardHeader";
+export { TaskModal } from "./TaskModal";
 export { CardChips } from "./boardBits";
 export * from "./cards";
 export type * from "./types";

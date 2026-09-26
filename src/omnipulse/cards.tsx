@@ -28,11 +28,13 @@ export interface CardProps {
   muted?: boolean;
   /** Left edge accent. */
   accent?: string;
+  /** Tinted card — the application marks system-made records this way. */
+  accentCard?: boolean;
   children: ReactNode;
   title?: string;
 }
 
-export function Card({ onClick, actions, muted, accent, children, title }: CardProps) {
+export function Card({ onClick, actions, muted, accent, accentCard, children, title }: CardProps) {
   return (
     <div style={{ position: "relative", height: "100%", minWidth: 0 }}>
       <button
@@ -47,8 +49,8 @@ export function Card({ onClick, actions, muted, accent, children, title }: CardP
           padding: 16,
           textAlign: "left",
           font: "inherit",
-          background: "var(--surface)",
-          border: "1px solid var(--rule)",
+          background: accentCard ? "var(--green-wash)" : "var(--surface)",
+          border: `1px solid ${accentCard ? "var(--green-soft)" : "var(--rule)"}`,
           borderLeft: accent ? `4px solid ${accent}` : undefined,
           borderRadius: "var(--r-md)",
           boxShadow: "var(--shadow-sm)",
@@ -202,41 +204,58 @@ export function QuickToggle({
   );
 }
 
-/** Grid / Table switch above a list that offers both. */
+/**
+ * Segmented view switch — Card / Table / Calendar.
+ *
+ * Matches the application's control exactly: 12px mono, uppercase, a hairline
+ * between joined segments, and the active one filled in the deep green.
+ */
 export function ViewToggle({
   value,
   onChange,
-  options = ["Grid", "Table"],
+  options = ["Card", "Table"],
+  label = "View mode",
 }: {
   value: string;
   onChange: (v: string) => void;
   options?: string[];
+  label?: string;
 }) {
   return (
-    <div style={{ display: "inline-flex", flexShrink: 0 }}>
+    <div
+      role="tablist"
+      aria-label={label}
+      style={{ display: "inline-flex", borderRadius: "var(--r-sm)", overflow: "hidden", flexShrink: 0 }}
+    >
       {options.map((o, i) => {
         const active = o === value;
+        const first = i === 0;
+        const last = i === options.length - 1;
         return (
           <button
             key={o}
             type="button"
+            role="tab"
+            aria-selected={active}
             onClick={() => onChange(o)}
-            aria-pressed={active}
             style={{
               padding: "6px 14px",
               fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.04em",
+              fontSize: 12,
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
-              border: "1px solid var(--rule-strong)",
-              borderRightWidth: i === options.length - 1 ? 1 : 0,
-              borderTopLeftRadius: i === 0 ? "var(--r-sm)" : 0,
-              borderBottomLeftRadius: i === 0 ? "var(--r-sm)" : 0,
-              borderTopRightRadius: i === options.length - 1 ? "var(--r-sm)" : 0,
-              borderBottomRightRadius: i === options.length - 1 ? "var(--r-sm)" : 0,
+              whiteSpace: "nowrap",
               cursor: "pointer",
-              background: active ? "var(--green-deep)" : "transparent",
-              color: active ? "#f4efdf" : "var(--ink-soft)",
+              background: active ? "var(--green-deep)" : "var(--surface)",
+              color: active ? "var(--surface)" : "var(--ink-soft)",
+              borderWidth: 1,
+              borderStyle: "solid",
+              borderColor: active ? "var(--green-deep)" : "var(--rule)",
+              borderLeftWidth: first ? 1 : 0,
+              borderTopLeftRadius: first ? "var(--r-sm)" : 0,
+              borderBottomLeftRadius: first ? "var(--r-sm)" : 0,
+              borderTopRightRadius: last ? "var(--r-sm)" : 0,
+              borderBottomRightRadius: last ? "var(--r-sm)" : 0,
             }}
           >
             {o}
@@ -346,6 +365,27 @@ export function initials(name: string): string {
       .slice(0, 2)
       .map((w) => w[0]?.toUpperCase() ?? "")
       .join("") || "?"
+  );
+}
+
+/** Two-person glyph used in a card's meta line. */
+export function PeopleGlyph() {
+  return (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="3.2" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+    </svg>
   );
 }
 

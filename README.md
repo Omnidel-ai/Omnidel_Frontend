@@ -16,7 +16,7 @@ Omnidel_Frontend/
 │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
 │   ├── data/           ← 3. demo data (demo.json + masters.json + omnipulse.json)
 │   ├── admin/          ← 5. the admin screens, two layouts
-│   ├── omnipulse/      ← teams, projects, review queue, board
+│   ├── omnipulse/      ← teams, projects, review queue, board, task sheet
 │   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness

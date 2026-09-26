@@ -11,14 +11,14 @@ export interface ModalProps {
   children?: ReactNode;
   /** Buttons row, right-aligned at the bottom of the card. */
   footer?: ReactNode;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   /** Hide the × in the corner (a modal that must be answered by its buttons). */
   hideClose?: boolean;
   /** Ignore Escape and scrim clicks — for a save that is already in flight. */
   dismissible?: boolean;
 }
 
-const SIZE_CLASS = { sm: "modal-card--sm", md: "", lg: "modal-card--lg" } as const;
+const SIZE_CLASS = { sm: "modal-card--sm", md: "", lg: "modal-card--lg", xl: "modal-card--xl" } as const;
 
 /**
  * Scrim + card, portalled to <body>.

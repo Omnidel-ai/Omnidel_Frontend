@@ -20,6 +20,7 @@ export * from "./NoAccessScreen";
 export * from "./Avatar";
 export * from "./Badge";
 export * from "./Menu";
+export * from "./Disclosure";
 export * from "./EmptyState";
 export * from "./Skeleton";
 export * from "./StatusToggle";
