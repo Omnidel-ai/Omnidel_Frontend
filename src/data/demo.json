@@ -409,7 +409,7 @@
       },
       {
         "match": "backend",
-        "text": "No. There is no fetch, no database and no auth in this workspace. Edits change in-memory state and are lost on reload, by design — the real APIs get wired once the backend split lands."
+        "text": "Almost none. No database, no auth, and every screen runs on this file — edits change in-memory state and are lost on reload, by design. The one exception is the file handlers under api/, which talk to Vercel Blob when a store is configured and refuse when it is not. The real APIs get wired once the backend split lands."
       },
       {
         "match": "shell",
