@@ -1,7 +1,7 @@
-# OmniDel — Shared Components, Shell & Admin UI
+# OmniDel — Shared Components, Shell & Product Screens
 
 An **isolated** frontend workspace: shared UI components, the application
-shell, a dashboard, the complete admin area and the OmniPulse screens — all
+shell, a dashboard, the complete admin area, OmniPulse and OmniMart — all
 running on demo data. There is no API, no database and no auth here, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
@@ -11,17 +11,18 @@ to accommodate, and published here so it can be worked on on its own.
 ```
 Omnidel_Frontend/
 ├── src/
-│   ├── components/     ← 1. shared UI components
+│   ├── components/     ← shared UI components
 │   │   └── acharya-app/   ← reference copy, excluded from the build
-│   ├── shell/          ← 2. shell components (sidebar, topbar, …)
-│   ├── data/           ← 3. demo data (demo.json + masters.json + omnipulse.json)
-│   ├── admin/          ← 5. the admin screens, two layouts
+│   ├── shell/          ← sidebar, topbar, profile, status bar, assistant
+│   ├── data/           ← demo data (demo · masters · omnipulse · omnimart)
+│   ├── admin/          ← the admin screens, two layouts
 │   ├── omnipulse/      ← teams, projects, review queue, board, task sheet
+│   ├── omnimart/       ← pipeline, operations, missions, schedule, store
 │   ├── dashboard/      ← dashboard home page
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
 │   ├── styles/global.css
-│   ├── App.tsx         ← 4. shell layout wired to the data
+│   ├── App.tsx
 │   └── main.tsx
 ├── scripts/smoke.tsx
 ├── package.json  tsconfig.json  vite.config.ts  eslint.config.js  index.html
@@ -67,7 +68,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 31 screens — shell, playground, dashboard, the four OmniPulse screens and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
+| `npm run smoke` | Server-renders all 36 screens — shell, playground, dashboard, the four OmniPulse screens and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -244,6 +245,26 @@ Cards move between lists with the card menu rather than by dragging: drag and
 drop needs `@dnd-kit`, and a workspace that exists to show the design should
 not take a dependency to fake one. The calendar likewise plots due dates but
 does not reschedule by dragging.
+
+## OmniMart — `src/omnimart/`
+
+Five screens in the application's order — **Pipeline · Operations · Missions ·
+Schedule & Sites · Store**.
+
+Four of them are work lists and share **one component**, `MartListPage`, with a
+descriptor each: views in the page header (All Leads · Short Cycle · Long Cycle
+· Archived), search-with-FILTERS beneath, Export CSV beside the add button, and
+the row actions the app offers — View · Next stage · Archive. Their cells come
+from the same `toColumn` the admin tables use, which is why a lead table and a
+language table read as one table.
+
+A view can be something other than a table: Store opens on **Overview**, a grid
+of KPI tiles, and its Inventory view is the table. Missions is its own screen —
+a promise with a pace is not a row, so each card leads with the plain sentence
+("Behind — doing 0/day, needs 92/day") that a percentage alone cannot give.
+
+Money is written the way the app writes it: **25.8L, 29K** — lakh and thousand,
+not million, because the people reading these columns think in lakhs.
 
 ## Dashboard home — `src/dashboard/`
 

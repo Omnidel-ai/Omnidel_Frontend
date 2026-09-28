@@ -5,13 +5,16 @@ import { AdminPage, SettingsPage } from "./admin";
 import { Playground } from "./playground/Playground";
 import { DashboardHome } from "./dashboard";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "./omnipulse";
+import { MartListPage, MissionsPage } from "./omnimart";
 import { HomePage } from "./playground/HomePage";
 import { PlaceholderPage } from "./playground/PlaceholderPage";
 import demo from "./data/demo.json";
 import masters from "./data/masters.json";
 import omnipulse from "./data/omnipulse.json";
+import omnimart from "./data/omnimart.json";
 import type { DemoData, DemoMaster } from "./data/types";
 import type { OmniPulseData } from "./omnipulse";
+import type { OmniMartData } from "./omnimart";
 
 // One cast at the edge: JSON has no types, and everything downstream reads the
 // declared shapes. The shell's content and the admin descriptors are separate
@@ -19,6 +22,7 @@ import type { OmniPulseData } from "./omnipulse";
 // these are the lines that change.
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
+const MART = omnimart as OmniMartData;
 
 /** /admin/<key> → the master or the settings record with that key. */
 function adminKey(href: string): string | null {
@@ -44,6 +48,10 @@ export function App() {
   const key = adminKey(activeHref);
   const master = key ? DATA.masters.find((m) => m.key === key) : undefined;
   const settings = key ? DATA.settings.find((s) => s.key === key) : undefined;
+  // /omnimart/<key> → the work list with that key.
+  const martList = activeHref.startsWith("/omnimart/")
+    ? MART.lists.find((l) => l.key === activeHref.slice("/omnimart/".length))
+    : undefined;
 
   return (
     <>
@@ -68,6 +76,10 @@ export function App() {
         ) : activeHref === "/admin/dashboard" ? (
           // Admin's own dashboard is the dashboard — one component, two routes.
           <DashboardHome data={DATA} onNavigate={setActiveHref} />
+        ) : martList ? (
+          <MartListPage key={martList.key} list={martList} externalSearch={search} />
+        ) : activeHref === "/omnimart/missions" ? (
+          <MissionsPage data={MART.missions} />
         ) : activeHref === "/omnipulse/boards" ? (
           <TeamsPage
             data={PULSE.teams}

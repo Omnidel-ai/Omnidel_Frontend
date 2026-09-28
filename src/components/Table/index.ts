@@ -17,3 +17,5 @@ export {
   tableActBtnRestoreStyle,
 } from "./TableRowActions";
 export type { TableActionProps, TableRowActionsProps } from "./TableRowActions";
+export { toColumn, formatInr, formatCompactInr } from "./fromDescriptor";
+export type { ColumnDescriptor, DescriptorRow } from "./fromDescriptor";

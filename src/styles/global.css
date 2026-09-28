@@ -1387,3 +1387,100 @@ input, button, select, textarea { font-family: var(--sans); }
 }
 .opx-cal__task:hover { background: #74291a; }
 .opx-cal__task-day { font-family: var(--mono); font-size: 10px; opacity: 0.8; flex-shrink: 0; }
+
+/* ─── OmniMart ──────────────────────────────────────────────────────────── */
+.mart-subtitle {
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  margin: -6px 0 14px;
+  max-width: 76ch;
+}
+
+/* Counters above a work list — the same strip the admin masters use, with
+   money formatted the Indian way. */
+.mart-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+}
+.mart-summary__item { display: inline-flex; align-items: baseline; gap: 7px; }
+.mart-summary__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.mart-summary__value {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.mart-mission {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+.mart-mission__stream {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 3px;
+}
+.mart-mission__track {
+  height: 8px;
+  background: var(--surface-sunk);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mart-mission__fill { height: 100%; border-radius: 2px; transition: width 240ms ease; }
+.mart-mission__num { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+
+/* Store's opening view: one tile per store. */
+.mart-overview__head { margin-bottom: 14px; }
+.mart-overview__eyebrow {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 3px;
+}
+.mart-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: 14px;
+}
+.mart-kpi {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 16px;
+  min-width: 0;
+}
+.mart-kpi__track {
+  display: block;
+  height: 6px;
+  margin-top: 12px;
+  background: var(--surface-sunk);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mart-kpi__fill { display: block; height: 100%; border-radius: 2px; }

@@ -1,0 +1,1125 @@
+{
+  "missions": {
+    "label": "Missions",
+    "subtitle": "Where each mission stands, whether it's on pace, and the work linked to it.",
+    "searchPlaceholder": "Search missions...",
+    "emptyMessage": "No missions match this view",
+    "emptyHint": "Missions are set in Admin → Missions.",
+    "rows": [
+      {
+        "id": "ms1",
+        "name": "Serve 10,000 households",
+        "stream": "Reach",
+        "status": "green",
+        "current": 6420,
+        "target": 10000,
+        "unit": "households",
+        "requiredPace": 28.0,
+        "actualPace": 21.4,
+        "daysLeft": 118,
+        "tasks": {
+          "total": 34,
+          "open": 12,
+          "done": 22
+        }
+      },
+      {
+        "id": "ms2",
+        "name": "Zero waste at source",
+        "stream": "Practice",
+        "status": "amber",
+        "current": 62,
+        "target": 100,
+        "unit": "% of sites",
+        "requiredPace": 0.4,
+        "actualPace": 0.9,
+        "daysLeft": 96,
+        "tasks": {
+          "total": 18,
+          "open": 11,
+          "done": 7
+        }
+      },
+      {
+        "id": "ms3",
+        "name": "Kaarigar livelihoods",
+        "stream": "People",
+        "status": "green",
+        "current": 214,
+        "target": 300,
+        "unit": "kaarigars",
+        "requiredPace": 1.6,
+        "actualPace": 1.1,
+        "daysLeft": 140,
+        "tasks": {
+          "total": 26,
+          "open": 9,
+          "done": 17
+        }
+      },
+      {
+        "id": "ms4",
+        "name": "Same-day fulfilment",
+        "stream": "Service",
+        "status": "red",
+        "current": 38,
+        "target": 80,
+        "unit": "% of orders",
+        "requiredPace": 0.2,
+        "actualPace": 1.4,
+        "daysLeft": 62,
+        "tasks": {
+          "total": 12,
+          "open": 9,
+          "done": 3
+        }
+      },
+      {
+        "id": "ms5",
+        "name": "Vernacular first",
+        "stream": "Product",
+        "status": "green",
+        "current": 94,
+        "target": 100,
+        "unit": "% of screens",
+        "requiredPace": 0.9,
+        "actualPace": 0.3,
+        "daysLeft": 74,
+        "tasks": {
+          "total": 9,
+          "open": 2,
+          "done": 7
+        }
+      },
+      {
+        "id": "ms6",
+        "name": "Two-hour support reply",
+        "stream": "Service",
+        "status": "amber",
+        "current": 71,
+        "target": 95,
+        "unit": "% of tickets",
+        "requiredPace": 0.5,
+        "actualPace": 0.8,
+        "daysLeft": 55,
+        "tasks": {
+          "total": 7,
+          "open": 4,
+          "done": 3
+        }
+      }
+    ]
+  },
+  "lists": [
+    {
+      "key": "pipeline",
+      "label": "Pipeline",
+      "singular": "Lead",
+      "searchPlaceholder": "Search leads & filters...",
+      "emptyMessage": "No leads in this view",
+      "emptyHint": "Widen the filters, or add the first lead.",
+      "countLabel": "leads",
+      "minWidth": 1240,
+      "tabs": [
+        {
+          "label": "All Leads"
+        },
+        {
+          "label": "Short Cycle",
+          "field": "cycle",
+          "value": "Fast"
+        },
+        {
+          "label": "Long Cycle",
+          "field": "cycle",
+          "value": "Long"
+        },
+        {
+          "label": "Archived",
+          "field": "health",
+          "value": "Archived"
+        }
+      ],
+      "filters": [
+        {
+          "key": "stage",
+          "label": "Stage",
+          "options": [
+            "Enquiry",
+            "Survey",
+            "Quotation",
+            "Negotiation",
+            "Won",
+            "Lost"
+          ]
+        },
+        {
+          "key": "source",
+          "label": "Source",
+          "options": [
+            "Walk-in",
+            "Referral",
+            "Instagram",
+            "WhatsApp",
+            "Website",
+            "Exhibition"
+          ]
+        },
+        {
+          "key": "assigned_to",
+          "label": "Assigned to",
+          "options": [
+            "Ananya Sen",
+            "Bikram Das",
+            "Chandni Roy",
+            "Devraj Nair",
+            "Esha Khan",
+            "Farhan Ali"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "lead_no",
+          "header": "Lead no",
+          "width": "120px",
+          "type": "link"
+        },
+        {
+          "key": "lead",
+          "header": "Lead",
+          "width": "minmax(190px, 2fr)"
+        },
+        {
+          "key": "source",
+          "header": "Source",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Walk-in": "neutral",
+            "Referral": "neutral",
+            "Instagram": "neutral",
+            "WhatsApp": "neutral",
+            "Website": "neutral",
+            "Exhibition": "neutral"
+          }
+        },
+        {
+          "key": "assigned_to",
+          "header": "Assigned to",
+          "width": "minmax(150px, 1fr)"
+        },
+        {
+          "key": "cycle",
+          "header": "Cycle",
+          "width": "110px",
+          "type": "badge",
+          "tones": {
+            "Fast": "green",
+            "Standard": "neutral",
+            "Long": "ochre"
+          }
+        },
+        {
+          "key": "stage",
+          "header": "Current",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Enquiry": "neutral",
+            "Survey": "ochre",
+            "Quotation": "ochre",
+            "Negotiation": "ochre",
+            "Won": "green",
+            "Lost": "crit",
+            "On hold": "neutral"
+          }
+        },
+        {
+          "key": "next_action",
+          "header": "Next action",
+          "width": "minmax(180px, 1.4fr)"
+        },
+        {
+          "key": "value",
+          "header": "Value",
+          "width": "130px",
+          "type": "money",
+          "align": "right"
+        },
+        {
+          "key": "health",
+          "header": "Health",
+          "width": "120px",
+          "type": "badge",
+          "tones": {
+            "On track": "ok",
+            "Slipping": "amber",
+            "Stalled": "crit"
+          }
+        },
+        {
+          "key": "created",
+          "header": "Created",
+          "width": "120px",
+          "type": "date"
+        }
+      ],
+      "rowActions": [
+        "View",
+        "Next stage",
+        "Archive"
+      ],
+      "rows": [
+        {
+          "id": "ld1",
+          "lead_no": "LD-1001",
+          "lead": "Mitra residence kitchen",
+          "source": "Walk-in",
+          "assigned_to": "Ananya Sen",
+          "cycle": "Fast",
+          "stage": "Survey",
+          "next_action": "Book the survey slot",
+          "value": 185000,
+          "health": "On track",
+          "created": "2026-09-02"
+        },
+        {
+          "id": "ld2",
+          "lead_no": "LD-1002",
+          "lead": "Karnani House lobby",
+          "source": "Referral",
+          "assigned_to": "Bikram Das",
+          "cycle": "Long",
+          "stage": "Quotation",
+          "next_action": "Send the revised quote",
+          "value": 940000,
+          "health": "On track",
+          "created": "2026-08-21"
+        },
+        {
+          "id": "ld3",
+          "lead_no": "LD-1003",
+          "lead": "Sarkar wardrobe set",
+          "source": "Instagram",
+          "assigned_to": "Chandni Roy",
+          "cycle": "Standard",
+          "stage": "Enquiry",
+          "next_action": "Call back — missed twice",
+          "value": 76000,
+          "health": "Slipping",
+          "created": "2026-09-11"
+        },
+        {
+          "id": "ld4",
+          "lead_no": "LD-1004",
+          "lead": "Downtown Mall kiosk",
+          "source": "Website",
+          "assigned_to": "Devraj Nair",
+          "cycle": "Long",
+          "stage": "Negotiation",
+          "next_action": "Agree the payment terms",
+          "value": 1250000,
+          "health": "On track",
+          "created": "2026-07-30"
+        },
+        {
+          "id": "ld5",
+          "lead_no": "LD-1005",
+          "lead": "Bose flat renovation",
+          "source": "WhatsApp",
+          "assigned_to": "Esha Khan",
+          "cycle": "Standard",
+          "stage": "Survey",
+          "next_action": "Customer stopped replying",
+          "value": 310000,
+          "health": "Stalled",
+          "created": "2026-08-04"
+        },
+        {
+          "id": "ld6",
+          "lead_no": "LD-1006",
+          "lead": "Ghosh office fit-out",
+          "source": "Referral",
+          "assigned_to": "Farhan Ali",
+          "cycle": "Standard",
+          "stage": "Won",
+          "next_action": "Hand over to Operations",
+          "value": 520000,
+          "health": "On track",
+          "created": "2026-07-12"
+        },
+        {
+          "id": "ld7",
+          "lead_no": "LD-1007",
+          "lead": "Newtown duplex",
+          "source": "Walk-in",
+          "assigned_to": "Ananya Sen",
+          "cycle": "Fast",
+          "stage": "Quotation",
+          "next_action": "Chase the approval",
+          "value": 435000,
+          "health": "On track",
+          "created": "2026-09-15"
+        },
+        {
+          "id": "ld8",
+          "lead_no": "LD-1008",
+          "lead": "Salt Lake studio",
+          "source": "Exhibition",
+          "assigned_to": "Bikram Das",
+          "cycle": "Fast",
+          "stage": "Enquiry",
+          "next_action": "Qualify the budget",
+          "value": 92000,
+          "health": "On track",
+          "created": "2026-09-22"
+        },
+        {
+          "id": "ld9",
+          "lead_no": "LD-1009",
+          "lead": "Rajarhat cafe counter",
+          "source": "Instagram",
+          "assigned_to": "Chandni Roy",
+          "cycle": "Standard",
+          "stage": "Lost",
+          "next_action": "Lost on price",
+          "value": 148000,
+          "health": "Stalled",
+          "created": "2026-06-18"
+        },
+        {
+          "id": "ld10",
+          "lead_no": "LD-1010",
+          "lead": "Behala shop shelving",
+          "source": "WhatsApp",
+          "assigned_to": "Devraj Nair",
+          "cycle": "Standard",
+          "stage": "Negotiation",
+          "next_action": "Waiting on the discount sign-off",
+          "value": 264000,
+          "health": "Slipping",
+          "created": "2026-08-28"
+        },
+        {
+          "id": "ld11",
+          "lead_no": "LD-1011",
+          "lead": "Sonarpur villa",
+          "source": "Referral",
+          "assigned_to": "Esha Khan",
+          "cycle": "Long",
+          "stage": "Survey",
+          "next_action": "Second site visit",
+          "value": 1480000,
+          "health": "On track",
+          "created": "2026-09-06"
+        },
+        {
+          "id": "ld12",
+          "lead_no": "LD-1012",
+          "lead": "Tangra warehouse racks",
+          "source": "Website",
+          "assigned_to": "Farhan Ali",
+          "cycle": "Standard",
+          "stage": "Enquiry",
+          "next_action": "Send the brochure",
+          "value": 380000,
+          "health": "On track",
+          "created": "2026-09-24"
+        }
+      ],
+      "exportable": true,
+      "addLabel": "+ Add lead"
+    },
+    {
+      "key": "operations",
+      "label": "Operations",
+      "singular": "Operation",
+      "searchPlaceholder": "Search operations & filters...",
+      "emptyMessage": "No operations in this view",
+      "emptyHint": "Won leads arrive here from the Pipeline.",
+      "countLabel": "operations",
+      "minWidth": 1220,
+      "tabs": [
+        {
+          "label": "All"
+        },
+        {
+          "label": "Live",
+          "field": "stage",
+          "value": "In progress"
+        },
+        {
+          "label": "Delivered",
+          "field": "stage",
+          "value": "Delivered"
+        },
+        {
+          "label": "Cancelled",
+          "field": "stage",
+          "value": "Cancelled"
+        }
+      ],
+      "filters": [
+        {
+          "key": "stage",
+          "label": "Stage",
+          "options": [
+            "Booked",
+            "Assigned",
+            "In progress",
+            "Quality check",
+            "Delivered",
+            "Cancelled"
+          ]
+        },
+        {
+          "key": "assigned_to",
+          "label": "Assigned to",
+          "options": [
+            "Ananya Sen",
+            "Bikram Das",
+            "Chandni Roy",
+            "Devraj Nair",
+            "Esha Khan",
+            "Farhan Ali"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "op_no",
+          "header": "Op no",
+          "width": "110px",
+          "type": "link"
+        },
+        {
+          "key": "project",
+          "header": "Project",
+          "width": "minmax(190px, 2fr)"
+        },
+        {
+          "key": "lead_no",
+          "header": "Lead no",
+          "width": "120px",
+          "type": "link"
+        },
+        {
+          "key": "assigned_to",
+          "header": "Assigned to",
+          "width": "minmax(150px, 1fr)"
+        },
+        {
+          "key": "cycle",
+          "header": "Cycle",
+          "width": "110px",
+          "type": "badge",
+          "tones": {
+            "Fast": "green",
+            "Standard": "neutral",
+            "Long": "ochre"
+          }
+        },
+        {
+          "key": "stage",
+          "header": "Stage",
+          "width": "140px",
+          "type": "badge",
+          "tones": {
+            "Booked": "neutral",
+            "Assigned": "ochre",
+            "In progress": "ochre",
+            "Quality check": "ochre",
+            "Delivered": "green",
+            "Cancelled": "crit"
+          }
+        },
+        {
+          "key": "next_action",
+          "header": "Next action",
+          "width": "minmax(180px, 1.4fr)"
+        },
+        {
+          "key": "value",
+          "header": "Value",
+          "width": "130px",
+          "type": "money",
+          "align": "right"
+        },
+        {
+          "key": "planned",
+          "header": "Planned",
+          "width": "120px",
+          "type": "date"
+        }
+      ],
+      "rowActions": [
+        "View",
+        "Next stage",
+        "Archive"
+      ],
+      "rows": [
+        {
+          "id": "op1",
+          "op_no": "OP-201",
+          "project": "Ghosh office fit-out",
+          "lead_no": "LD-1006",
+          "assigned_to": "Ananya Sen",
+          "cycle": "Standard",
+          "stage": "Assigned",
+          "next_action": "Confirm the karigar roster",
+          "value": 520000,
+          "planned": "2026-10-02"
+        },
+        {
+          "id": "op2",
+          "op_no": "OP-202",
+          "project": "Air Water planters",
+          "lead_no": "LD-1014",
+          "assigned_to": "Bikram Das",
+          "cycle": "Long",
+          "stage": "In progress",
+          "next_action": "Load the second consignment",
+          "value": 880000,
+          "planned": "2026-09-29"
+        },
+        {
+          "id": "op3",
+          "op_no": "OP-203",
+          "project": "Mitra kitchen",
+          "lead_no": "LD-1001",
+          "assigned_to": "Chandni Roy",
+          "cycle": "Fast",
+          "stage": "Booked",
+          "next_action": "Book the install slot",
+          "value": 185000,
+          "planned": "2026-10-06"
+        },
+        {
+          "id": "op4",
+          "op_no": "OP-204",
+          "project": "Karnani lobby",
+          "lead_no": "LD-1002",
+          "assigned_to": "Devraj Nair",
+          "cycle": "Long",
+          "stage": "Quality check",
+          "next_action": "Inspector visit",
+          "value": 940000,
+          "planned": "2026-09-30"
+        },
+        {
+          "id": "op5",
+          "op_no": "OP-205",
+          "project": "C2 Vatika planting",
+          "lead_no": "LD-1021",
+          "assigned_to": "Esha Khan",
+          "cycle": "Standard",
+          "stage": "In progress",
+          "next_action": "Third bed planting",
+          "value": 410000,
+          "planned": "2026-10-01"
+        },
+        {
+          "id": "op6",
+          "op_no": "OP-206",
+          "project": "Downtown kiosk",
+          "lead_no": "LD-1004",
+          "assigned_to": "Farhan Ali",
+          "cycle": "Long",
+          "stage": "Delivered",
+          "next_action": "Collect the sign-off",
+          "value": 1250000,
+          "planned": "2026-09-18"
+        },
+        {
+          "id": "op7",
+          "op_no": "OP-207",
+          "project": "Swacchata stall",
+          "lead_no": "LD-1030",
+          "assigned_to": "Ananya Sen",
+          "cycle": "Fast",
+          "stage": "Cancelled",
+          "next_action": "Refund raised",
+          "value": 64000,
+          "planned": "2026-09-09"
+        },
+        {
+          "id": "op8",
+          "op_no": "OP-208",
+          "project": "Sonarpur villa phase 1",
+          "lead_no": "LD-1011",
+          "assigned_to": "Bikram Das",
+          "cycle": "Long",
+          "stage": "Booked",
+          "next_action": "Await the advance",
+          "value": 740000,
+          "planned": "2026-10-12"
+        }
+      ],
+      "exportable": true,
+      "addLabel": "+ Add operation"
+    },
+    {
+      "key": "schedule",
+      "label": "Schedule & Sites",
+      "singular": "Visit",
+      "searchPlaceholder": "Search visits & filters...",
+      "emptyMessage": "Nothing scheduled in this view",
+      "emptyHint": "Book a visit and it appears here.",
+      "countLabel": "visits",
+      "minWidth": 1080,
+      "tabs": [
+        {
+          "label": "All"
+        },
+        {
+          "label": "Scheduled",
+          "field": "status",
+          "value": "Scheduled"
+        },
+        {
+          "label": "Unassigned",
+          "field": "status",
+          "value": "Unassigned"
+        },
+        {
+          "label": "Done",
+          "field": "status",
+          "value": "Done"
+        }
+      ],
+      "filters": [
+        {
+          "key": "site",
+          "label": "Site",
+          "options": [
+            "Newtown Warehouse",
+            "Karnani House",
+            "Downtown Mall",
+            "Mitra residence",
+            "C2 Vatika",
+            "Salt Lake studio"
+          ]
+        },
+        {
+          "key": "worker",
+          "label": "Worker",
+          "options": [
+            "Ananya Sen",
+            "Bikram Das",
+            "Chandni Roy",
+            "Devraj Nair",
+            "Esha Khan",
+            "Farhan Ali"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "seq",
+          "header": "#",
+          "width": "64px",
+          "type": "code"
+        },
+        {
+          "key": "date",
+          "header": "Date",
+          "width": "130px",
+          "type": "date"
+        },
+        {
+          "key": "site",
+          "header": "Site",
+          "width": "minmax(180px, 1.8fr)"
+        },
+        {
+          "key": "window",
+          "header": "Time window",
+          "width": "160px"
+        },
+        {
+          "key": "worker",
+          "header": "Worker",
+          "width": "minmax(150px, 1fr)"
+        },
+        {
+          "key": "status",
+          "header": "Status",
+          "width": "140px",
+          "type": "badge",
+          "tones": {
+            "Scheduled": "green",
+            "In progress": "ochre",
+            "Done": "ok",
+            "Unassigned": "neutral",
+            "Missed": "crit"
+          }
+        },
+        {
+          "key": "duration",
+          "header": "Duration",
+          "width": "120px",
+          "type": "number",
+          "align": "right"
+        }
+      ],
+      "rowActions": [
+        "View",
+        "Reassign"
+      ],
+      "rows": [
+        {
+          "id": "vs1",
+          "seq": "1",
+          "date": "2026-09-28",
+          "site": "Newtown Warehouse",
+          "window": "09:00 – 11:00",
+          "worker": "Ananya Sen",
+          "status": "Scheduled",
+          "duration": 120
+        },
+        {
+          "id": "vs2",
+          "seq": "2",
+          "date": "2026-09-28",
+          "site": "Karnani House",
+          "window": "11:30 – 13:00",
+          "worker": "Bikram Das",
+          "status": "Scheduled",
+          "duration": 90
+        },
+        {
+          "id": "vs3",
+          "seq": "3",
+          "date": "2026-09-28",
+          "site": "Downtown Mall",
+          "window": "Any time",
+          "worker": "",
+          "status": "Unassigned",
+          "duration": 60
+        },
+        {
+          "id": "vs4",
+          "seq": "4",
+          "date": "2026-09-29",
+          "site": "Mitra residence",
+          "window": "08:00 – 09:30",
+          "worker": "Chandni Roy",
+          "status": "Scheduled",
+          "duration": 90
+        },
+        {
+          "id": "vs5",
+          "seq": "5",
+          "date": "2026-09-29",
+          "site": "C2 Vatika",
+          "window": "14:00 – 17:00",
+          "worker": "Devraj Nair",
+          "status": "In progress",
+          "duration": 180
+        },
+        {
+          "id": "vs6",
+          "seq": "6",
+          "date": "2026-09-27",
+          "site": "Salt Lake studio",
+          "window": "10:00 – 11:00",
+          "worker": "Esha Khan",
+          "status": "Done",
+          "duration": 60
+        },
+        {
+          "id": "vs7",
+          "seq": "7",
+          "date": "2026-09-27",
+          "site": "Newtown Warehouse",
+          "window": "15:00 – 16:30",
+          "worker": "Farhan Ali",
+          "status": "Done",
+          "duration": 90
+        },
+        {
+          "id": "vs8",
+          "seq": "8",
+          "date": "2026-09-30",
+          "site": "Karnani House",
+          "window": "Any time",
+          "worker": "",
+          "status": "Unassigned",
+          "duration": 120
+        },
+        {
+          "id": "vs9",
+          "seq": "9",
+          "date": "2026-09-26",
+          "site": "Downtown Mall",
+          "window": "09:30 – 10:30",
+          "worker": "Ananya Sen",
+          "status": "Missed",
+          "duration": 60
+        }
+      ],
+      "addLabel": "+ Book visit",
+      "exportable": true
+    },
+    {
+      "key": "store",
+      "label": "Store",
+      "singular": "Item",
+      "searchPlaceholder": "Search stock & filters...",
+      "emptyMessage": "No stock in this view",
+      "emptyHint": "Widen the filters to see everything.",
+      "countLabel": "items",
+      "minWidth": 1060,
+      "tabs": [
+        {
+          "label": "Overview",
+          "kind": "overview"
+        },
+        {
+          "label": "Inventory"
+        },
+        {
+          "label": "Sales",
+          "kind": "placeholder"
+        },
+        {
+          "label": "Store Health",
+          "kind": "placeholder"
+        }
+      ],
+      "filters": [
+        {
+          "key": "category",
+          "label": "Category",
+          "options": [
+            "Timber",
+            "Fittings",
+            "Finish",
+            "Plants"
+          ]
+        },
+        {
+          "key": "store",
+          "label": "Store",
+          "options": [
+            "Newtown Warehouse",
+            "Rajarhat Warehouse",
+            "Bagnan Depot"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "seq",
+          "header": "#",
+          "width": "64px",
+          "type": "code"
+        },
+        {
+          "key": "sku",
+          "header": "SKU",
+          "width": "130px",
+          "type": "code"
+        },
+        {
+          "key": "name",
+          "header": "Item",
+          "width": "minmax(190px, 2fr)"
+        },
+        {
+          "key": "category",
+          "header": "Category",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Timber": "green",
+            "Fittings": "ochre",
+            "Finish": "neutral",
+            "Plants": "green"
+          }
+        },
+        {
+          "key": "store",
+          "header": "Store",
+          "width": "minmax(170px, 1.2fr)"
+        },
+        {
+          "key": "qty",
+          "header": "Qty",
+          "width": "100px",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "min",
+          "header": "Min",
+          "width": "100px",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "status",
+          "header": "Status",
+          "width": "120px",
+          "type": "badge",
+          "tones": {
+            "Low": "crit",
+            "OK": "ok"
+          }
+        }
+      ],
+      "rowActions": [
+        "View"
+      ],
+      "rows": [
+        {
+          "id": "st1",
+          "seq": "1",
+          "sku": "SKU-1001",
+          "name": "Teak plank 8ft",
+          "category": "Timber",
+          "store": "Newtown Warehouse",
+          "qty": 120,
+          "min": 40,
+          "status": "OK"
+        },
+        {
+          "id": "st2",
+          "seq": "2",
+          "sku": "SKU-1002",
+          "name": "Ply board 19mm",
+          "category": "Timber",
+          "store": "Newtown Warehouse",
+          "qty": 240,
+          "min": 80,
+          "status": "OK"
+        },
+        {
+          "id": "st3",
+          "seq": "3",
+          "sku": "SKU-1003",
+          "name": "Brass handle",
+          "category": "Fittings",
+          "store": "Rajarhat Warehouse",
+          "qty": 860,
+          "min": 200,
+          "status": "OK"
+        },
+        {
+          "id": "st4",
+          "seq": "4",
+          "sku": "SKU-1004",
+          "name": "Soft-close hinge",
+          "category": "Fittings",
+          "store": "Rajarhat Warehouse",
+          "qty": 90,
+          "min": 150,
+          "status": "Low"
+        },
+        {
+          "id": "st5",
+          "seq": "5",
+          "sku": "SKU-1005",
+          "name": "Laminate sheet",
+          "category": "Finish",
+          "store": "Newtown Warehouse",
+          "qty": 310,
+          "min": 100,
+          "status": "OK"
+        },
+        {
+          "id": "st6",
+          "seq": "6",
+          "sku": "SKU-1006",
+          "name": "Edge banding roll",
+          "category": "Finish",
+          "store": "Bagnan Depot",
+          "qty": 18,
+          "min": 40,
+          "status": "Low"
+        },
+        {
+          "id": "st7",
+          "seq": "7",
+          "sku": "SKU-1007",
+          "name": "Drawer channel",
+          "category": "Fittings",
+          "store": "Rajarhat Warehouse",
+          "qty": 410,
+          "min": 120,
+          "status": "OK"
+        },
+        {
+          "id": "st8",
+          "seq": "8",
+          "sku": "SKU-1008",
+          "name": "Wood primer 4L",
+          "category": "Finish",
+          "store": "Bagnan Depot",
+          "qty": 75,
+          "min": 30,
+          "status": "OK"
+        },
+        {
+          "id": "st9",
+          "seq": "9",
+          "sku": "SKU-1009",
+          "name": "Screw pack 100",
+          "category": "Fittings",
+          "store": "Newtown Warehouse",
+          "qty": 1200,
+          "min": 300,
+          "status": "OK"
+        },
+        {
+          "id": "st10",
+          "seq": "10",
+          "sku": "SKU-1010",
+          "name": "Marigold tray",
+          "category": "Plants",
+          "store": "Bagnan Depot",
+          "qty": 24,
+          "min": 50,
+          "status": "Low"
+        }
+      ],
+      "addLabel": "+ Add item",
+      "exportable": true,
+      "overview": {
+        "eyebrow": "Daily as at 06:00",
+        "title": "Store KPI Overview",
+        "stores": [
+          {
+            "id": "s1",
+            "name": "C2 Retail",
+            "today": 0,
+            "target": 850000,
+            "status": "critical"
+          },
+          {
+            "id": "s2",
+            "name": "RD Retail",
+            "today": 0,
+            "target": 850000,
+            "status": "critical"
+          },
+          {
+            "id": "s3",
+            "name": "DM Retail",
+            "today": 124000,
+            "target": 900000,
+            "status": "watch"
+          },
+          {
+            "id": "s4",
+            "name": "NV Nursery",
+            "today": 610000,
+            "target": 600000,
+            "status": "ok"
+          }
+        ]
+      }
+    }
+  ]
+}

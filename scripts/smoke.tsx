@@ -15,14 +15,18 @@ import { Playground } from "../src/playground/Playground";
 import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "../src/omnipulse";
+import { MartListPage, MissionsPage } from "../src/omnimart";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
+import omnimart from "../src/data/omnimart.json";
 import type { DemoData, DemoMaster } from "../src/data/types";
 import type { OmniPulseData } from "../src/omnipulse";
+import type { OmniMartData } from "../src/omnimart";
 
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
+const MART = omnimart as OmniMartData;
 
 interface Screen {
   name: string;
@@ -155,6 +159,43 @@ const screens: Screen[] = [
       ["members", PULSE.boards[0].members[0]],
     ],
   },
+  {
+    name: "omnimart/missions",
+    html: renderToString(<MissionsPage data={MART.missions} />),
+    markers: [
+      // The subtitle carries an apostrophe, which renders escaped.
+      ["subtitle", "Where each mission stands"],
+      ["a mission", MART.missions.rows[0].name],
+      ["stream eyebrow", MART.missions.rows[0].stream],
+      ["progress track", "mart-mission__track"],
+      ["pace sentence", "Doing"],
+    ],
+  },
+  // The four work lists, through the one component — and the pieces only some
+  // of them declare asserted where they are declared.
+  ...MART.lists.map((l) => ({
+    name: `omnimart/${l.key}`,
+    html: renderToString(<MartListPage list={l} />),
+    markers: (l.tabs?.[0].kind === "overview"
+      ? [
+          // Store opens on its KPI tiles, so that is what SSR renders.
+          ["views in the header", l.tabs[1].label],
+          ["overview title", l.overview!.title],
+          ["a store tile", l.overview!.stores[0].name],
+          ["tile track", "mart-kpi__track"],
+        ]
+      : [
+          ["views in the header", l.tabs?.[0].label ?? l.label],
+          ["table header", "table-header"],
+          ["first column", l.columns[0].header],
+          ["a data row", String(l.rows[0][l.columns[1].key] ?? l.rows[0].id)],
+          // Placeholders carry an ampersand, which renders escaped.
+          ["search", l.searchPlaceholder.replace(/&/g, "&amp;")],
+          ["export", "Export CSV"],
+          ...(l.tabs?.length ? [["tabs", l.tabs[1].label]] : []),
+          ...(l.rowActions?.length ? [["row action", l.rowActions[0]]] : []),
+        ]) as Array<[string, string]>,
+  })),
   ...DATA.settings.map((st) => ({
     name: `admin/${st.key}`,
     html: renderToString(<SettingsPage settings={st} />),
