@@ -1,4 +1,5 @@
-import { CLIENT_MAX_BYTES, FILE_MAX_BYTES, IMAGE_MAX_BYTES, PREFIXES, hasStore, json } from "./_lib/blob.js";
+import { LIMITS, PREFIXES, hasStore, json } from "./_lib/blob.js";
+import { ALL_TYPES, typesOfKind } from "./_lib/media.js";
 
 /**
  * GET /api — what these functions are, and whether they can do anything.
@@ -21,18 +22,24 @@ export default async function handler(request: Request): Promise<Response> {
       functions: [
         { route: "/api/blob/upload-token", method: "POST", does: "Token for a browser-direct upload" },
         { route: "/api/blob/upload", method: "POST · DELETE", does: "Multipart upload through the function, and delete" },
-        { route: "/api/blob/view", method: "GET", does: "Read a private blob — the one way to show one" },
-        { route: "/api/blob/public/<key>", method: "GET", does: "Read a public blob, cached and cross-origin" },
+        { route: "/api/blob/view", method: "GET", does: "Read a private blob — the one way to show one. Ranges, ETags, ?download=1" },
+        { route: "/api/blob/public/<key>", method: "GET", does: "Read a public blob, cached, cross-origin, seekable" },
         { route: "/api/blob/list", method: "GET", does: "What is in a prefix" },
       ],
       prefixes: Object.fromEntries(
-        Object.entries(PREFIXES).map(([prefix, rule]) => [prefix, rule.access]),
+        Object.entries(PREFIXES).map(([prefix, rule]) => [
+          prefix,
+          { access: rule.access, kinds: rule.kinds },
+        ]),
       ),
-      limits: {
-        imageBytes: IMAGE_MAX_BYTES,
-        fileBytes: FILE_MAX_BYTES,
-        clientDirectBytes: CLIENT_MAX_BYTES,
-      },
+      // Per kind, and per route: what may pass through a function body, and
+      // what may go browser-direct. The browser reads these to choose a route
+      // and to refuse a file before uploading it rather than after.
+      limits: LIMITS,
+      types: Object.fromEntries(
+        (["image", "video", "audio", "document", "data"] as const).map((k) => [k, typesOfKind([k])]),
+      ),
+      typeCount: ALL_TYPES.length,
     },
     200,
     { "Cache-Control": "no-store" },

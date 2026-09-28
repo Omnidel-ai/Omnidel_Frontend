@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { emitToast } from "../Toast";
 import { ImagePreview } from "./ImagePreview";
-import { deleteBlob, uploadImage, type BlobArea, type UploadedImage } from "../../lib/blob";
+import { deleteBlob, uploadImage, type BlobArea, type StoredFile } from "../../lib/blob";
 
 export interface ImageFieldProps {
   /** Which prefix this picture belongs to — it decides public or private. */
@@ -12,7 +12,7 @@ export interface ImageFieldProps {
   value?: string | null;
   /** The stored key, when the caller has it — needed to remove the old one. */
   pathname?: string | null;
-  onChange: (next: UploadedImage | null) => void;
+  onChange: (next: StoredFile | null) => void;
   /** For the initials behind an empty frame. */
   name?: string;
   size?: number;

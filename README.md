@@ -2,8 +2,8 @@
 
 An **isolated** frontend workspace: shared UI components, the application
 shell, Home, the complete admin area, OmniPulse, OmniMart and OmniVarsity —
-all running on demo data, with a small set of Vercel Functions for Vercel Blob
-uploads. There is no API, no database and no auth here beyond those, by design.
+all running on demo data, with a set of Vercel Functions for Vercel Blob:
+images, video, audio and documents, public and private.
 
 It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
@@ -21,7 +21,7 @@ to accommodate, and published here so it can be worked on on its own.
 | **OmniVarsity** | Acharyas · Acharya Dashboard · Kaarigars | `src/omnivarsity/` + `src/lists/` |
 | **Admin** | 23 masters + Business Details + the dashboard | `src/admin/` |
 | **Components** | the playground — every shared component in every state | `src/playground/` |
-| **Uploads** | five Vercel Functions for Vercel Blob, and the field that uses them | `api/` + `src/lib/blob.ts` |
+| **Media & files** | five Vercel Functions for Blob — images, video, audio, documents — and the fields that use them | `api/` + `src/lib/blob.ts` |
 
 **OmniMart** is the sales and delivery side. Four of its five screens are work
 lists and share **one component**, `ListPage`: views in the page header, a
@@ -50,7 +50,7 @@ descriptors.** `AdminPage` for reference data, `ListPage` for work in flight,
 OmniDel/                    ← existing Next.js app, untouched
 ├── src/ app/ …
 └── frontend/               ← this project
-    ├── api/                ← Vercel Functions: Vercel Blob upload, view, list
+    ├── api/                ← Vercel Functions: Blob upload, view, public, list
     ├── src/
     │   ├── components/     ← 1. shared UI components
     │   │   └── acharya-app/   ← reference copy, excluded from the build
@@ -348,10 +348,11 @@ already existed, not two new components. The edge is decoration over a title
 that already says the same thing; it is never the only thing telling two panels
 apart.
 
-## Uploads — `api/` and `src/lib/blob.ts`
+## Media, documents & uploads — `api/` and `src/lib/blob.ts`
 
-The first thing in this workspace that is not a component: five **Vercel
-Functions** for Vercel Blob, mirroring the routes the application already runs.
+The one part of this workspace that is not a component: five **Vercel
+Functions** for Vercel Blob, mirroring the routes the application already runs,
+and the fields that use them.
 
 ```
 api/
@@ -363,39 +364,69 @@ api/
 │   ├── view.ts                 GET    read a PRIVATE blob — the only way to show one
 │   ├── public/[...path].ts     GET    read a PUBLIC blob, cached and cross-origin
 │   └── list.ts                 GET    what is in a prefix
-└── _lib/blob.ts                        the rules all five enforce
+└── _lib/
+    ├── media.ts                        what may be stored, what kind it is, how large
+    ├── blob.ts                         where it may go, and who may put it there
+    └── serve.ts                        ranges, ETags, disposition — shared by both read routes
 ```
 
-**Two stores, and the split is the point.** A private blob's own URL needs an
-Authorization header, and `<img src>` cannot send one — so a private image is
-readable only through `view`, which holds the token and streams the bytes back.
-A public blob keeps its own URL, caches for a day in the CDN and answers
-cross-origin, because a storefront picture is the same bytes for everyone.
-Which store a file lands in is decided by its prefix, never by the caller:
+### Kinds, not extensions
+
+Every rule follows from one thing: a file's **kind**. Thirty-odd content types
+map to five kinds, and the caps, the pickers, the icons and the way a file is
+served are all written against the kind.
+
+| Kind | Types | Through a function | Browser-direct |
+|---|---|---|---|
+| image | JPEG, PNG, WebP, GIF, AVIF, SVG | 4 MB | 25 MB |
+| document | PDF, Word, Excel, PowerPoint, RTF | 4 MB | 50 MB |
+| data | text, Markdown, CSV, JSON | 4 MB | 25 MB |
+| audio | MP3, M4A, WAV, OGG, WebM, FLAC | 4 MB | 200 MB |
+| video | MP4, WebM, QuickTime, Matroska | 4 MB | 1 GB |
+
+The two columns are two routes, not two opinions: a Vercel function body caps
+around 4.5 MB, so anything larger **has** to go browser → Blob directly with a
+token. That is what makes a video storable at all.
+
+### Two stores, split by prefix
+
+Which store a file lands in is decided by its prefix, never by the caller, and
+each prefix takes only the kinds that belong there — a knowledge base has no
+use for a video, a storefront none for a spreadsheet.
 
 | Prefix | Store | Takes |
 |---|---|---|
-| `omnivarsity/acharya/` | private | images |
-| `omnivarsity/kaarigar/` | private | images |
-| `omnimart/pipeline/` | private | images, PDF, CSV, text |
-| `omnimart/store/` | **public** | images |
+| `omnivarsity/acharya/` · `omnivarsity/kaarigar/` | private | image |
+| `omnivarsity/kb/` | private | document, data |
+| `omnimart/pipeline/` · `omnipulse/task/` | private | image, document, data |
+| `omnistudio/media/` | private | image, video, audio |
+| `omnimart/store/` | **public** | image |
+| `omnistudio/brand/` | **public** | image, document |
 
-**Two ways up, for one reason.** A Vercel function body caps around 4.5 MB, so
-anything larger has to go browser → Blob directly with a token from
-`upload-token` — which is what the application does for acharya portraits. The
-multipart route through `upload` is the fallback for when the direct one cannot
-connect, which on some localhost setups is a CORS failure rather than a bug.
-`uploadImage()` tries them in that order and does not retry a refusal: a 4xx
-from the token route is a decision, and asking the other door gets the same
-answer more slowly.
+A private blob's own URL needs an Authorization header, and no element can send
+one — so a private file is readable only through `view`, which holds the token
+and streams the bytes back. A public blob keeps its own URL, caches for a day in
+the CDN and answers cross-origin.
 
-**Serving is where the care goes.** The content type comes from the key's
-extension and never from the stored value; anything unrecognised is sent as a
-download; SVG is an attachment with a locked-down CSP, because an SVG can carry
-script and this origin also serves the app; private reads are `Cache-Control:
-private` so a shared cache never holds one viewer's image. The public route
-answers 404 for a private key rather than 403, since a 403 would confirm the
-key exists.
+### Serving is where the care goes
+
+* **Byte ranges.** A `<video>` opens a file by asking for its last few hundred
+  bytes, then its first, then seeks. Without `Range` it downloads the whole
+  thing before it can play and the scrub bar does nothing, so both read routes
+  forward the header and answer 206 with `Content-Range`. The range goes to the
+  store rather than being applied in the function — slicing there would mean
+  paying for the whole file to serve a fragment of it.
+* **Conditional requests.** The ETag goes out, `If-None-Match` comes back, an
+  unchanged file answers 304 with no body.
+* **The content type comes from the key's extension**, never from what was
+  stored under it, so a file uploaded with a lying type is not served back with
+  it. Unrecognised types download.
+* **SVG never renders inline** — it is a document that can carry script, and
+  this origin also serves the workspace. **PDF does**, because previewing one
+  without downloading it is most of the point, but under a `sandbox` CSP.
+  `?download=1` forces the save dialog for either.
+* Private reads are `Cache-Control: private`, so a shared cache never holds one
+  viewer's file.
 
 ### Authentication, and what stands in for it
 
@@ -410,41 +441,72 @@ an open door onto a real Blob store. Two things keep it shut:
 
 With both set, a write must carry the secret in `x-upload-secret`. That is a
 shared secret, not a session: enough for a demo behind a link, and deliberately
-not what the application does. Anything real gets a session and a permission
-per route before it gets users.
+not what the application does. Anything real gets a session and a permission per
+route before it gets users.
 
 ### In the browser
 
-`ImageField` is the application's avatar field: the frame with the initials
-behind it, one button that says Upload or Change, Remove once there is
-something to remove. It **replaces before it deletes**, so a failed delete
-leaves a stray blob rather than a record pointing at nothing. `ImagePreview` is
-the load: it holds its size and shimmers while the image decodes, and falls
-back to initials when there is nothing or when the fetch fails — a private blob
-whose session has lapsed fails exactly like a missing one, and neither deserves
-a broken-image glyph.
+| Component | For |
+|---|---|
+| `ImageField` | one picture on a record — the application's avatar field |
+| `ImagePreview` | showing one, with its loading, empty and failed states |
+| `FileField` | attachments: many files, any kind the prefix allows |
+| `FileRow` | one attached file — glyph, name, size, download, remove |
+| `MediaPlayer` | video and audio, played in place |
+| `FileKindIcon` | one glyph per kind |
 
-**With no store, nothing is hidden.** The picture is shown from an object URL
-and the line under the field says it went nowhere, rather than letting it look
-saved. Open **Components → Images** to see all of it.
+`ImageField` **replaces before it deletes**, so a failed delete leaves a stray
+blob rather than a record pointing at nothing. `FileField` offers only the types
+its prefix accepts, reports real progress on the browser-direct route — a 200 MB
+recording gets a bar, not a spinner — and gives video and audio a player,
+because those are the two kinds you cannot judge from a name.
+
+**With no store, nothing is hidden.** Files are shown from an object URL and the
+line under the field says they went nowhere, rather than letting them look
+saved. Open **Components → Media & files** to see all of it.
 
 ### Running them
 
 `npm run dev` does not run functions — Vite serves the SPA only, and answers
-`/api/*` with the same 501 a store-less deployment gives, so development
-behaves like the normal deployment. For the real thing:
+`/api/*` with the same 501 a store-less deployment gives, so development behaves
+like the normal deployment. For the real thing, see the next section.
+
+`npm run typecheck` covers `api/` too, through `tsconfig.api.json` — the
+functions run on Node, not in the browser, and are deliberately not part of the
+SPA's build. `@vercel/blob` is loaded through a dynamic import in the browser, so
+it is a separate chunk and never enters the main bundle.
+
+## Deploying to Vercel
+
+The workspace deploys as a Vite static build plus the functions in `api/`.
 
 ```bash
 npm install -g vercel
-vercel link
-vercel blob store add            # writes BLOB_READ_WRITE_TOKEN
-vercel env add BLOB_UPLOAD_SECRET
-vercel dev                        # SPA + functions together
+vercel link                       # pick or create the project
+vercel                            # preview deployment
+vercel --prod                     # production
 ```
 
-`.env.example` documents both variables. `npm run typecheck` covers `api/` too,
-through `tsconfig.api.json` — the functions run on Node, not in the browser, and
-are deliberately not part of the SPA's build.
+Uploads need a Blob store, which is optional — without one everything runs in
+demo mode:
+
+```bash
+vercel blob store add             # writes BLOB_READ_WRITE_TOKEN into the project
+vercel env add BLOB_UPLOAD_SECRET # a long random string; see .env.example
+vercel env pull .env.local        # to run them locally
+vercel dev                        # SPA + functions together, on one port
+```
+
+`vercel.json` sets the build (`npm run build` → `dist`), a duration per function
+— 60s for the ones that stream or receive a file, 5s for the manifest — and the
+static headers: `nosniff`, `strict-origin-when-cross-origin`, `SAMEORIGIN`, and a
+year of immutable caching for the fingerprinted assets. `.vercelignore` keeps the
+acharya-app reference copy and the smoke harness out of the deployment.
+`engines.node` pins Node 20 or newer.
+
+Everything else is Vercel's defaults on purpose: the Vite preset already knows
+the output directory and the SPA fallback, and configuration that only restates
+a default is configuration that goes stale.
 
 ## Dashboard home — `src/dashboard/`
 

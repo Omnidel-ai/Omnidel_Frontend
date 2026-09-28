@@ -1,17 +1,21 @@
 import { del, put } from "@vercel/blob";
-import { FILE_MAX_BYTES, IMAGE_MAX_BYTES, bareType, guard, json, ruleFor } from "../_lib/blob.js";
+import { bareType, checkType, guard, json, pathnameOf, ruleFor } from "../_lib/blob.js";
 
 /**
  * POST /api/blob/upload — multipart upload through this function.
  * DELETE /api/blob/upload — remove one blob by URL or pathname.
  *
- * The other half of the pair. `upload-token` is the right path for anything
- * large; this one exists because a browser talking straight to Vercel Blob
- * needs CORS to work, which it does not on every localhost setup — the
- * application keeps the same fallback for exactly that reason.
+ * The small-file door. `upload-token` is the right way in for anything of
+ * size; this exists because a browser talking straight to Vercel Blob needs
+ * CORS to work, which it does not on every localhost setup — the application
+ * keeps the same fallback for exactly that reason.
  *
- * The form carries `file` and `pathname`. The pathname is checked against the
- * same prefix rules the token route uses, so both doors have one lock.
+ * Everything above roughly 4 MB is refused here with a message pointing at the
+ * other route, because Vercel rejects the request body before this code runs
+ * and the caller would otherwise see an opaque platform error.
+ *
+ * The form carries `file` and `pathname`. The pathname goes through the same
+ * prefix rules the token route uses, so both doors have one lock.
  */
 export default async function handler(request: Request): Promise<Response> {
   if (request.method === "DELETE") return remove(request);
@@ -28,31 +32,27 @@ export default async function handler(request: Request): Promise<Response> {
 
   const pathname = String(form.get("pathname") ?? "");
   const rule = ruleFor(pathname);
-  if (!rule) return json({ error: "Path is not one this workspace writes to." }, 400);
-
-  const contentType = bareType(file.type);
-  if (!rule.types.includes(contentType)) {
+  if (!rule) {
     return json(
-      { error: `Type not allowed here. This path takes: ${rule.types.join(", ")}.` },
-      415,
+      { error: "Path is not one this workspace writes to.", prefixes: prefixHint(), },
+      400,
     );
   }
 
-  const cap = maxFor(contentType);
-  if (file.size > cap) {
-    return json(
-      {
-        error: `File too large (max ${Math.round(cap / 1024 / 1024)} MB through this route).`,
-        hint: "Larger files go browser-direct with a token from /api/blob/upload-token.",
-      },
-      413,
-    );
+  const contentType = bareType(file.type);
+  const check = checkType(rule, contentType, file.size, "fn");
+  if (!check.ok) {
+    return json({ error: check.error, hint: check.hint, accepts: rule.types }, check.status);
   }
 
   try {
     const blob = await put(pathname, file, {
       access: rule.access,
       contentType,
+      // A record's own file overwrites itself — the key carries the record's
+      // slug, so a random suffix would orphan the old one. Public files get a
+      // suffix because they are catalogued by URL and may be replaced while an
+      // old URL is still in someone's cache.
       addRandomSuffix: rule.access === "public",
       allowOverwrite: rule.access === "private",
     });
@@ -60,18 +60,14 @@ export default async function handler(request: Request): Promise<Response> {
       url: blob.url,
       pathname: blob.pathname,
       access: rule.access,
+      kind: check.kind,
       name: file.name,
       size: file.size,
       type: contentType,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return json({ error: message }, 502);
+    return json({ error: err instanceof Error ? err.message : String(err) }, 502);
   }
-}
-
-function maxFor(contentType: string): number {
-  return contentType.startsWith("image/") ? IMAGE_MAX_BYTES : FILE_MAX_BYTES;
 }
 
 /**
@@ -85,10 +81,7 @@ async function remove(request: Request): Promise<Response> {
   const denied = guard(request);
   if (denied) return denied;
 
-  const body = (await request.json().catch(() => ({}))) as {
-    url?: string;
-    pathname?: string;
-  };
+  const body = (await request.json().catch(() => ({}))) as { url?: string; pathname?: string };
   const target = body.pathname ?? pathnameOf(body.url);
   if (!target) return json({ error: "A url or pathname is required." }, 400);
   if (!ruleFor(target)) return json({ error: "Path is not one this workspace owns." }, 403);
@@ -102,14 +95,6 @@ async function remove(request: Request): Promise<Response> {
   return json({ ok: true, pathname: target });
 }
 
-/** The key inside the store, from a full blob URL. */
-function pathnameOf(url: string | undefined): string | null {
-  if (!url) return null;
-  try {
-    const parsed = new URL(url);
-    if (!parsed.hostname.endsWith(".blob.vercel-storage.com")) return null;
-    return decodeURIComponent(parsed.pathname.replace(/^\//, ""));
-  } catch {
-    return null;
-  }
+function prefixHint(): string[] {
+  return ["omnivarsity/", "omnimart/", "omnipulse/", "omnistudio/"];
 }

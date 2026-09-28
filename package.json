@@ -27,5 +27,8 @@
     "eslint": "^9.39.0",
     "typescript": "^5.9.3",
     "vite": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
