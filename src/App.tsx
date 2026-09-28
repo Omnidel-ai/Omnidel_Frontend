@@ -4,6 +4,7 @@ import { ShellLayout } from "./shell";
 import { AdminPage, SettingsPage } from "./admin";
 import { Playground } from "./playground/Playground";
 import { DashboardHome } from "./dashboard";
+import { WorkHome } from "./home";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "./omnipulse";
 import { MartListPage, MissionsPage } from "./omnimart";
 import { HomePage } from "./playground/HomePage";
@@ -113,7 +114,7 @@ export function App() {
         ) : activeHref === "/playground" ? (
           <Playground />
         ) : activeHref === "/home" ? (
-          <DashboardHome data={DATA} onNavigate={setActiveHref} />
+          <WorkHome data={DATA.home} />
         ) : activeHref === "/about" ? (
           <HomePage data={DATA} onNavigate={setActiveHref} />
         ) : (

@@ -16,6 +16,7 @@ import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "../src/omnipulse";
 import { MartListPage, MissionsPage } from "../src/omnimart";
+import { WorkHome } from "../src/home";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
@@ -50,6 +51,7 @@ const screens: Screen[] = [
       ["admin group (sales)", "Sales &amp; Pipeline"],
       ["admin group (people)", "People &amp; Access"],
       ["a page inside a group", "Pipeline Stages"],
+      ["a pipeline stage in the nav", "Site Visit Scheduled"],
     ],
   },
   {
@@ -157,6 +159,23 @@ const screens: Screen[] = [
       ["priority chip", "opx-chip--med"],
       ["overdue chip", "opx-chip--overdue"],
       ["members", PULSE.boards[0].members[0]],
+    ],
+  },
+  {
+    name: "home",
+    html: renderToString(<WorkHome data={DATA.home} />),
+    markers: [
+      ["title", DATA.home.title],
+      ["eyebrow", "Overview"],
+      ["a stat tile", DATA.home.stats[0].label],
+      ["assigned to me", "Tasks Assigned to Me"],
+      ["assigned by me", "Tasks Assigned by Me"],
+      ["mentions", "Mentions"],
+      ["announcements", "Announcements"],
+      ["tasks by status", "Tasks by Status"],
+      ["tasks by mission", "Tasks by Mission"],
+      ["a row", DATA.home.assignedToMe.open[0].text],
+      ["donut legend", "donut__legend"],
     ],
   },
   {

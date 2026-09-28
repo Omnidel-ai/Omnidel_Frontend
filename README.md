@@ -1,8 +1,8 @@
 # OmniDel — Shared Components, Shell & Product Screens
 
 An **isolated** frontend workspace: shared UI components, the application
-shell, a dashboard, the complete admin area, OmniPulse and OmniMart — all
-running on demo data. There is no API, no database and no auth here, by design.
+shell, Home, the complete admin area, OmniPulse and OmniMart — all running on
+demo data. There is no API, no database and no auth here, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
@@ -15,10 +15,11 @@ Omnidel_Frontend/
 │   │   └── acharya-app/   ← reference copy, excluded from the build
 │   ├── shell/          ← sidebar, topbar, profile, status bar, assistant
 │   ├── data/           ← demo data (demo · masters · omnipulse · omnimart)
+│   ├── home/           ← "Your work so far" — the screen the shell opens on
 │   ├── admin/          ← the admin screens, two layouts
 │   ├── omnipulse/      ← teams, projects, review queue, board, task sheet
 │   ├── omnimart/       ← pipeline, operations, missions, schedule, store
-│   ├── dashboard/      ← dashboard home page
+│   ├── dashboard/      ← the charts screen, reached from Admin
 │   ├── hooks/
 │   ├── playground/     ← demo screens + component harness
 │   ├── styles/global.css

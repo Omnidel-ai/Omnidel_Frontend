@@ -20,7 +20,7 @@
 
   "nav": [
     {
-      "label": "Dashboard",
+      "label": "Home",
       "href": "/home",
       "icon": "home"
     },
@@ -32,7 +32,56 @@
         {
           "label": "Pipeline",
           "href": "/omnimart/pipeline",
-          "badge": 12
+          "children": [
+            {
+              "label": "New",
+              "href": "/omnimart/pipeline/new",
+              "badge": 25
+            },
+            {
+              "label": "Contacted",
+              "href": "/omnimart/pipeline/contacted",
+              "badge": 4
+            },
+            {
+              "label": "Qualified",
+              "href": "/omnimart/pipeline/qualified",
+              "badge": 1
+            },
+            {
+              "label": "Site Visit Scheduled",
+              "href": "/omnimart/pipeline/site-visit-scheduled",
+              "badge": 1
+            },
+            {
+              "label": "Discovery Call",
+              "href": "/omnimart/pipeline/discovery-call",
+              "badge": 1
+            },
+            {
+              "label": "Site Visit Done",
+              "href": "/omnimart/pipeline/site-visit-done"
+            },
+            {
+              "label": "Proposal",
+              "href": "/omnimart/pipeline/proposal",
+              "badge": 18
+            },
+            {
+              "label": "Site Survey",
+              "href": "/omnimart/pipeline/site-survey",
+              "badge": 2
+            },
+            {
+              "label": "Negotiation",
+              "href": "/omnimart/pipeline/negotiation",
+              "badge": 5
+            },
+            {
+              "label": "Final Approval",
+              "href": "/omnimart/pipeline/final-approval"
+            }
+          ]
         },
         {
           "label": "Operations",
@@ -531,6 +580,154 @@
       }
     }
   ],
+
+  "home": {
+    "title": "Your work so far.",
+    "subtitle": "Tasks assigned to you, broken down by status.",
+    "today": "28 Sept 2026",
+    "stats": [
+      {
+        "label": "Total tasks",
+        "value": "37",
+        "icon": "task"
+      },
+      {
+        "label": "Planned tasks",
+        "value": "18",
+        "icon": "planned"
+      },
+      {
+        "label": "Doing tasks",
+        "value": "7",
+        "icon": "doing"
+      },
+      {
+        "label": "Done tasks",
+        "value": "12",
+        "icon": "done"
+      }
+    ],
+    "assignedToMe": {
+      "open": [
+        {
+          "id": "h1",
+          "text": "Survey block C — 14 households",
+          "meta": "Due 27 Sept"
+        },
+        {
+          "id": "h2",
+          "text": "Verify PIN codes against state master",
+          "meta": "Due 28 Sept"
+        },
+        {
+          "id": "h3",
+          "text": "Chase the approval on Newtown duplex",
+          "meta": "Due 30 Sept"
+        },
+        {
+          "id": "h4",
+          "text": "Call back the three missed households",
+          "meta": "Due 26 Sept"
+        }
+      ],
+      "done": [
+        {
+          "id": "h5",
+          "text": "Agree the lane code with Ops",
+          "meta": "20 Sept"
+        },
+        {
+          "id": "h6",
+          "text": "Draft the delivery-note template",
+          "meta": "15 Sept"
+        }
+      ]
+    },
+    "assignedByMe": {
+      "open": [
+        {
+          "id": "h7",
+          "text": "Photograph the Newtown hub",
+          "meta": "Created 22 Sept"
+        },
+        {
+          "id": "h8",
+          "text": "Load the first 40 crates",
+          "meta": "Created 24 Sept"
+        }
+      ],
+      "done": [
+        {
+          "id": "h9",
+          "text": "Hire two karigars for block B",
+          "meta": "18 Sept"
+        }
+      ]
+    },
+    "mentions": [
+      {
+        "id": "h10",
+        "text": "Bikram mentioned you on “R&D on Omnidel for Travelscope”",
+        "meta": "1 h ago"
+      },
+      {
+        "id": "h11",
+        "text": "Chandni mentioned you on “Catalogue refresh”",
+        "meta": "Yesterday"
+      }
+    ],
+    "announcements": [
+      {
+        "id": "h12",
+        "text": "Diwali week dispatch timings",
+        "meta": "2 days ago"
+      },
+      {
+        "id": "h13",
+        "text": "New trade test for carpentry karigars",
+        "meta": "1 week ago"
+      }
+    ],
+    "byStatus": [
+      {
+        "label": "Planned",
+        "value": 18,
+        "tone": "planned"
+      },
+      {
+        "label": "Doing",
+        "value": 7,
+        "tone": "doing"
+      },
+      {
+        "label": "Done",
+        "value": 12,
+        "tone": "done"
+      }
+    ],
+    "byMission": [
+      {
+        "label": "Serve 10,000 households",
+        "value": 14,
+        "tone": "planned"
+      },
+      {
+        "label": "Kaarigar livelihoods",
+        "value": 11,
+        "tone": "planned"
+      },
+      {
+        "label": "Vernacular first",
+        "value": 7,
+        "tone": "planned"
+      },
+      {
+        "label": "Zero waste at source",
+        "value": 5,
+        "tone": "planned"
+      }
+    ]
+  },
 
   "dashboard": {
     "greeting": "Good morning, Harshit",
