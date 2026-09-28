@@ -15,6 +15,10 @@ export interface ColumnDescriptor {
   align?: "left" | "right" | "center";
   /** For `badge`: value → tone. */
   tones?: Record<string, string>;
+  /** For `person`: the row key holding the muted line under the name. */
+  sub?: string;
+  /** For `person`: the row key holding a chip after the name, when set. */
+  badge?: string;
 }
 
 /** The minimum a row must have to be rendered. */
@@ -144,6 +148,49 @@ export function toColumn(c: ColumnDescriptor): Column<DescriptorRow> {
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8, minWidth: 0 }}>
               <Avatar name={name} size={22} />
               <span className="picker-truncate">{name}</span>
+            </span>
+          );
+        },
+      };
+
+    /**
+     * A person as two lines: their portrait, their name, and what they are.
+     *
+     * The application's acharya and kaarigar tables lead with this — the name
+     * is the link to the record, so it is underlined, and the description sits
+     * under it in the muted line rather than in a column of its own, where it
+     * would be clipped.
+     */
+    case "person":
+      return {
+        ...base,
+        render: (r) => {
+          const name = str(r[c.key], "");
+          if (!name) return <Muted />;
+          const sub = c.sub ? str(r[c.sub], "") : "";
+          const chip = c.badge ? str(r[c.badge], "") : "";
+          return (
+            <span style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+              <Avatar name={name} size={32} />
+              <span style={{ minWidth: 0 }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                  <span
+                    className="picker-truncate"
+                    style={{ textDecoration: "underline", textUnderlineOffset: 2 }}
+                  >
+                    {name}
+                  </span>
+                  {chip && <Badge tone="ochre">{chip}</Badge>}
+                </span>
+                {sub && (
+                  <span
+                    className="picker-truncate"
+                    style={{ display: "block", fontSize: 12, color: "var(--ink-mute)" }}
+                  >
+                    {sub}
+                  </span>
+                )}
+              </span>
             </span>
           );
         },

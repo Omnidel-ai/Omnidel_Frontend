@@ -1,23 +1,43 @@
 {
-  "brand": { "name": "OmniDEL.ai", "badge": "O", "environment": "demo data" },
-
+  "brand": {
+    "name": "OmniDEL.ai",
+    "badge": "O",
+    "environment": "demo data"
+  },
   "user": {
     "name": "Harshit Sharma",
     "role": "founder",
     "phone": "+91 98300 00000",
     "teams": [
-      { "id": "t1", "name": "Platform" },
-      { "id": "t2", "name": "Operations" },
-      { "id": "t3", "name": "Catalogue" }
+      {
+        "id": "t1",
+        "name": "Platform"
+      },
+      {
+        "id": "t2",
+        "name": "Operations"
+      },
+      {
+        "id": "t3",
+        "name": "Catalogue"
+      }
     ],
     "languages": [
-      { "code": "en", "label": "English" },
-      { "code": "hi", "label": "हिन्दी" },
-      { "code": "bn", "label": "বাংলা" }
+      {
+        "code": "en",
+        "label": "English"
+      },
+      {
+        "code": "hi",
+        "label": "हिन्दी"
+      },
+      {
+        "code": "bn",
+        "label": "বাংলা"
+      }
     ],
     "activeLanguage": "en"
   },
-
   "nav": [
     {
       "label": "Home",
@@ -124,7 +144,23 @@
     {
       "label": "OmniVarsity",
       "href": "/omnivarsity",
-      "icon": "book"
+      "icon": "book",
+      "children": [
+        {
+          "label": "Acharyas",
+          "href": "/omnivarsity/acharyas",
+          "badge": 9
+        },
+        {
+          "label": "Acharya Dashboard",
+          "href": "/omnivarsity/dashboard"
+        },
+        {
+          "label": "Kaarigars",
+          "href": "/omnivarsity/kaarigars",
+          "badge": 2
+        }
+      ]
     },
     {
       "label": "OmniMoney",
@@ -286,21 +322,69 @@
       "icon": "book"
     }
   ],
-
   "status": [
-    { "key": "env", "label": "Env", "value": "Demo", "tone": "neutral", "detail": "No API calls — everything on this screen is demo.json" },
-    { "key": "sync", "label": "Data", "value": "In memory", "tone": "ok", "detail": "Edits live until the page reloads" },
-    { "key": "queue", "label": "Queue", "value": "3 pending", "tone": "warn", "detail": "Worker setups awaiting approval" },
-    { "key": "build", "label": "Build", "value": "shared-ui 0.1.0", "tone": "neutral" }
+    {
+      "key": "env",
+      "label": "Env",
+      "value": "Demo",
+      "tone": "neutral",
+      "detail": "No API calls — everything on this screen is demo.json"
+    },
+    {
+      "key": "sync",
+      "label": "Data",
+      "value": "In memory",
+      "tone": "ok",
+      "detail": "Edits live until the page reloads"
+    },
+    {
+      "key": "queue",
+      "label": "Queue",
+      "value": "3 pending",
+      "tone": "warn",
+      "detail": "Worker setups awaiting approval"
+    },
+    {
+      "key": "build",
+      "label": "Build",
+      "value": "shared-ui 0.1.0",
+      "tone": "neutral"
+    }
   ],
-
   "notifications": [
-    { "id": "n1", "title": "Lane LN-004 archived", "body": "Ananya archived it from the Masters screen.", "at": "12 min ago", "unread": true, "tone": "warn" },
-    { "id": "n2", "title": "3 worker setups pending", "body": "Newtown branch — awaiting phone verification.", "at": "1 h ago", "unread": true, "tone": "crit" },
-    { "id": "n3", "title": "Catalogue import finished", "body": "412 rows imported, 3 skipped.", "at": "Yesterday", "unread": false, "tone": "success" },
-    { "id": "n4", "title": "Bengali translations updated", "body": "94% of UI strings now covered.", "at": "2 days ago", "unread": false, "tone": "info" }
+    {
+      "id": "n1",
+      "title": "Lane LN-004 archived",
+      "body": "Ananya archived it from the Masters screen.",
+      "at": "12 min ago",
+      "unread": true,
+      "tone": "warn"
+    },
+    {
+      "id": "n2",
+      "title": "3 worker setups pending",
+      "body": "Newtown branch — awaiting phone verification.",
+      "at": "1 h ago",
+      "unread": true,
+      "tone": "crit"
+    },
+    {
+      "id": "n3",
+      "title": "Catalogue import finished",
+      "body": "412 rows imported, 3 skipped.",
+      "at": "Yesterday",
+      "unread": false,
+      "tone": "success"
+    },
+    {
+      "id": "n4",
+      "title": "Bengali translations updated",
+      "body": "94% of UI strings now covered.",
+      "at": "2 days ago",
+      "unread": false,
+      "tone": "info"
+    }
   ],
-
   "assistant": {
     "name": "MahAcharya",
     "greeting": "Ask me about anything on this screen — the masters, the shell, or what a component does.",
@@ -311,15 +395,29 @@
       "Is any of this connected to the backend?"
     ],
     "replies": [
-      { "match": "driven", "text": "Every admin screen here is rendered from one descriptor in demo.json — its columns, its form fields and its rows. The page component itself is generic: nothing in it names a lane, a language or a mission." },
-      { "match": "add a new master", "text": "Add an entry to `masters` in demo.json: a key, labels, a `columns` array and a `fields` array. It appears in the sidebar and gets a full CRUD screen with no new code." },
-      { "match": "shared", "text": "Buttons, inputs, selects, the table family, filters, modals, toasts, the page header and the badges. Anything that knows a domain object — comments, rich text, CSV import — is a feature, not a shared component." },
-      { "match": "backend", "text": "No. There is no fetch, no database and no auth in this workspace. Edits change in-memory state and are lost on reload, by design — the real APIs get wired once the backend split lands." },
-      { "match": "shell", "text": "The shell is the sidebar, the topbar with search and notifications, the profile menu, the status bar and this assistant. All five read demo.json, so none of them hard-code a route or a person." }
+      {
+        "match": "driven",
+        "text": "Every admin screen here is rendered from one descriptor in demo.json — its columns, its form fields and its rows. The page component itself is generic: nothing in it names a lane, a language or a mission."
+      },
+      {
+        "match": "add a new master",
+        "text": "Add an entry to `masters` in demo.json: a key, labels, a `columns` array and a `fields` array. It appears in the sidebar and gets a full CRUD screen with no new code."
+      },
+      {
+        "match": "shared",
+        "text": "Buttons, inputs, selects, the table family, filters, modals, toasts, the page header and the badges. Anything that knows a domain object — comments, rich text, CSV import — is a feature, not a shared component."
+      },
+      {
+        "match": "backend",
+        "text": "No. There is no fetch, no database and no auth in this workspace. Edits change in-memory state and are lost on reload, by design — the real APIs get wired once the backend split lands."
+      },
+      {
+        "match": "shell",
+        "text": "The shell is the sidebar, the topbar with search and notifications, the profile menu, the status bar and this assistant. All five read demo.json, so none of them hard-code a route or a person."
+      }
     ],
     "fallback": "This is a demo assistant — it answers from a small canned set. Try one of the suggestions above, or ask about the masters, the shell, the shared components or the backend."
   },
-
   "settings": [
     {
       "key": "business-details",
@@ -580,7 +678,6 @@
       }
     }
   ],
-
   "home": {
     "title": "Your work so far.",
     "subtitle": "Tasks assigned to you, broken down by status.",
@@ -728,57 +825,186 @@
       }
     ]
   },
-
   "dashboard": {
     "greeting": "Good morning, Harshit",
     "subtitle": "Here is the shape of the week. Every number on this page comes from demo.json.",
     "stats": [
-      { "key": "orders", "label": "Orders", "value": "1,284", "delta": "+8.4%", "deltaTone": "ok", "hint": "vs last week" },
-      { "key": "revenue", "label": "Revenue", "value": "₹18.4L", "delta": "+2.1%", "deltaTone": "ok", "hint": "vs last week" },
-      { "key": "sla", "label": "On-time", "value": "94%", "delta": "-1.2pt", "deltaTone": "warn", "hint": "target 95%" },
-      { "key": "open", "label": "Open tasks", "value": "37", "delta": "+6", "deltaTone": "crit", "hint": "12 overdue" }
+      {
+        "key": "orders",
+        "label": "Orders",
+        "value": "1,284",
+        "delta": "+8.4%",
+        "deltaTone": "ok",
+        "hint": "vs last week"
+      },
+      {
+        "key": "revenue",
+        "label": "Revenue",
+        "value": "₹18.4L",
+        "delta": "+2.1%",
+        "deltaTone": "ok",
+        "hint": "vs last week"
+      },
+      {
+        "key": "sla",
+        "label": "On-time",
+        "value": "94%",
+        "delta": "-1.2pt",
+        "deltaTone": "warn",
+        "hint": "target 95%"
+      },
+      {
+        "key": "open",
+        "label": "Open tasks",
+        "value": "37",
+        "delta": "+6",
+        "deltaTone": "crit",
+        "hint": "12 overdue"
+      }
     ],
     "weekly": {
       "label": "Deliveries completed",
       "unit": "per week",
       "points": [
-        { "label": "W24", "value": 186 },
-        { "label": "W25", "value": 204 },
-        { "label": "W26", "value": 178 },
-        { "label": "W27", "value": 231 },
-        { "label": "W28", "value": 249 },
-        { "label": "W29", "value": 222 },
-        { "label": "W30", "value": 268 },
-        { "label": "W31", "value": 291 },
-        { "label": "W32", "value": 274 },
-        { "label": "W33", "value": 305 },
-        { "label": "W34", "value": 318 },
-        { "label": "W35", "value": 296 }
+        {
+          "label": "W24",
+          "value": 186
+        },
+        {
+          "label": "W25",
+          "value": 204
+        },
+        {
+          "label": "W26",
+          "value": 178
+        },
+        {
+          "label": "W27",
+          "value": 231
+        },
+        {
+          "label": "W28",
+          "value": 249
+        },
+        {
+          "label": "W29",
+          "value": 222
+        },
+        {
+          "label": "W30",
+          "value": 268
+        },
+        {
+          "label": "W31",
+          "value": 291
+        },
+        {
+          "label": "W32",
+          "value": 274
+        },
+        {
+          "label": "W33",
+          "value": 305
+        },
+        {
+          "label": "W34",
+          "value": 318
+        },
+        {
+          "label": "W35",
+          "value": 296
+        }
       ]
     },
     "stages": {
       "label": "Pipeline by stage",
       "points": [
-        { "label": "Enquiry", "value": 64 },
-        { "label": "Survey", "value": 41 },
-        { "label": "Quotation", "value": 33 },
-        { "label": "Negotiation", "value": 19 },
-        { "label": "Won", "value": 12 },
-        { "label": "Handover", "value": 7 }
+        {
+          "label": "Enquiry",
+          "value": 64
+        },
+        {
+          "label": "Survey",
+          "value": 41
+        },
+        {
+          "label": "Quotation",
+          "value": 33
+        },
+        {
+          "label": "Negotiation",
+          "value": 19
+        },
+        {
+          "label": "Won",
+          "value": 12
+        },
+        {
+          "label": "Handover",
+          "value": 7
+        }
       ]
     },
     "statuses": [
-      { "label": "On track", "value": 58, "tone": "ok" },
-      { "label": "At risk", "value": 12, "tone": "warn" },
-      { "label": "Blocked", "value": 5, "tone": "crit" }
+      {
+        "label": "On track",
+        "value": 58,
+        "tone": "ok"
+      },
+      {
+        "label": "At risk",
+        "value": 12,
+        "tone": "warn"
+      },
+      {
+        "label": "Blocked",
+        "value": 5,
+        "tone": "crit"
+      }
     ],
     "activity": [
-      { "id": "a1", "who": "Ananya", "what": "archived lane LN-004", "at": "12 min ago", "tone": "warn" },
-      { "id": "a2", "who": "Bikram", "what": "closed 14 deliveries on LN-007", "at": "1 h ago", "tone": "ok" },
-      { "id": "a3", "who": "Chandni", "what": "imported 412 catalogue rows", "at": "3 h ago", "tone": "ok" },
-      { "id": "a4", "who": "Devraj", "what": "flagged 3 worker setups for review", "at": "Yesterday", "tone": "crit" },
-      { "id": "a5", "who": "Ananya", "what": "added mission “Vernacular first”", "at": "Yesterday", "tone": "info" },
-      { "id": "a6", "who": "Bikram", "what": "updated SLA on route-audit to 36h", "at": "2 days ago", "tone": "info" }
+      {
+        "id": "a1",
+        "who": "Ananya",
+        "what": "archived lane LN-004",
+        "at": "12 min ago",
+        "tone": "warn"
+      },
+      {
+        "id": "a2",
+        "who": "Bikram",
+        "what": "closed 14 deliveries on LN-007",
+        "at": "1 h ago",
+        "tone": "ok"
+      },
+      {
+        "id": "a3",
+        "who": "Chandni",
+        "what": "imported 412 catalogue rows",
+        "at": "3 h ago",
+        "tone": "ok"
+      },
+      {
+        "id": "a4",
+        "who": "Devraj",
+        "what": "flagged 3 worker setups for review",
+        "at": "Yesterday",
+        "tone": "crit"
+      },
+      {
+        "id": "a5",
+        "who": "Ananya",
+        "what": "added mission “Vernacular first”",
+        "at": "Yesterday",
+        "tone": "info"
+      },
+      {
+        "id": "a6",
+        "who": "Bikram",
+        "what": "updated SLA on route-audit to 36h",
+        "at": "2 days ago",
+        "tone": "info"
+      }
     ]
   }
 }

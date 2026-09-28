@@ -13,7 +13,17 @@ export interface PanelProps {
   flush?: boolean;
   /** Extra class on the card — a grid span, say. */
   className?: string;
+  /**
+   * A coloured left edge naming what the panel is about.
+   *
+   * The dashboard's panels carry one; Home's do not. It is decoration over a
+   * title that already says the same thing, never the only thing telling two
+   * panels apart.
+   */
+  accent?: PanelAccent;
 }
+
+export type PanelAccent = "green" | "ochre" | "terra" | "crit";
 
 /**
  * A titled card.
@@ -31,9 +41,14 @@ export function Panel({
   children,
   flush = false,
   className,
+  accent,
 }: PanelProps) {
   return (
-    <section className={["panel", className].filter(Boolean).join(" ")}>
+    <section
+      className={["panel", accent && `panel--accent panel--${accent}`, className]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <header className="panel__head">
         {icon && <span className="panel__icon">{icon}</span>}
         <span style={{ minWidth: 0 }}>
@@ -53,6 +68,13 @@ export interface StatTileProps {
   icon?: ReactNode;
   /** Muted line under the row. */
   hint?: string;
+  /**
+   * A washed, borderless tile instead of the bordered one.
+   *
+   * The Acharya dashboard's counters sit in a tinted block; Home's sit in a
+   * card with a rule. Same tile, two dresses.
+   */
+  tone?: PanelAccent;
 }
 
 /**
@@ -61,9 +83,9 @@ export interface StatTileProps {
  * The number sits beside the label rather than above it, as the application
  * has it: at this size the pair reads as one phrase, "0 total tasks".
  */
-export function StatTile({ label, value, icon, hint }: StatTileProps) {
+export function StatTile({ label, value, icon, hint, tone }: StatTileProps) {
   return (
-    <div className="stat-tile">
+    <div className={tone ? `stat-tile stat-tile--wash stat-tile--${tone}` : "stat-tile"}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
         {icon && <span className="stat-tile__icon">{icon}</span>}
         <span className="stat-tile__value">{value}</span>

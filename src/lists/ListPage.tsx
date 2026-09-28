@@ -15,32 +15,32 @@ import {
   type Column,
 } from "../components";
 import { downloadCsv } from "../admin/AdminPage/exportCsv";
-import type { MartList, MartRow } from "./types";
-import { StoreOverview } from "./StoreOverview";
+import type { ListDescriptor, ListRow } from "./types";
+import { StoreOverview } from "../omnimart/StoreOverview";
 
-export interface MartListPageProps {
-  list: MartList;
+export interface ListPageProps {
+  list: ListDescriptor;
   /** Search text from the shell's topbar. */
   externalSearch?: string;
 }
 
 /**
- * One work list — Pipeline, Operations, Schedule & Sites, Store.
+ * A work list — one screen, one descriptor.
  *
- * The same relationship the admin masters have to `AdminPage`: four screens,
- * one component, a descriptor each. These are not CRUD masters though — they
- * are work in flight, so instead of add/edit/archive they carry the views the
- * application puts in the header (All Leads · Short Cycle · Long Cycle ·
- * Archived), the search-with-FILTERS beneath it, and the row actions the app
- * offers: View · Next stage · Archive.
+ * Six screens use it today: OmniMart's Pipeline, Operations, Schedule & Sites
+ * and Store, and OmniVarsity's Acharyas and Kaarigars. The same relationship
+ * the admin masters have to `AdminPage`, but for work in flight rather than
+ * reference data: instead of add/edit/archive it carries the views the
+ * application puts in the page header, the search-with-FILTERS beneath it, and
+ * whatever row actions that screen offers.
  *
  * Cells come from the same `toColumn` the admin tables use, which is why a
- * lead table and a language table feel like one table.
+ * lead table, an acharya table and a language table read as one table.
  *
- * A view can also be something other than a table — Store opens on a grid of
- * KPI tiles — so a descriptor may name a `kind` per view.
+ * A view can be something other than a table — Store opens on a grid of KPI
+ * tiles — so a descriptor may name a `kind` per view.
  */
-export function MartListPage({ list, externalSearch }: MartListPageProps) {
+export function ListPage({ list, externalSearch }: ListPageProps) {
   const views = list.tabs ?? [];
   const [tab, setTab] = useState(views[0]?.label ?? "All");
   const [search, setSearch] = useState("");
@@ -81,8 +81,8 @@ export function MartListPage({ list, externalSearch }: MartListPageProps) {
   const narrowed =
     Boolean(query) || Boolean(view?.field) || Object.values(filters).some((v) => v.length > 0);
 
-  const columns: Column<MartRow>[] = [
-    ...list.columns.map((c) => toColumn(c) as Column<MartRow>),
+  const columns: Column<ListRow>[] = [
+    ...list.columns.map((c) => toColumn(c) as Column<ListRow>),
     ...(list.rowActions?.length
       ? [
           {
@@ -113,7 +113,7 @@ export function MartListPage({ list, externalSearch }: MartListPageProps) {
   return (
     <div>
       <PageHeader
-        crumbs={[{ label: "OmniMart" }, { label: list.label }]}
+        crumbs={[{ label: list.module }, { label: list.label }]}
         marginBottom={12}
         actions={
           views.length > 0 ? (

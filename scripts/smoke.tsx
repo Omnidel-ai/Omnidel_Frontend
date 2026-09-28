@@ -15,19 +15,24 @@ import { Playground } from "../src/playground/Playground";
 import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "../src/omnipulse";
-import { MartListPage, MissionsPage } from "../src/omnimart";
+import { MissionsPage } from "../src/omnimart";
+import { AcharyaDashboard } from "../src/omnivarsity";
+import { ListPage } from "../src/lists";
 import { WorkHome } from "../src/home";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
 import omnimart from "../src/data/omnimart.json";
+import omnivarsity from "../src/data/omnivarsity.json";
 import type { DemoData, DemoMaster } from "../src/data/types";
 import type { OmniPulseData } from "../src/omnipulse";
 import type { OmniMartData } from "../src/omnimart";
+import type { OmniVarsityData } from "../src/omnivarsity";
 
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
 const MART = omnimart as OmniMartData;
+const VARSITY = omnivarsity as OmniVarsityData;
 
 interface Screen {
   name: string;
@@ -190,15 +195,30 @@ const screens: Screen[] = [
       ["pace sentence", "Doing"],
     ],
   },
-  // The four work lists, through the one component — and the pieces only some
-  // of them declare asserted where they are declared.
-  ...MART.lists.map((l) => ({
-    name: `omnimart/${l.key}`,
-    html: renderToString(<MartListPage list={l} />),
-    markers: (l.tabs?.[0].kind === "overview"
+  {
+    name: "omnivarsity/dashboard",
+    html: renderToString(<AcharyaDashboard data={VARSITY.dashboard} />),
+    markers: [
+      ["crumb", VARSITY.dashboard.label],
+      ["sections", VARSITY.dashboard.tabs[1]],
+      ["range", VARSITY.dashboard.ranges[2]],
+      ["a washed tile", "stat-tile--wash"],
+      ["a counter", VARSITY.dashboard.tiles[0].value],
+      ["an accented panel", "panel--accent"],
+      ["a recent row", VARSITY.dashboard.panels[1].items[0].text],
+      ["an empty panel", VARSITY.dashboard.panels[0].empty],
+    ],
+  },
+  // Every work list in the workspace, through the one component — OmniMart's
+  // four and OmniVarsity's two — with the pieces only some of them declare
+  // asserted where they are declared.
+  ...[...MART.lists, ...VARSITY.lists].map((l) => ({
+    name: `${l.module.toLowerCase()}/${l.key}`,
+    html: renderToString(<ListPage list={l} />),
+    markers: (l.tabs?.[0]?.kind === "overview"
       ? [
           // Store opens on its KPI tiles, so that is what SSR renders.
-          ["views in the header", l.tabs[1].label],
+          ["views in the header", l.tabs![1].label],
           ["overview title", l.overview!.title],
           ["a store tile", l.overview!.stores[0].name],
           ["tile track", "mart-kpi__track"],
@@ -210,8 +230,8 @@ const screens: Screen[] = [
           ["a data row", String(l.rows[0][l.columns[1].key] ?? l.rows[0].id)],
           // Placeholders carry an ampersand, which renders escaped.
           ["search", l.searchPlaceholder.replace(/&/g, "&amp;")],
-          ["export", "Export CSV"],
-          ...(l.tabs?.length ? [["tabs", l.tabs[1].label]] : []),
+          ...(l.exportable ? [["export", "Export CSV"]] : []),
+          ...(l.tabs && l.tabs.length > 1 ? [["tabs", l.tabs[1].label]] : []),
           ...(l.rowActions?.length ? [["row action", l.rowActions[0]]] : []),
         ]) as Array<[string, string]>,
   })),

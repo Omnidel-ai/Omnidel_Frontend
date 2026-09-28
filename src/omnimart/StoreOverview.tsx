@@ -1,5 +1,5 @@
 import { Badge, Button, Skeleton, emitToast, formatCompactInr, type BadgeTone } from "../components";
-import type { MartStoreOverview } from "./types";
+import type { ListOverview } from "../lists";
 
 const TONE: Record<string, BadgeTone> = {
   critical: "crit",
@@ -18,7 +18,7 @@ export function StoreOverview({
   overview,
   loading,
 }: {
-  overview: MartStoreOverview;
+  overview: ListOverview;
   loading?: boolean;
 }) {
   return (

@@ -113,6 +113,7 @@
   "lists": [
     {
       "key": "pipeline",
+      "module": "OmniMart",
       "label": "Pipeline",
       "singular": "Lead",
       "searchPlaceholder": "Search leads & filters...",
@@ -433,6 +434,7 @@
     },
     {
       "key": "operations",
+      "module": "OmniMart",
       "label": "Operations",
       "singular": "Operation",
       "searchPlaceholder": "Search operations & filters...",
@@ -661,6 +663,7 @@
     },
     {
       "key": "schedule",
+      "module": "OmniMart",
       "label": "Schedule & Sites",
       "singular": "Visit",
       "searchPlaceholder": "Search visits & filters...",
@@ -864,6 +867,7 @@
     },
     {
       "key": "store",
+      "module": "OmniMart",
       "label": "Store",
       "singular": "Item",
       "searchPlaceholder": "Search stock & filters...",
