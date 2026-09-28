@@ -1,0 +1,92 @@
+{
+  "today": "2026-09-29",
+  "modules": ["OmniMart", "OmniPulse", "OmniVarsity", "OmniMoney", "Inventory"],
+  "rows": [
+    {
+      "id": "other",
+      "name": "other",
+      "prefix": "other",
+      "status": "Closing",
+      "seats": { "used": 2, "cap": 100 },
+      "modules": ["Inventory", "OmniMart", "OmniPulse"],
+      "created": "2026-09-25",
+      "owner": { "name": "Ritika Bose", "email": "ritika@other.in" },
+      "lifecycle": { "suspended": "2026-09-25", "graceEnds": "2026-10-09", "exportEnds": "2026-10-25" },
+      "people": [
+        { "name": "Ritika Bose", "email": "ritika@other.in", "role": "Owner", "lastSeen": "2026-09-25" },
+        { "name": "Arnab Pal", "email": "arnab@other.in", "role": "Member", "lastSeen": "2026-09-24" }
+      ],
+      "invoices": [
+        { "no": "INV-0142", "period": "Sep 2026", "amount": 4800, "status": "Overdue", "due": "2026-09-20" },
+        { "no": "INV-0117", "period": "Aug 2026", "amount": 4800, "status": "Paid", "due": "2026-08-20" }
+      ],
+      "activity": [
+        { "at": "2026-09-25 18:10", "who": "Harshit Sharma", "what": "Began closing the instance", "tone": "crit" },
+        { "at": "2026-09-25 18:02", "who": "Harshit Sharma", "what": "Suspended the instance — invoice INV-0142 past due", "tone": "amber" },
+        { "at": "2026-09-25 11:40", "who": "Ritika Bose", "what": "Turned on Inventory" },
+        { "at": "2026-09-25 11:32", "who": "Ritika Bose", "what": "Invited Arnab Pal" },
+        { "at": "2026-09-25 11:20", "who": "System", "what": "Created the instance with OmniMart and OmniPulse", "tone": "green" }
+      ]
+    },
+    {
+      "id": "demo",
+      "name": "demo",
+      "prefix": "demo",
+      "status": "Active",
+      "seats": { "used": 2, "cap": 100 },
+      "modules": [],
+      "created": "2026-09-25",
+      "owner": { "name": "Harshit Sharma", "email": "harshit@omnidel.ai" },
+      "people": [
+        { "name": "Harshit Sharma", "email": "harshit@omnidel.ai", "role": "Owner", "lastSeen": "2026-09-29" },
+        { "name": "Demo Viewer", "email": "viewer@omnidel.ai", "role": "Member", "lastSeen": "2026-09-27" }
+      ],
+      "activity": [{ "at": "2026-09-25 09:00", "who": "System", "what": "Created the instance", "tone": "green" }]
+    },
+    {
+      "id": "karmyog",
+      "name": "karmyog",
+      "prefix": "karmyog",
+      "status": "Active",
+      "seats": { "used": 1, "cap": 100 },
+      "modules": [],
+      "created": "2026-09-23",
+      "owner": { "name": "Sanjay Mitra", "email": "sanjay@karmyog.org" },
+      "people": [{ "name": "Sanjay Mitra", "email": "sanjay@karmyog.org", "role": "Owner", "lastSeen": "2026-09-28" }],
+      "activity": [{ "at": "2026-09-23 10:15", "who": "System", "what": "Created the instance", "tone": "green" }]
+    },
+    {
+      "id": "tgr5wnqetb",
+      "name": "tgr5wnqetb",
+      "prefix": "tgr5wnqetb",
+      "status": "Trial",
+      "seats": { "used": 0, "cap": null },
+      "modules": [],
+      "created": "2026-09-22",
+      "trialEnds": "2026-10-06",
+      "activity": [{ "at": "2026-09-22 16:48", "who": "System", "what": "Started a trial", "tone": "green" }]
+    },
+    {
+      "id": "tgr5wnqeta",
+      "name": "tgr5wnqeta",
+      "prefix": "tgr5wnqeta",
+      "status": "Trial",
+      "seats": { "used": 0, "cap": null },
+      "modules": [],
+      "created": "2026-09-22",
+      "trialEnds": "2026-10-06",
+      "activity": [{ "at": "2026-09-22 16:47", "who": "System", "what": "Started a trial", "tone": "green" }]
+    },
+    {
+      "id": "tivib395ob",
+      "name": "tivib395ob",
+      "prefix": "tivib395ob",
+      "status": "Trial",
+      "seats": { "used": 0, "cap": null },
+      "modules": [],
+      "created": "2026-09-21",
+      "trialEnds": "2026-10-05",
+      "activity": [{ "at": "2026-09-21 12:05", "who": "System", "what": "Started a trial", "tone": "green" }]
+    }
+  ]
+}

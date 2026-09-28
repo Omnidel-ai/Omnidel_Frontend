@@ -292,6 +292,20 @@
           ]
         },
         {
+          "label": "Platform",
+          "href": "/admin/platform",
+          "children": [
+            {
+              "label": "Instances",
+              "href": "/admin/instances"
+            },
+            {
+              "label": "Staff roles",
+              "href": "/admin/staff-roles"
+            }
+          ]
+        },
+        {
           "label": "System",
           "href": "/admin/system",
           "children": [
