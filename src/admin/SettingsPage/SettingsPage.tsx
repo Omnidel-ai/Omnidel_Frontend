@@ -104,7 +104,7 @@ export function SettingsPage({ settings }: SettingsPageProps) {
         </p>
       )}
 
-      <div style={{ display: "grid", gap: 18, maxWidth: 860 }}>
+      <div style={{ display: "grid", gap: 18 }}>
         {settings.groups.map((g) => (
           <section
             key={g.title}
@@ -151,7 +151,7 @@ export function SettingsPage({ settings }: SettingsPageProps) {
 /** Placeholder while a settings record is being read. */
 export function SettingsSkeleton() {
   return (
-    <div style={{ display: "grid", gap: 18, maxWidth: 860 }}>
+    <div style={{ display: "grid", gap: 18 }}>
       {[0, 1].map((i) => (
         <div
           key={i}

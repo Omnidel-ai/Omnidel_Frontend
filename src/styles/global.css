@@ -1595,7 +1595,7 @@ input, button, select, textarea { font-family: var(--sans); }
 .stat-tile--crit { background: var(--crit-wash); }
 
 /* ─── Acharya dashboard ────────────────────────────────────────────────── */
-.varsity-dash { display: flex; flex-direction: column; gap: 20px; max-width: 1560px; }
+.varsity-dash { display: flex; flex-direction: column; gap: 20px; }
 .varsity-dash__tiles {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1649,7 +1649,16 @@ input, button, select, textarea { font-family: var(--sans); }
   .varsity-dash__panels { grid-template-columns: minmax(0, 1fr); }
 }
 
-.home { display: flex; flex-direction: column; gap: 26px; max-width: 1560px; }
+/* Home is the one screen the application caps, and it centres what it caps —
+   so the empty width falls on both sides rather than all on the right. */
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  width: 100%;
+  max-width: 1560px;
+  margin-inline: auto;
+}
 .home__eyebrow {
   font-family: var(--mono);
   font-size: 10px;
