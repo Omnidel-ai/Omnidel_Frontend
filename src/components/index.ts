@@ -19,6 +19,7 @@ export * from "./PageHeader";
 export * from "./Panel";
 export * from "./NoAccessScreen";
 export * from "./Avatar";
+export * from "./ImageField";
 export * from "./Badge";
 export * from "./Menu";
 export * from "./Disclosure";

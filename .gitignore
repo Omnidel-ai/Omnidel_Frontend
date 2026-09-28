@@ -2,3 +2,7 @@ node_modules
 dist
 .smoke
 *.tsbuildinfo
+
+.env
+.env.local
+.vercel

@@ -2,8 +2,8 @@
 
 An **isolated** frontend workspace: shared UI components, the application
 shell, Home, the complete admin area, OmniPulse, OmniMart and OmniVarsity —
-all running on demo data. There is no API, no database and no auth here, by
-design.
+all running on demo data, with a small set of Vercel Functions for Vercel Blob
+uploads. There is no API, no database and no auth here beyond those, by design.
 
 It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
@@ -21,6 +21,7 @@ to accommodate, and published here so it can be worked on on its own.
 | **OmniVarsity** | Acharyas · Acharya Dashboard · Kaarigars | `src/omnivarsity/` + `src/lists/` |
 | **Admin** | 23 masters + Business Details + the dashboard | `src/admin/` |
 | **Components** | the playground — every shared component in every state | `src/playground/` |
+| **Uploads** | five Vercel Functions for Vercel Blob, and the field that uses them | `api/` + `src/lib/blob.ts` |
 
 **OmniMart** is the sales and delivery side. Four of its five screens are work
 lists and share **one component**, `ListPage`: views in the page header, a
@@ -49,6 +50,7 @@ descriptors.** `AdminPage` for reference data, `ListPage` for work in flight,
 OmniDel/                    ← existing Next.js app, untouched
 ├── src/ app/ …
 └── frontend/               ← this project
+    ├── api/                ← Vercel Functions: Vercel Blob upload, view, list
     ├── src/
     │   ├── components/     ← 1. shared UI components
     │   │   └── acharya-app/   ← reference copy, excluded from the build
@@ -345,6 +347,104 @@ sections (Overview · Chats · Rating · Quiz). Its counters are the shared
 already existed, not two new components. The edge is decoration over a title
 that already says the same thing; it is never the only thing telling two panels
 apart.
+
+## Uploads — `api/` and `src/lib/blob.ts`
+
+The first thing in this workspace that is not a component: five **Vercel
+Functions** for Vercel Blob, mirroring the routes the application already runs.
+
+```
+api/
+├── index.ts                    GET    what these functions are, and whether they can do anything
+├── blob/
+│   ├── upload-token.ts         POST   token for a browser-direct upload
+│   ├── upload.ts               POST   multipart through the function
+│   │                           DELETE remove one blob
+│   ├── view.ts                 GET    read a PRIVATE blob — the only way to show one
+│   ├── public/[...path].ts     GET    read a PUBLIC blob, cached and cross-origin
+│   └── list.ts                 GET    what is in a prefix
+└── _lib/blob.ts                        the rules all five enforce
+```
+
+**Two stores, and the split is the point.** A private blob's own URL needs an
+Authorization header, and `<img src>` cannot send one — so a private image is
+readable only through `view`, which holds the token and streams the bytes back.
+A public blob keeps its own URL, caches for a day in the CDN and answers
+cross-origin, because a storefront picture is the same bytes for everyone.
+Which store a file lands in is decided by its prefix, never by the caller:
+
+| Prefix | Store | Takes |
+|---|---|---|
+| `omnivarsity/acharya/` | private | images |
+| `omnivarsity/kaarigar/` | private | images |
+| `omnimart/pipeline/` | private | images, PDF, CSV, text |
+| `omnimart/store/` | **public** | images |
+
+**Two ways up, for one reason.** A Vercel function body caps around 4.5 MB, so
+anything larger has to go browser → Blob directly with a token from
+`upload-token` — which is what the application does for acharya portraits. The
+multipart route through `upload` is the fallback for when the direct one cannot
+connect, which on some localhost setups is a CORS failure rather than a bug.
+`uploadImage()` tries them in that order and does not retry a refusal: a 4xx
+from the token route is a decision, and asking the other door gets the same
+answer more slowly.
+
+**Serving is where the care goes.** The content type comes from the key's
+extension and never from the stored value; anything unrecognised is sent as a
+download; SVG is an attachment with a locked-down CSP, because an SVG can carry
+script and this origin also serves the app; private reads are `Cache-Control:
+private` so a shared cache never holds one viewer's image. The public route
+answers 404 for a private key rather than 403, since a 403 would confirm the
+key exists.
+
+### Authentication, and what stands in for it
+
+In the application every one of these routes sits behind a session and a
+permission slug. **This workspace has no users**, so the same handlers would be
+an open door onto a real Blob store. Two things keep it shut:
+
+* with no `BLOB_READ_WRITE_TOKEN` the handlers refuse and the workspace runs in
+  demo mode — which is how it is normally deployed;
+* with a token but no `BLOB_UPLOAD_SECRET`, **writes still refuse**, so wiring a
+  store up is not by itself enough to open one.
+
+With both set, a write must carry the secret in `x-upload-secret`. That is a
+shared secret, not a session: enough for a demo behind a link, and deliberately
+not what the application does. Anything real gets a session and a permission
+per route before it gets users.
+
+### In the browser
+
+`ImageField` is the application's avatar field: the frame with the initials
+behind it, one button that says Upload or Change, Remove once there is
+something to remove. It **replaces before it deletes**, so a failed delete
+leaves a stray blob rather than a record pointing at nothing. `ImagePreview` is
+the load: it holds its size and shimmers while the image decodes, and falls
+back to initials when there is nothing or when the fetch fails — a private blob
+whose session has lapsed fails exactly like a missing one, and neither deserves
+a broken-image glyph.
+
+**With no store, nothing is hidden.** The picture is shown from an object URL
+and the line under the field says it went nowhere, rather than letting it look
+saved. Open **Components → Images** to see all of it.
+
+### Running them
+
+`npm run dev` does not run functions — Vite serves the SPA only, and answers
+`/api/*` with the same 501 a store-less deployment gives, so development
+behaves like the normal deployment. For the real thing:
+
+```bash
+npm install -g vercel
+vercel link
+vercel blob store add            # writes BLOB_READ_WRITE_TOKEN
+vercel env add BLOB_UPLOAD_SECRET
+vercel dev                        # SPA + functions together
+```
+
+`.env.example` documents both variables. `npm run typecheck` covers `api/` too,
+through `tsconfig.api.json` — the functions run on Node, not in the browser, and
+are deliberately not part of the SPA's build.
 
 ## Dashboard home — `src/dashboard/`
 
