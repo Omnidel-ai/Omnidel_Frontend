@@ -9,7 +9,7 @@ import { ChromeSection } from "./ChromeSection";
 import { StatesSection } from "./StatesSection";
 import { UploadsSection } from "./UploadsSection";
 
-const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Empty & loading", "Overlays", "Header", "Images"];
+const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Empty & loading", "Overlays", "Header", "Media & files"];
 
 /**
  * Component playground.
@@ -52,7 +52,7 @@ export function Playground() {
       {show("Empty & loading") && <StatesSection />}
       {show("Overlays") && <OverlaysSection />}
       {show("Header") && <ChromeSection />}
-      {show("Images") && <UploadsSection />}
+      {show("Media & files") && <UploadsSection />}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { list } from "@vercel/blob";
 import { PREFIXES, guard, json, ruleFor } from "../_lib/blob.js";
+import { typeForPath, kindOf } from "../_lib/media.js";
 
 /**
  * GET /api/blob/list?prefix=omnimart/store/ — what is in a prefix.
@@ -40,6 +41,7 @@ export default async function handler(request: Request): Promise<Response> {
         url: b.url,
         size: b.size,
         uploadedAt: b.uploadedAt,
+        kind: kindOf(typeForPath(b.pathname) ?? ""),
         // How the browser should read it back: a private key only opens
         // through the view proxy, a public one from its own URL.
         viewUrl:

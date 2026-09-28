@@ -1,0 +1,6 @@
+# Not part of a deployment: the reference copy of the acharya app, the SSR
+# smoke harness, and local build output.
+src/components/acharya-app
+scripts
+.smoke
+dist

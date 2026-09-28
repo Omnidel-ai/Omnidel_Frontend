@@ -1,69 +1,57 @@
+import { LIMITS, TYPE_KIND, kindOf, typesOfKind, type Kind } from "./media.js";
+
 /**
  * What every blob handler in this workspace shares.
  *
- * The rules are the application's, kept in one place because four handlers
- * enforce them and a rule that lives in four files is a rule that drifts:
- * which prefixes may be written, what may be uploaded, how big, and which of
- * the two stores — public or private — a prefix belongs to.
+ * Which prefixes may be written, what kinds of file each takes, how large, and
+ * which of the two stores a prefix belongs to. Five handlers enforce these,
+ * and a rule that lives in five files is a rule that drifts.
  *
- * Nothing here talks to a database or a session, because this workspace has
- * neither. What replaces them is `guard()`: see the note on it.
+ * The file-type vocabulary itself is in `media.ts`; this module is about
+ * **where** things go and **who** may put them there.
  */
 
-/** The image types every image handler accepts. Matches the app's avatar route. */
-export const IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-] as const;
-
-/** Documents the pipeline accepts alongside images, as in the app's /api/uploads. */
-export const FILE_TYPES = [
-  ...IMAGE_TYPES,
-  "application/pdf",
-  "text/csv",
-  "text/plain",
-  "text/markdown",
-] as const;
-
-/** 5 MB for an image, the app's avatar cap. */
-export const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
-/**
- * 10 MB for a file that travels through this function.
- *
- * A Vercel function body is capped around 4.5 MB, so anything above that has
- * to go browser → Blob directly with a token from `upload-token`. This cap is
- * for the multipart fallback and is deliberately below the client-upload cap.
- */
-export const FILE_MAX_BYTES = 10 * 1024 * 1024;
-/** 50 MB for a browser-direct upload, which never passes through a function. */
-export const CLIENT_MAX_BYTES = 50 * 1024 * 1024;
+export { LIMITS, kindOf } from "./media.js";
+export type { Kind } from "./media.js";
 
 /**
- * Where uploads may land, and which store each prefix uses.
+ * Where uploads may land.
  *
  * A prefix allowlist rather than a free path: a handler that accepts any
  * pathname lets one caller overwrite another's key, and "public" and "private"
- * stop meaning anything the moment a caller picks the prefix.
+ * stop meaning anything the moment the caller picks the prefix.
+ *
+ * Each prefix mirrors a place the application already stores something, and
+ * takes only the kinds that make sense there — a knowledge base has no use for
+ * a video, and a storefront has no use for a spreadsheet.
  */
 export const PREFIXES = {
   /** Acharya portraits — private, read back through the view proxy. */
-  "omnivarsity/acharya/": { access: "private" as const, types: IMAGE_TYPES },
+  "omnivarsity/acharya/": { access: "private", kinds: ["image"] },
   /** Kaarigar portraits — private, same treatment. */
-  "omnivarsity/kaarigar/": { access: "private" as const, types: IMAGE_TYPES },
-  /** Pipeline attachments — private, and not all of them are images. */
-  "omnimart/pipeline/": { access: "private" as const, types: FILE_TYPES },
-  /** Storefront images — public, served with a long cache and no session. */
-  "omnimart/store/": { access: "public" as const, types: IMAGE_TYPES },
-};
+  "omnivarsity/kaarigar/": { access: "private", kinds: ["image"] },
+  /** The acharya knowledge base — what an acharya has been given to read. */
+  "omnivarsity/kb/": { access: "private", kinds: ["document", "data"] },
+  /** Pipeline attachments — a lead's paperwork and site photos. */
+  "omnimart/pipeline/": { access: "private", kinds: ["image", "document", "data"] },
+  /** Storefront images — public, cached hard, embedded elsewhere. */
+  "omnimart/store/": { access: "public", kinds: ["image"] },
+  /** Task attachments on a board. */
+  "omnipulse/task/": { access: "private", kinds: ["image", "document", "data"] },
+  /** Studio media — the one prefix that takes video and audio. */
+  "omnistudio/media/": { access: "private", kinds: ["image", "video", "audio"] },
+  /** Brand assets — public, because they are used off this origin. */
+  "omnistudio/brand/": { access: "public", kinds: ["image", "document"] },
+} satisfies Record<string, { access: "public" | "private"; kinds: Kind[] }>;
 
 export type Prefix = keyof typeof PREFIXES;
 
 export interface PathRule {
   prefix: Prefix;
   access: "public" | "private";
-  types: readonly string[];
+  kinds: readonly Kind[];
+  /** The content types this prefix accepts, derived from its kinds. */
+  types: string[];
 }
 
 /**
@@ -77,34 +65,59 @@ export function ruleFor(pathname: string): PathRule | null {
   if (!/^[a-zA-Z0-9/._-]+$/.test(pathname)) return null;
   for (const [prefix, rule] of Object.entries(PREFIXES)) {
     if (pathname.startsWith(prefix) && pathname.length > prefix.length) {
-      return { prefix: prefix as Prefix, access: rule.access, types: rule.types };
+      return {
+        prefix: prefix as Prefix,
+        access: rule.access,
+        kinds: rule.kinds,
+        types: typesOfKind(rule.kinds),
+      };
     }
   }
   return null;
 }
 
-/** Extension → content type, for serving a blob we only know the key of. */
-const BY_EXT: Record<string, string> = {
-  jpg: "image/jpeg",
-  jpeg: "image/jpeg",
-  png: "image/png",
-  gif: "image/gif",
-  webp: "image/webp",
-  svg: "image/svg+xml",
-  pdf: "application/pdf",
-  csv: "text/csv",
-  txt: "text/plain",
-  md: "text/markdown",
-};
-
-export function contentTypeFor(pathname: string): string | null {
-  const ext = pathname.split(".").pop()?.toLowerCase();
-  return ext ? (BY_EXT[ext] ?? null) : null;
+/**
+ * Whether this prefix takes this type, and how much of it.
+ *
+ * Returns the reason when it does not, because "file type not allowed" without
+ * saying what is allowed sends the caller to the source to find out.
+ */
+export function checkType(
+  rule: PathRule,
+  contentType: string,
+  size: number,
+  route: "fn" | "client",
+): { ok: true; kind: Kind } | { ok: false; status: number; error: string; hint?: string } {
+  const kind = kindOf(contentType);
+  if (!kind || !TYPE_KIND[contentType]) {
+    return { ok: false, status: 415, error: `Type ${contentType || "(none)"} is not stored here.` };
+  }
+  if (!rule.kinds.includes(kind)) {
+    return {
+      ok: false,
+      status: 415,
+      error: `This path takes ${rule.kinds.join(", ")} — not ${kind}.`,
+    };
+  }
+  const cap = LIMITS[kind][route];
+  if (size > cap) {
+    return {
+      ok: false,
+      status: 413,
+      error: `Too large: ${mb(size)} against a ${mb(cap)} limit for ${kind} on this route.`,
+      hint:
+        route === "fn"
+          ? "Anything this size goes browser-direct with a token from /api/blob/upload-token."
+          : undefined,
+    };
+  }
+  return { ok: true, kind };
 }
 
-/** A content type without its parameters, lowercased — `image/png;charset` → `image/png`. */
-export function bareType(value: string | null | undefined): string {
-  return (value ?? "").split(";")[0]!.trim().toLowerCase();
+function mb(bytes: number): string {
+  return bytes >= 1024 * 1024
+    ? `${Math.round((bytes / 1024 / 1024) * 10) / 10} MB`
+    : `${Math.round(bytes / 1024)} KB`;
 }
 
 export function json(body: unknown, status = 200, headers: Record<string, string> = {}): Response {
@@ -112,6 +125,11 @@ export function json(body: unknown, status = 200, headers: Record<string, string
     status,
     headers: { "Content-Type": "application/json", ...headers },
   });
+}
+
+/** A content type without its parameters, lowercased — `image/png;charset` → `image/png`. */
+export function bareType(value: string | null | undefined): string {
+  return (value ?? "").split(";")[0]!.trim().toLowerCase();
 }
 
 /** Whether a Blob store is wired to this deployment at all. */
@@ -168,7 +186,22 @@ export function guard(request: Request): Response | null {
 export function publicCors(): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Range",
+    // Without this a cross-origin player cannot see the range headers it needs
+    // to seek, and falls back to downloading the whole file.
+    "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges",
   };
+}
+
+/** The key inside the store, from a full blob URL. */
+export function pathnameOf(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.endsWith(".blob.vercel-storage.com")) return null;
+    return decodeURIComponent(parsed.pathname.replace(/^\//, ""));
+  } catch {
+    return null;
+  }
 }
