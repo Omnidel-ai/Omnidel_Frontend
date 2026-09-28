@@ -1,3 +1,5 @@
+import type { HomeData } from "../home/types";
+
 /**
  * Shapes of `demo.json`.
  *
@@ -245,6 +247,8 @@ export interface DemoRow {
 export interface DemoData {
   brand: DemoBrand;
   dashboard: DemoDashboard;
+  /** The work overview the shell opens on — see `src/home`. */
+  home: HomeData;
   user: DemoUser;
   nav: DemoNavItem[];
   status: DemoStatusItem[];

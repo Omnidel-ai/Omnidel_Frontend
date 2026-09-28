@@ -16,6 +16,7 @@ export * from "./Modal";
 export * from "./ConfirmDialog";
 export * from "./Toast";
 export * from "./PageHeader";
+export * from "./Panel";
 export * from "./NoAccessScreen";
 export * from "./Avatar";
 export * from "./Badge";

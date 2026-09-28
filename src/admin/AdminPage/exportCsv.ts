@@ -1,4 +1,4 @@
-import type { DemoColumn, DemoRow } from "../../data/types";
+import type { ColumnDescriptor, DescriptorRow } from "../../components";
 
 /** RFC 4180 quoting: wrap in quotes and double any quote inside. */
 function cell(value: unknown): string {
@@ -7,7 +7,7 @@ function cell(value: unknown): string {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-export function toCsv(columns: DemoColumn[], rows: DemoRow[]): string {
+export function toCsv(columns: ColumnDescriptor[], rows: DescriptorRow[]): string {
   const head = columns.map((c) => cell(c.header)).join(",");
   const body = rows.map((r) => columns.map((c) => cell(r[c.key])).join(",")).join("\n");
   return `${head}\n${body}\n`;
@@ -20,7 +20,7 @@ export function toCsv(columns: DemoColumn[], rows: DemoRow[]): string {
  * carries exactly the columns the table shows, so what lands in the file is
  * what the reader was looking at.
  */
-export function downloadCsv(filename: string, columns: DemoColumn[], rows: DemoRow[]) {
+export function downloadCsv(filename: string, columns: ColumnDescriptor[], rows: DescriptorRow[]) {
   if (typeof document === "undefined") return;
   // The BOM is what makes Excel read UTF-8 rather than the system codepage —
   // without it the ₹ and the Bengali names arrive mangled.

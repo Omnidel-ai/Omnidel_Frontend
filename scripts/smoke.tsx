@@ -15,14 +15,24 @@ import { Playground } from "../src/playground/Playground";
 import { AdminPage, SettingsPage } from "../src/admin";
 import { DashboardHome } from "../src/dashboard";
 import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "../src/omnipulse";
+import { MissionsPage } from "../src/omnimart";
+import { AcharyaDashboard } from "../src/omnivarsity";
+import { ListPage } from "../src/lists";
+import { WorkHome } from "../src/home";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
+import omnimart from "../src/data/omnimart.json";
+import omnivarsity from "../src/data/omnivarsity.json";
 import type { DemoData, DemoMaster } from "../src/data/types";
 import type { OmniPulseData } from "../src/omnipulse";
+import type { OmniMartData } from "../src/omnimart";
+import type { OmniVarsityData } from "../src/omnivarsity";
 
 const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
+const MART = omnimart as OmniMartData;
+const VARSITY = omnivarsity as OmniVarsityData;
 
 interface Screen {
   name: string;
@@ -46,6 +56,7 @@ const screens: Screen[] = [
       ["admin group (sales)", "Sales &amp; Pipeline"],
       ["admin group (people)", "People &amp; Access"],
       ["a page inside a group", "Pipeline Stages"],
+      ["a pipeline stage in the nav", "Site Visit Scheduled"],
     ],
   },
   {
@@ -155,6 +166,75 @@ const screens: Screen[] = [
       ["members", PULSE.boards[0].members[0]],
     ],
   },
+  {
+    name: "home",
+    html: renderToString(<WorkHome data={DATA.home} />),
+    markers: [
+      ["title", DATA.home.title],
+      ["eyebrow", "Overview"],
+      ["a stat tile", DATA.home.stats[0].label],
+      ["assigned to me", "Tasks Assigned to Me"],
+      ["assigned by me", "Tasks Assigned by Me"],
+      ["mentions", "Mentions"],
+      ["announcements", "Announcements"],
+      ["tasks by status", "Tasks by Status"],
+      ["tasks by mission", "Tasks by Mission"],
+      ["a row", DATA.home.assignedToMe.open[0].text],
+      ["donut legend", "donut__legend"],
+    ],
+  },
+  {
+    name: "omnimart/missions",
+    html: renderToString(<MissionsPage data={MART.missions} />),
+    markers: [
+      // The subtitle carries an apostrophe, which renders escaped.
+      ["subtitle", "Where each mission stands"],
+      ["a mission", MART.missions.rows[0].name],
+      ["stream eyebrow", MART.missions.rows[0].stream],
+      ["progress track", "mart-mission__track"],
+      ["pace sentence", "Doing"],
+    ],
+  },
+  {
+    name: "omnivarsity/dashboard",
+    html: renderToString(<AcharyaDashboard data={VARSITY.dashboard} />),
+    markers: [
+      ["crumb", VARSITY.dashboard.label],
+      ["sections", VARSITY.dashboard.tabs[1]],
+      ["range", VARSITY.dashboard.ranges[2]],
+      ["a washed tile", "stat-tile--wash"],
+      ["a counter", VARSITY.dashboard.tiles[0].value],
+      ["an accented panel", "panel--accent"],
+      ["a recent row", VARSITY.dashboard.panels[1].items[0].text],
+      ["an empty panel", VARSITY.dashboard.panels[0].empty],
+    ],
+  },
+  // Every work list in the workspace, through the one component — OmniMart's
+  // four and OmniVarsity's two — with the pieces only some of them declare
+  // asserted where they are declared.
+  ...[...MART.lists, ...VARSITY.lists].map((l) => ({
+    name: `${l.module.toLowerCase()}/${l.key}`,
+    html: renderToString(<ListPage list={l} />),
+    markers: (l.tabs?.[0]?.kind === "overview"
+      ? [
+          // Store opens on its KPI tiles, so that is what SSR renders.
+          ["views in the header", l.tabs![1].label],
+          ["overview title", l.overview!.title],
+          ["a store tile", l.overview!.stores[0].name],
+          ["tile track", "mart-kpi__track"],
+        ]
+      : [
+          ["views in the header", l.tabs?.[0].label ?? l.label],
+          ["table header", "table-header"],
+          ["first column", l.columns[0].header],
+          ["a data row", String(l.rows[0][l.columns[1].key] ?? l.rows[0].id)],
+          // Placeholders carry an ampersand, which renders escaped.
+          ["search", l.searchPlaceholder.replace(/&/g, "&amp;")],
+          ...(l.exportable ? [["export", "Export CSV"]] : []),
+          ...(l.tabs && l.tabs.length > 1 ? [["tabs", l.tabs[1].label]] : []),
+          ...(l.rowActions?.length ? [["row action", l.rowActions[0]]] : []),
+        ]) as Array<[string, string]>,
+  })),
   ...DATA.settings.map((st) => ({
     name: `admin/${st.key}`,
     html: renderToString(<SettingsPage settings={st} />),
