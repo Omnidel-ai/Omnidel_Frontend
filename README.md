@@ -9,6 +9,42 @@ It is developed in the main OmniDel repository as a standalone folder
 (`frontend/`) that the Next.js application does not import and was not modified
 to accommodate, and published here so it can be worked on on its own.
 
+## What is in here
+
+**40 screens**, in the application's own order, all on demo data:
+
+| | Screens | Built from |
+|---|---|---|
+| **Home** | Your work so far | `src/home/` |
+| **OmniMart** | Pipeline · Operations · Missions · Schedule & Sites · Store | `src/omnimart/` + `src/lists/` |
+| **OmniPulse** | Teams · Projects · Board · Review queue | `src/omnipulse/` |
+| **OmniVarsity** | Acharyas · Acharya Dashboard · Kaarigars | `src/omnivarsity/` + `src/lists/` |
+| **Admin** | 23 masters + Business Details + the dashboard | `src/admin/` |
+| **Components** | the playground — every shared component in every state | `src/playground/` |
+
+**OmniMart** is the sales and delivery side. Four of its five screens are work
+lists and share **one component**, `ListPage`: views in the page header, a
+search-with-FILTERS strip beneath, Export CSV beside the add button, and the
+row actions the application offers — View · Next stage · Archive. Store opens
+on a grid of KPI tiles instead of a table, and Missions is its own screen,
+because a promise with a pace is not a row. Money is written the way the app
+writes it: **25.8L, 29K** — lakh and thousand, not million.
+
+**OmniVarsity** is the teaching side — the mentors and the kaarigar network.
+Acharyas and Kaarigars are two more descriptors handed to the same `ListPage`,
+so nothing in `src/omnivarsity/` renders a table; they needed one new cell
+type, `person` — a portrait, the name underlined as the link to the record,
+and what they are in the muted line under it. The **Acharya Dashboard** is the
+one screen with a shape of its own: six counters over four activity panels,
+with the period (1D · 7D · 30D) beside the sections (Overview · Chats · Rating
+· Quiz). Its counters are the shared `StatTile` in a washed, borderless dress
+and its panels the shared `Panel` with a coloured left edge — two variants on
+components that already existed, not two new components.
+
+That is the whole arrangement in one line: **one layout per family, many
+descriptors.** `AdminPage` for reference data, `ListPage` for work in flight,
+`SettingsPage` for a single record. Adding a screen is usually adding JSON.
+
 ```
 OmniDel/                    ← existing Next.js app, untouched
 ├── src/ app/ …
@@ -52,14 +88,18 @@ Existing Next.js app → inspect only → current UI / design
 5. Generic admin UI    src/admin/           ✅
    Dashboard home      src/dashboard/       ✅
    Empty & loading     EmptyState, Skeleton ✅
-6. Testing & polish    typecheck · lint · build · smoke · playground
+6. Product screens     src/home/            ✅  Home
+                       src/omnipulse/       ✅  teams, projects, board, review
+                       src/omnimart/        ✅  pipeline → store
+                       src/omnivarsity/     ✅  acharyas, dashboard, kaarigars
+7. Testing & polish    typecheck · lint · build · smoke · playground
           ↓
        STOP — backend split lands first
           ↓
      then: connect real APIs
 ```
 
-Step 6's automated half is done and green. The visual half is the playground
+Step 7's automated half is done and green. The visual half is the playground
 and the shell demo, which need a browser — see [Known limitations](#known-limitations).
 
 ---
@@ -78,7 +118,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 36 screens — shell, playground, dashboard, the four OmniPulse screens and all 24 admin screens — and asserts the markup, including each descriptor parameter on the masters that declare it |
+| `npm run smoke` | Server-renders all 40 screens — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 24 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -87,7 +127,17 @@ fall back to Georgia / system sans / a mono face and nothing else changes.
 
 ### What you can do in the running app
 
-* **Dashboard** — the landing screen: stat tiles, a 12-week bar chart with a
+* **Home** — the screen the app opens on: four counts, the work assigned to and
+  by you with Open / Done, mentions, announcements, and the two rings.
+* **OmniMart** — walk Pipeline's stages from the sidebar, switch views in the
+  page header, export a view to CSV, open Store on its KPI tiles, and read a
+  mission's pace as a sentence rather than a percentage.
+* **OmniPulse** — teams → projects → a board in card, table or calendar view,
+  with the task sheet and the review queue.
+* **OmniVarsity** — the acharyas with their type and description, the Acharya
+  Dashboard across 1D / 7D / 30D, and the kaarigar network with its Requests
+  tab.
+* **Dashboard** — stat tiles, a 12-week bar chart with a
   range filter and a table view, pipeline-by-stage bars, a status breakdown and
   an activity feed. **Reload** replays the loading state so the skeletons show.
 * **About this demo** — what the workspace is, with the masters one click away.
@@ -502,13 +552,13 @@ approach keeps the two identical and the dependency list at two packages.
 
 ## Known limitations
 
-* **Not verified in a browser by the author.** Typecheck, lint, production build
-  and the SSR smoke render all pass, but no screenshot was taken — browser
-  automation was unavailable in the sessions that built it. Open the playground
-  and the shell before trusting the pixels.
 * **No automated tests beyond the smoke render.** No Vitest/RTL setup yet;
-  `npm run smoke` renders all seven screens and checks the markup. Interaction
+  `npm run smoke` renders all 40 screens and checks the markup. Interaction
   tests are the obvious next addition.
+* **The product screens were compared against the running application by eye**,
+  in a browser, screen by screen — they were not diffed pixel by pixel, and the
+  demo data behind them is invented. The shape, the wording and the controls are
+  the application's; the numbers are not.
 * **The assistant is canned.** Keyword-matched replies from `demo.json`, with a
   550ms delay so the pending state is visible. No model, no streaming, no tools.
 * **The sidebar has no permissions.** The app hides rows by permission and module
