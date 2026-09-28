@@ -33,7 +33,9 @@ export function HomePage({ data, onNavigate }: { data: DemoData; onNavigate: (hr
         its own dev server. Everything on screen is rendered from{" "}
         <code style={{ fontFamily: "var(--mono)", fontSize: 12 }}>src/data/demo.json</code> — the
         navigation, the person in the topbar, the notifications, the assistant&apos;s answers and
-        every admin table below. There is no API and no database.
+        every admin table below. There is no application API and no database — the only server
+        code is the file handlers under <code style={{ fontFamily: "var(--mono)", fontSize: 12 }}>api/</code>,
+        and those refuse unless a Blob store is configured.
       </p>
 
       <div className="pg-grid-2" style={{ marginTop: 22 }}>

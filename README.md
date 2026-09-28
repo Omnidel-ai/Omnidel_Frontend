@@ -2,7 +2,7 @@
 
 An **isolated** frontend workspace: shared UI components, the application
 shell, Home, the complete admin area, OmniPulse, OmniMart and OmniVarsity —
-all running on demo data, with a set of Vercel Functions for Vercel Blob:
+every screen on demo data — plus a set of Vercel Functions for Vercel Blob:
 images, video, audio and documents, public and private.
 
 It is developed in the main OmniDel repository as a standalone folder
@@ -700,8 +700,10 @@ approach keeps the two identical and the dependency list at two packages.
 
 ## Assumptions
 
-1. **Demo data only.** No API, no database, no auth, no router. Writes are in
-   memory and reset on reload.
+1. **Demo data only.** No application API, no database, no auth, no router.
+   Writes are in memory and reset on reload. The exception is deliberate and
+   narrow: the Vercel Functions in `api/` put files in a Blob store, and with
+   no store configured they refuse and the fields say so.
 2. **The separation plan's `common/components/` grouping is the target**, so the
    folders here mirror it and the later move is a copy, not a re-think.
 3. **Presentation only.** Where the app's version reads context (the module-nav
