@@ -22,7 +22,7 @@ export interface SidebarProps {
   mobileOpen?: boolean;
   onMobileOpenChange?: (open: boolean) => void;
   /** Extra rows pinned to the bottom, above the collapse control. */
-  footer?: { label: string; icon?: string; onClick: () => void; dot?: boolean }[];
+  footer?: { label: string; icon?: string; onClick: () => void; dot?: boolean; tone?: "crit" }[];
 }
 
 /**
@@ -87,7 +87,10 @@ export function Sidebar({
             : {
                 position: "sticky",
                 top: 0,
-                height: "100vh",
+                // The parent's height, not the viewport's: a bar above the
+                // shell (the console's "Viewing…" line) must not push the
+                // footer off the bottom.
+                height: "100%",
                 flexShrink: 0,
                 transition: `width ${WIDTH_MS}ms ${EASE_OUT}, min-width ${WIDTH_MS}ms ${EASE_OUT}`,
                 zIndex: 20,
@@ -200,6 +203,7 @@ export function Sidebar({
               label={f.label}
               icon={f.icon}
               dot={f.dot}
+              tone={f.tone}
               collapsed={!showLabels}
               onClick={f.onClick}
             />
@@ -594,6 +598,7 @@ function BottomRow({
   onClick,
   dot,
   flipIcon,
+  tone,
 }: {
   label: string;
   icon?: string;
@@ -601,6 +606,7 @@ function BottomRow({
   onClick: () => void;
   dot?: boolean;
   flipIcon?: boolean;
+  tone?: "crit";
 }) {
   const [hovered, setHovered] = useState(false);
   return (
@@ -622,7 +628,7 @@ function BottomRow({
           width: "100%",
           border: "none",
           background: "transparent",
-          color: "var(--ink-mute)",
+          color: tone === "crit" ? "var(--crit)" : "var(--ink-mute)",
           cursor: "pointer",
           borderRadius: 0,
           fontSize: 12,

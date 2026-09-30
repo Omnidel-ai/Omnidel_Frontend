@@ -8,10 +8,12 @@ import type { DemoNotification, DemoUser } from "../../data/types";
 
 export interface TopbarProps {
   user: DemoUser;
-  search: string;
-  onSearchChange: (value: string) => void;
+  /** Omit `onSearchChange` for an app with no global search. */
+  search?: string;
+  onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
-  notifications: DemoNotification[];
+  /** Omit for an app with no notifications; the bell is not drawn. */
+  notifications?: DemoNotification[];
   onNotificationRead?: (id: string) => void;
   onNotificationsReadAll?: () => void;
   onLanguageChange?: (code: string) => void;
@@ -31,7 +33,7 @@ export interface TopbarProps {
  */
 export function Topbar({
   user,
-  search,
+  search = "",
   onSearchChange,
   searchPlaceholder = "Search…",
   notifications,
@@ -95,17 +97,19 @@ export function Topbar({
         </button>
       )}
 
-      <div style={{ flex: "1 1 auto", minWidth: 0, maxWidth: 380 }}>
-        <SearchBar
-          value={search}
-          onChange={onSearchChange}
-          placeholder={searchPlaceholder}
-          shortcut={isMobile ? undefined : "Ctrl K"}
-          bindShortcut
-          width="100%"
-          compact={isMobile}
-        />
-      </div>
+      {onSearchChange && (
+        <div style={{ flex: "1 1 auto", minWidth: 0, maxWidth: 380 }}>
+          <SearchBar
+            value={search}
+            onChange={onSearchChange}
+            placeholder={searchPlaceholder}
+            shortcut={isMobile ? undefined : "Ctrl K"}
+            bindShortcut
+            width="100%"
+            compact={isMobile}
+          />
+        </div>
+      )}
 
       <div
         style={{
@@ -117,11 +121,13 @@ export function Topbar({
         }}
       >
         {extra}
-        <NotificationBell
-          items={notifications}
-          onRead={onNotificationRead}
-          onReadAll={onNotificationsReadAll}
-        />
+        {notifications && (
+          <NotificationBell
+            items={notifications}
+            onRead={onNotificationRead}
+            onReadAll={onNotificationsReadAll}
+          />
+        )}
         <Profile
           user={user}
           onLanguageChange={onLanguageChange}

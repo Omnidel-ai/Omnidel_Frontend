@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Toaster } from "./components";
 import { ShellLayout } from "./shell";
-import { AdminPage, InstancePage, InstancesPage, SettingsPage, StaffRolesPage } from "./admin";
-import type { InstancesData, StaffRolesData } from "./admin";
+import { AdminPage, SettingsPage } from "./admin";
 import { Playground } from "./playground/Playground";
 import { DashboardHome } from "./dashboard";
 import { WorkHome } from "./home";
@@ -17,8 +16,6 @@ import masters from "./data/masters.json";
 import omnipulse from "./data/omnipulse.json";
 import omnimart from "./data/omnimart.json";
 import omnivarsity from "./data/omnivarsity.json";
-import staffRoles from "./data/staffRoles.json";
-import instances from "./data/instances.json";
 import type { DemoData, DemoMaster } from "./data/types";
 import type { OmniPulseData } from "./omnipulse";
 import type { OmniMartData } from "./omnimart";
@@ -32,8 +29,6 @@ const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
 const MART = omnimart as OmniMartData;
 const VARSITY = omnivarsity as OmniVarsityData;
-const STAFF_ROLES = staffRoles as StaffRolesData;
-const INSTANCES = instances as InstancesData;
 
 /** /<module>/<key> → that module's list with that key. */
 function findList<T extends { key: string }>(href: string, prefix: string, lists: T[]): T | undefined {
@@ -60,8 +55,6 @@ export function App() {
   // board is open. In the app these are route params.
   const [teamId, setTeamId] = useState("");
   const [boardId, setBoardId] = useState<string | null>(null);
-  // The console's open instance; a route param in the platform app.
-  const [instanceId, setInstanceId] = useState<string | null>(null);
 
   const key = adminKey(activeHref);
   const master = key ? DATA.masters.find((m) => m.key === key) : undefined;
@@ -78,7 +71,6 @@ export function App() {
         onNavigate={(href) => {
           setActiveHref(href);
           setBoardId(null);
-          setInstanceId(null);
           if (!href.startsWith("/omnipulse")) setTeamId("");
           setSearch("");
         }}
@@ -94,19 +86,6 @@ export function App() {
         ) : activeHref === "/admin/dashboard" ? (
           // Admin's own dashboard is the dashboard — one component, two routes.
           <DashboardHome data={DATA} onNavigate={setActiveHref} />
-        ) : activeHref === "/admin/instances" ? (
-          instanceId ? (
-            <InstancePage
-              key={instanceId}
-              instance={INSTANCES.rows.find((r) => r.id === instanceId) ?? INSTANCES.rows[0]}
-              data={INSTANCES}
-              onBack={() => setInstanceId(null)}
-            />
-          ) : (
-            <InstancesPage data={INSTANCES} onOpen={(r) => setInstanceId(r.id)} />
-          )
-        ) : activeHref === "/admin/staff-roles" ? (
-          <StaffRolesPage data={STAFF_ROLES} />
         ) : list ? (
           <ListPage key={list.key} list={list} externalSearch={search} />
         ) : activeHref === "/omnimart/missions" ? (
