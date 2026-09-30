@@ -64,6 +64,25 @@ const PATHS: Record<string, ReactElement> = {
       <path d="M9.2 12.2l2 2 3.6-3.8" />
     </>
   ),
+  building: (
+    <>
+      <rect x="4" y="3" width="16" height="18" rx="1" />
+      <path d="M9 21v-4h6v4M8 7h2M14 7h2M8 11h2M14 11h2" />
+    </>
+  ),
+  users: (
+    <>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+      <path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.2a6.5 6.5 0 0 1 3.5 5.8" />
+    </>
+  ),
+  logout: (
+    <>
+      <path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" />
+      <path d="M10 17l-5-5 5-5M5 12h11" />
+    </>
+  ),
   dot: <circle cx="12" cy="12" r="4" />,
 };
 

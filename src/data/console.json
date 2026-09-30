@@ -1,0 +1,54 @@
+{
+  "brand": { "name": "OmniDel Console", "badge": "OD", "environment": "platform" },
+  "user": {
+    "name": "Shubham Gupta",
+    "role": "platform user",
+    "phone": "+91 98300 00001",
+    "teams": [{ "id": "p1", "name": "OmniDel staff" }],
+    "languages": [{ "code": "en", "label": "English" }],
+    "activeLanguage": "en"
+  },
+  "nav": [
+    { "label": "Instances", "href": "/console/instances", "icon": "building" },
+    { "label": "Staff roles", "href": "/console/staff-roles", "icon": "users" }
+  ],
+  "instances": [
+    {
+      "id": "other",
+      "name": "other",
+      "prefix": "other",
+      "status": "Closing",
+      "seats": "2 / 100",
+      "modules": ["Inventory", "OmniMart", "OmniPulse"],
+      "created": "25 Sep 2026",
+      "createdLong": "25 September 2026",
+      "lifecycle": [
+        { "label": "Grace ends", "value": "9 Oct 2026" },
+        { "label": "Suspended", "value": "25 Sep 2026" },
+        { "label": "Export window ends", "value": "25 Oct 2026" }
+      ]
+    },
+    { "id": "demo", "name": "demo", "prefix": "demo", "status": "Active", "seats": "2 / 100", "modules": [], "created": "25 Sep 2026", "createdLong": "25 September 2026" },
+    { "id": "karmyog", "name": "karmyog", "prefix": "karmyog", "status": "Active", "seats": "1 / 100", "modules": [], "created": "23 Sep 2026", "createdLong": "23 September 2026" },
+    { "id": "tgr5wnqetb", "name": "tgr5wnqetb", "prefix": "tgr5wnqetb", "status": "Trial", "seats": "0 / ∞", "modules": [], "created": "22 Sep 2026", "createdLong": "22 September 2026" },
+    { "id": "tgr5wnqeta", "name": "tgr5wnqeta", "prefix": "tgr5wnqeta", "status": "Trial", "seats": "0 / ∞", "modules": [], "created": "22 Sep 2026", "createdLong": "22 September 2026" },
+    { "id": "tivib395ob", "name": "tivib395ob", "prefix": "tivib395ob", "status": "Trial", "seats": "0 / ∞", "modules": [], "created": "21 Sep 2026", "createdLong": "21 September 2026" }
+  ],
+  "roles": ["Support", "Billing", "Admin"],
+  "permissions": [
+    { "label": "See customers", "grants": ["Support", "Billing", "Admin"] },
+    { "label": "See invoices", "grants": ["Support", "Billing", "Admin"] },
+    { "label": "Record a payment", "grants": ["Billing", "Admin"] },
+    { "label": "Suspend a customer, or mark them past due", "grants": ["Billing", "Admin"] },
+    { "label": "Reactivate a customer", "grants": ["Billing", "Admin"] },
+    { "label": "Begin closing a customer", "grants": ["Admin"] },
+    { "label": "Archive a customer (starts the deletion countdown)", "grants": ["Admin"] },
+    { "label": "Turn a module on", "grants": ["Admin"] },
+    { "label": "Turn a module off", "grants": ["Admin"] },
+    { "label": "Invite people to a customer's team", "grants": ["Admin"] },
+    { "label": "Give a seat", "grants": ["Admin"] },
+    { "label": "Take a seat away", "grants": ["Admin"] },
+    { "label": "Open a support session", "grants": ["Support", "Admin"] },
+    { "label": "Close a support session", "grants": ["Support", "Admin"] }
+  ]
+}
