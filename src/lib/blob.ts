@@ -220,6 +220,14 @@ export interface UploadOptions {
   secret?: string;
   /** Progress, 0–1, on the browser-direct route. */
   onProgress?: (fraction: number) => void;
+  /**
+   * Cancels the upload.
+   *
+   * Passed to Blob's own client, which stops the parts in flight, and to the
+   * multipart fallback's fetch. Without it a cancelled 200 MB upload keeps
+   * paying for itself in the background.
+   */
+  signal?: AbortSignal;
 }
 
 /**
@@ -277,6 +285,7 @@ export async function uploadFile(file: File, options: UploadOptions): Promise<St
       // still enforces the type on the bytes, so a lie only buys a lower one.
       clientPayload: type,
       multipart: file.size > 5 * 1024 * 1024,
+      ...(options.signal ? { abortSignal: options.signal } : {}),
       ...(options.onProgress
         ? {
             onUploadProgress: (p: { percentage: number }) =>
@@ -304,9 +313,12 @@ export async function uploadFile(file: File, options: UploadOptions): Promise<St
     const form = new FormData();
     form.set("file", file);
     form.set("pathname", pathname);
-    const res = await fetch("/api/blob/upload", { method: "POST", body: form, headers }).catch(
-      () => null,
-    );
+    const res = await fetch("/api/blob/upload", {
+      method: "POST",
+      body: form,
+      headers,
+      ...(options.signal ? { signal: options.signal } : {}),
+    }).catch(() => null);
     if (res && res.ok) {
       const data = (await res.json()) as { url: string; pathname: string };
       return {

@@ -11,7 +11,7 @@ to accommodate, and published here so it can be worked on on its own.
 
 ## What is in here
 
-**40 screens**, in the application's own order, all on demo data:
+**41 screens**, in the application's own order, all on demo data:
 
 | | Screens | Built from |
 |---|---|---|
@@ -19,7 +19,7 @@ to accommodate, and published here so it can be worked on on its own.
 | **OmniMart** | Pipeline · Operations · Missions · Schedule & Sites · Store | `src/omnimart/` + `src/lists/` |
 | **OmniPulse** | Teams · Projects · Board · Review queue | `src/omnipulse/` |
 | **OmniVarsity** | Acharyas · Acharya Dashboard · Kaarigars | `src/omnivarsity/` + `src/lists/` |
-| **Admin** | 23 masters + Business Details + the dashboard | `src/admin/` |
+| **Admin** | 24 masters + Business Details + the dashboard | `src/admin/` |
 | **Components** | the playground — every shared component in every state | `src/playground/` |
 | **Media & files** | five Vercel Functions for Blob — images, video, audio, documents — and the fields that use them | `api/` + `src/lib/blob.ts` |
 
@@ -120,7 +120,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 40 screens — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 24 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
+| `npm run smoke` | Server-renders all 41 screens — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 25 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -308,6 +308,60 @@ drop needs `@dnd-kit`, and a workspace that exists to show the design should
 not take a dependency to fake one. The calendar likewise plots due dates but
 does not reschedule by dragging.
 
+**Projects** can be created and edited: `+ New Project` and a row's **Project
+settings** open the same sheet, because a project's fields do not change once
+it has an id — only the title and what the save is called. The sheet reuses the
+admin forms' `FieldControl`, `validate` and `coerce` rather than hand-rolling
+inputs: a project is not reference data and does not belong in a master
+descriptor, but the controls are the same controls, and a second
+implementation of "required field, error under it" is a second implementation
+that drifts. Archive and restore are on the same menu.
+
+A team's **members** live in Admin rather than here, under Teams → a row's
+**Members** panel: who is in it, manager or member, and when they joined. The
+team itself carries the description and the colour the application shows
+wherever it is named.
+
+## The review decision — `src/omnipulse/ScoreDecision.tsx`
+
+An acharya scores a submission; a manager decides whether that score stands.
+That one choice is what the review screen exists for, so it is one row — the
+acharya's score, and two buttons — rather than a form:
+
+```
+Acharya score  9.2/10   [ Use Acharya ]  [ Enter my score ]  [ 8.5 ] / 10
+Feedback  optional                                                0/200
+```
+
+What the arrangement says is that **the acharya's score is the default and
+overriding it is a deliberate act**. The reviewer reads the evidence, agrees or
+does not, and the shorter path is agreement. Feedback is optional either way,
+because someone who agrees usually has nothing to add and should not have to
+type something to get past the form. Choosing "Enter my score" reveals the
+input beside it; nothing else moves.
+
+Scores are stored 0–1 as the application stores them and shown out of ten. A
+decision writes `finalScore` **beside** `acharyaScore` rather than over it —
+what the acharya said and what the reviewer decided are two facts, and a screen
+that keeps only the second cannot show that anyone disagreed. The queue has a
+column for each.
+
+A **simple task** is one the acharya never scored. There is nothing to accept,
+so the choice collapses and the input is there from the start.
+
+## Default tasks — `admin/default-tasks`
+
+The tasks the system assigns on its own, and the switch that decides whether a
+score ever reaches a person: **AI score is final**. On, the acharya's score
+stands and the task never enters the review queue; off, a manager accepts it or
+enters their own — the screen above. Each row carries its kind, its acharya,
+its cadence and, behind the row's **Steps** panel, what it actually asks for:
+the step, the evidence it wants (photo, text, number, checklist) and whether it
+is required.
+
+It is a descriptor, not a screen — `AdminPage` renders it, the way it renders
+the other 23.
+
 ## OmniMart — `src/omnimart/`
 
 Five screens in the application's order — **Pipeline · Operations · Missions ·
@@ -448,12 +502,45 @@ route before it gets users.
 
 | Component | For |
 |---|---|
+| `Dropzone` | drag files in, or click — with the policy written on it |
+| `UploadList` | what is in flight: progress, **cancel**, **retry**, the reason it failed |
+| `UploadField` | the three together: dropzone, queue, and what has landed |
+| `PrivateImage` | a stored **id**, rendered through a `resolveUrl` prop |
 | `ImageField` | one picture on a record — the application's avatar field |
 | `ImagePreview` | showing one, with its loading, empty and failed states |
 | `FileField` | attachments: many files, any kind the prefix allows |
 | `FileRow` | one attached file — glyph, name, size, download, remove |
 | `MediaPlayer` | video and audio, played in place |
 | `FileKindIcon` | one glyph per kind |
+
+### The client seam — `src/lib/upload/`
+
+The controls do not import `uploadFile`. They take an **`UploadClient`** from
+context, and there are two:
+
+```
+createBlobUploadClient()   the real one — Vercel Blob, through api/
+createMockUploadClient()   a timer: slow progress, cancel, a file that fails
+```
+
+Without that seam there is no way to see the states that matter — a slow
+upload, a cancel that lands mid-flight, a failure worth retrying — without a
+Blob store, a large file and a throttled connection. With it, the components
+under test are the components that ship; only what is underneath differs. Name
+a file with `fail` in it against the mock and the failure path plays out,
+retry and all.
+
+**Cancel is real, not cosmetic.** `useUploadQueue` holds an `AbortController`
+per file, passes its signal to Blob's own client and to the multipart fetch,
+and drops the parts in flight — a cancelled 200 MB upload stops paying for
+itself. It holds the original `File` too, which is what retry re-sends.
+
+`PrivateImage` takes a `fileId` and a `resolveUrl`, never a `src`: what a
+record stores and what a browser can load are different things for a private
+file, and conflating them is how a private image ends up rendered as a broken
+one. The resolver is a prop so the same picture can come through the view proxy
+in the app, a mock in the playground, or a signed URL if the store ever hands
+those out.
 
 `ImageField` **replaces before it deletes**, so a failed delete leaves a stray
 blob rather than a record pointing at nothing. `FileField` offers only the types
@@ -717,7 +804,7 @@ approach keeps the two identical and the dependency list at two packages.
 ## Known limitations
 
 * **No automated tests beyond the smoke render.** No Vitest/RTL setup yet;
-  `npm run smoke` renders all 40 screens and checks the markup. Interaction
+  `npm run smoke` renders all 41 screens and checks the markup. Interaction
   tests are the obvious next addition.
 * **The product screens were compared against the running application by eye**,
   in a browser, screen by screen — they were not diffed pixel by pixel, and the

@@ -20,6 +20,7 @@ export * from "./Panel";
 export * from "./NoAccessScreen";
 export * from "./Avatar";
 export * from "./ImageField";
+export * from "./Upload";
 export * from "./Badge";
 export * from "./Menu";
 export * from "./Disclosure";
