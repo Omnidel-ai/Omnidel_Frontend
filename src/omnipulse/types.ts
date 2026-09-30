@@ -73,7 +73,19 @@ export interface OmniPulseSubmission {
   seq: number;
   task: string;
   karigar: string;
-  score: number;
+  /**
+   * What the acharya gave it, 0–1 — the application's own scale, shown out of
+   * ten. Null when the acharya did not score this kind of task at all.
+   */
+  acharyaScore: number | null;
+  /** A task the acharya never scores, so a reviewer must give it one. */
+  isSimpleTask: boolean;
+  /** The score that stands once a reviewer has decided. */
+  finalScore: number | null;
+  /** The reviewer's note to the karigar. */
+  feedback: string;
+  /** Who decided. Empty until someone has. */
+  decidedBy: string;
   project: string;
   team: string;
   date: string;
@@ -88,6 +100,8 @@ export interface OmniPulseReviewData {
   emptyMessage: string;
   emptyHint: string;
   tabs: { label: string; field: string; value: string }[];
+  /** How long a reviewer's note may be. The app caps it at 200. */
+  feedbackMax?: number;
   rows: OmniPulseSubmission[];
 }
 

@@ -111,6 +111,7 @@ export function App() {
             <ProjectsPage
               data={PULSE.projects}
               teams={PULSE.teams.rows}
+              people={PULSE.people}
               teamId={teamId}
               onTeamChange={setTeamId}
               onOpen={(project) => {

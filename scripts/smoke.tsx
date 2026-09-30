@@ -74,6 +74,12 @@ const screens: Screen[] = [
       ["skeleton", "skeleton-bar"],
       // A real data row, since the admin screens SSR in their loading state.
       ["rendered data row", "LN-001"],
+      // The upload controls, which render against the mock client.
+      ["dropzone", "dropzone__prompt"],
+      ["dropzone policy line", "dropzone__policy"],
+      ["upload field", "upload-field__count"],
+      ["image field", "Upload photo"],
+      ["file kind rows", "Site survey"],
     ],
   },
   {
@@ -139,7 +145,11 @@ const screens: Screen[] = [
       ["queue table", "table-header"],
       ["tabs", PULSE.review.tabs[0].label],
       ["karigar column", "Karigar"],
-      ["score column", "Score"],
+      // Two score columns, because what the acharya said and what the reviewer
+      // decided are two facts.
+      ["acharya score column", "Acharya"],
+      ["final score column", "Final"],
+      ["a score out of ten", "/10"],
       ["a submission", PULSE.review.rows[0].task],
     ],
   },

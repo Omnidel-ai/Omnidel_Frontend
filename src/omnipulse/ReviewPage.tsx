@@ -15,16 +15,27 @@ import {
 } from "../components";
 import type { OmniPulseReviewData, OmniPulseSubmission } from "./types";
 import { Avatars } from "./cards";
+import {
+  ScoreDecision,
+  decisionProblem,
+  formatScoreOutOfTen,
+  scoreTone,
+  type ScoreDecisionValue,
+} from "./ScoreDecision";
 
 const ALL = "All";
 
 const STATUS_TONE = { Pending: "amber", Approved: "ok", Returned: "crit" } as const;
 
-/** A score is a judgement, so it carries its band in text as well as colour. */
-function scoreTone(score: number): "ok" | "amber" | "crit" {
-  if (score >= 85) return "ok";
-  if (score >= 65) return "amber";
-  return "crit";
+/** What a freshly opened submission proposes: take the acharya's score. */
+function openingDecision(row: OmniPulseSubmission): ScoreDecisionValue {
+  return {
+    mode: row.isSimpleTask ? "revise" : "accept",
+    // The reviewer's input starts at the acharya's number rather than at zero:
+    // most overrides are an adjustment, not a fresh judgement.
+    score: row.acharyaScore != null ? Math.round(row.acharyaScore * 100) / 10 : 7,
+    feedback: "",
+  };
 }
 
 export interface ReviewPageProps {
@@ -50,6 +61,17 @@ export function ReviewPage({ data }: ReviewPageProps) {
   const [loading, setLoading] = useState(() => typeof window !== "undefined");
   const [open, setOpen] = useState<OmniPulseSubmission | null>(null);
   const [returning, setReturning] = useState<OmniPulseSubmission | null>(null);
+  const [decision, setDecision] = useState<ScoreDecisionValue>({
+    mode: "accept",
+    score: 7,
+    feedback: "",
+  });
+
+  /** Opening a submission resets the decision to what that row proposes. */
+  function openRow(row: OmniPulseSubmission) {
+    setDecision(openingDecision(row));
+    setOpen(row);
+  }
 
   useEffect(() => {
     const id = window.setTimeout(() => setLoading(false), 600);
@@ -71,14 +93,49 @@ export function ReviewPage({ data }: ReviewPageProps) {
     });
   }, [rows, tab, q, data.tabs]);
 
-  function decide(row: OmniPulseSubmission, status: "Approved" | "Returned") {
-    setRows((rs) => rs.map((r) => (r.id === row.id ? { ...r, status } : r)));
+  /**
+   * Approve, with whichever score the reviewer settled on.
+   *
+   * The final score is stored separately from the acharya's rather than
+   * overwriting it: what the acharya said and what the reviewer decided are
+   * two facts, and a screen that keeps only the second cannot show that
+   * anyone disagreed.
+   */
+  function approve(row: OmniPulseSubmission) {
+    const problem = decisionProblem(decision, row.isSimpleTask);
+    if (problem) {
+      emitToast(problem, "error");
+      return;
+    }
+    const accepted = decision.mode === "accept" && !row.isSimpleTask;
+    const finalScore = accepted ? row.acharyaScore : Math.min(1, Math.max(0, decision.score / 10));
+    setRows((rs) =>
+      rs.map((r) =>
+        r.id === row.id
+          ? {
+              ...r,
+              status: "Approved",
+              finalScore,
+              feedback: decision.feedback.trim(),
+              decidedBy: "You",
+            }
+          : r,
+      ),
+    );
+    setOpen(null);
+    emitToast(
+      accepted
+        ? `#${row.seq} approved on the acharya's ${formatScoreOutOfTen(finalScore)}`
+        : `#${row.seq} approved at ${formatScoreOutOfTen(finalScore)} — your score`,
+      "success",
+    );
+  }
+
+  function returnForRework(row: OmniPulseSubmission) {
+    setRows((rs) => rs.map((r) => (r.id === row.id ? { ...r, status: "Returned" } : r)));
     setOpen(null);
     setReturning(null);
-    emitToast(
-      `#${row.seq} ${status === "Approved" ? "approved" : "returned to " + row.karigar}`,
-      status === "Approved" ? "success" : "info",
-    );
+    emitToast(`#${row.seq} returned to ${row.karigar}`, "info");
   }
 
   const columns: Column<OmniPulseSubmission>[] = [
@@ -110,11 +167,30 @@ export function ReviewPage({ data }: ReviewPageProps) {
       ),
     },
     {
-      key: "score",
-      header: "Score",
-      width: "96px",
+      key: "acharyaScore",
+      header: "Acharya",
+      width: "104px",
       align: "right",
-      render: (r) => <Badge tone={scoreTone(r.score)}>{r.score}</Badge>,
+      render: (r) =>
+        r.isSimpleTask ? (
+          <span style={{ color: "var(--ink-faint)" }}>—</span>
+        ) : (
+          <Badge tone={scoreTone(r.acharyaScore)}>{formatScoreOutOfTen(r.acharyaScore)}</Badge>
+        ),
+    },
+    {
+      // What stands, once someone has decided. Beside the acharya's rather
+      // than replacing it, so a disagreement is visible in the list.
+      key: "finalScore",
+      header: "Final",
+      width: "104px",
+      align: "right",
+      render: (r) =>
+        r.finalScore == null ? (
+          <span style={{ color: "var(--ink-faint)" }}>—</span>
+        ) : (
+          <Badge tone={scoreTone(r.finalScore)}>{formatScoreOutOfTen(r.finalScore)}</Badge>
+        ),
     },
     { key: "project", header: "Project", width: "minmax(140px, 1fr)" },
     { key: "team", header: "Team", width: "120px" },
@@ -135,7 +211,9 @@ export function ReviewPage({ data }: ReviewPageProps) {
       align: "right",
       render: (r) => (
         <TableRowActions nowrap>
-          <TableAction onClick={() => setOpen(r)}>Open</TableAction>
+          <TableAction onClick={() => openRow(r)}>
+            {r.status === "Pending" ? "Review" : "Open"}
+          </TableAction>
         </TableRowActions>
       ),
     },
@@ -176,8 +254,8 @@ export function ReviewPage({ data }: ReviewPageProps) {
         data={filtered}
         rowKey={(r) => r.id}
         loading={loading}
-        minWidth={1040}
-        onRowClick={setOpen}
+        minWidth={1180}
+        onRowClick={openRow}
         emptyVariant={q || tab !== ALL ? "no-results" : "empty"}
         emptyMessage={q ? `No submissions match “${q}”` : data.emptyMessage}
         emptyHint={q ? "Check the spelling, or clear the search." : data.emptyHint}
@@ -198,7 +276,9 @@ export function ReviewPage({ data }: ReviewPageProps) {
               <Button variant="danger" onClick={() => setReturning(open)}>
                 Return for rework
               </Button>
-              <Button onClick={() => decide(open, "Approved")}>Approve</Button>
+              <Button onClick={() => approve(open)}>
+                {open.isSimpleTask || decision.mode === "revise" ? "Approve at my score" : "Approve"}
+              </Button>
             </>
           ) : (
             <Button variant="ghost" onClick={() => setOpen(null)}>
@@ -209,11 +289,22 @@ export function ReviewPage({ data }: ReviewPageProps) {
       >
         {open && (
           <div style={{ display: "grid", gap: 14 }}>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
               <Badge tone={STATUS_TONE[open.status as keyof typeof STATUS_TONE] ?? "neutral"}>
                 {open.status}
               </Badge>
-              <Badge tone={scoreTone(open.score)}>Score {open.score}</Badge>
+              {open.isSimpleTask ? (
+                <Badge tone="neutral">Not scored by an acharya</Badge>
+              ) : (
+                <Badge tone={scoreTone(open.acharyaScore)}>
+                  Acharya {formatScoreOutOfTen(open.acharyaScore)}
+                </Badge>
+              )}
+              {open.finalScore != null && (
+                <Badge tone={scoreTone(open.finalScore)}>
+                  Final {formatScoreOutOfTen(open.finalScore)}
+                </Badge>
+              )}
               <Badge tone="neutral">
                 {open.attachments} {open.attachments === 1 ? "attachment" : "attachments"}
               </Badge>
@@ -244,11 +335,36 @@ export function ReviewPage({ data }: ReviewPageProps) {
             </div>
 
             <div>
-              <div className="form-label">Reviewer note</div>
+              <div className="form-label">Acharya's note</div>
               <p style={{ fontSize: 13, color: "var(--ink-soft)", lineHeight: 1.6 }}>
                 {open.note || "No note left on this submission."}
               </p>
             </div>
+
+            {open.status === "Pending" ? (
+              <ScoreDecision
+                acharyaScore={open.acharyaScore}
+                isSimpleTask={open.isSimpleTask}
+                value={decision}
+                onChange={setDecision}
+                feedbackMax={data.feedbackMax ?? 200}
+              />
+            ) : (
+              <div className="decision decision--settled">
+                <p style={{ fontSize: 13, color: "var(--ink-soft)", lineHeight: 1.6 }}>
+                  {open.status === "Returned"
+                    ? `Returned to ${open.karigar} for rework.`
+                    : open.finalScore != null && open.finalScore === open.acharyaScore
+                      ? `${open.decidedBy || "A reviewer"} kept the acharya's ${formatScoreOutOfTen(open.finalScore)}.`
+                      : `${open.decidedBy || "A reviewer"} set ${formatScoreOutOfTen(open.finalScore)} over the acharya's ${formatScoreOutOfTen(open.acharyaScore)}.`}
+                </p>
+                {open.feedback && (
+                  <p style={{ fontSize: 13, color: "var(--ink)", lineHeight: 1.6, marginTop: 6 }}>
+                    “{open.feedback}”
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </Modal>
@@ -266,7 +382,7 @@ export function ReviewPage({ data }: ReviewPageProps) {
         confirmTone="danger"
         onCancel={() => setReturning(null)}
         onConfirm={() => {
-          if (returning) decide(returning, "Returned");
+          if (returning) returnForRework(returning);
         }}
       />
     </div>

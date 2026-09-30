@@ -223,6 +223,10 @@
               "href": "/admin/task-types"
             },
             {
+              "label": "Default Tasks",
+              "href": "/admin/default-tasks"
+            },
+            {
               "label": "Trade Types",
               "href": "/admin/trade-types"
             },

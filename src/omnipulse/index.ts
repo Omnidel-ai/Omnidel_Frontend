@@ -19,3 +19,7 @@ export { TaskModal } from "./TaskModal";
 export { CardChips } from "./boardBits";
 export * from "./cards";
 export type * from "./types";
+export { ScoreDecision, decisionProblem, formatScoreOutOfTen, scoreTone } from "./ScoreDecision";
+export type { ScoreDecisionProps, ScoreDecisionValue } from "./ScoreDecision";
+export { ProjectForm } from "./ProjectForm";
+export type { ProjectFormProps } from "./ProjectForm";

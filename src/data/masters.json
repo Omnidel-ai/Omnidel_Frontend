@@ -1212,6 +1212,620 @@
     ]
   },
   {
+    "key": "default-tasks",
+    "label": "Default Tasks",
+    "singular": "Default task",
+    "module": "Admin",
+    "section": "Tasks & Workflow",
+    "eyebrow": "Reference data",
+    "description": "The tasks the system assigns on its own — what each one asks for, who scores it, and whether an acharya's score stands without a manager reading it.",
+    "searchPlaceholder": "Search default tasks…",
+    "minWidth": 1080,
+    "filters": [
+      {
+        "key": "kind",
+        "label": "Kind",
+        "options": [
+          {
+            "value": "Scored",
+            "label": "Scored"
+          },
+          {
+            "value": "Simple",
+            "label": "Simple"
+          },
+          {
+            "value": "Evidence",
+            "label": "Evidence"
+          }
+        ]
+      },
+      {
+        "key": "cadence",
+        "label": "Cadence",
+        "options": [
+          {
+            "value": "Daily",
+            "label": "Daily"
+          },
+          {
+            "value": "Weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "Monthly",
+            "label": "Monthly"
+          },
+          {
+            "value": "On assignment",
+            "label": "On assignment"
+          }
+        ]
+      }
+    ],
+    "summary": [
+      {
+        "label": "Default tasks",
+        "kind": "count"
+      },
+      {
+        "label": "AI score is final",
+        "kind": "count",
+        "where": {
+          "field": "ai_score_final",
+          "value": true
+        }
+      },
+      {
+        "label": "Go to a manager",
+        "kind": "count",
+        "where": {
+          "field": "ai_score_final",
+          "value": false
+        }
+      }
+    ],
+    "columns": [
+      {
+        "key": "title",
+        "header": "Task",
+        "width": "minmax(200px, 2.2fr)"
+      },
+      {
+        "key": "kind",
+        "header": "Kind",
+        "width": "120px",
+        "type": "badge",
+        "tones": {
+          "Scored": "green",
+          "Simple": "neutral",
+          "Evidence": "ochre"
+        }
+      },
+      {
+        "key": "acharya",
+        "header": "Acharya",
+        "width": "minmax(160px, 1.4fr)",
+        "type": "user"
+      },
+      {
+        "key": "cadence",
+        "header": "Cadence",
+        "width": "140px",
+        "type": "badge",
+        "tones": {
+          "Daily": "green",
+          "Weekly": "neutral",
+          "Monthly": "ochre",
+          "On assignment": "neutral"
+        }
+      },
+      {
+        "key": "priority",
+        "header": "Priority",
+        "width": "110px",
+        "type": "badge",
+        "tones": {
+          "High": "crit",
+          "Normal": "amber",
+          "Low": "ok"
+        }
+      },
+      {
+        "key": "due_in_days",
+        "header": "Due in",
+        "width": "90px",
+        "type": "number",
+        "align": "right"
+      },
+      {
+        "key": "ai_score_final",
+        "header": "AI is final",
+        "width": "110px",
+        "type": "flag"
+      },
+      {
+        "key": "status",
+        "header": "Status",
+        "width": "120px",
+        "type": "status"
+      }
+    ],
+    "fields": [
+      {
+        "key": "title",
+        "label": "Task",
+        "type": "text",
+        "required": true,
+        "placeholder": "Daily site photo"
+      },
+      {
+        "key": "kind",
+        "label": "Kind",
+        "type": "select",
+        "required": true,
+        "hint": "Scored tasks get an acharya score. Simple ones do not, so a manager enters their own.",
+        "options": [
+          {
+            "value": "Scored",
+            "label": "Scored"
+          },
+          {
+            "value": "Simple",
+            "label": "Simple"
+          },
+          {
+            "value": "Evidence",
+            "label": "Evidence"
+          }
+        ]
+      },
+      {
+        "key": "acharya",
+        "label": "Acharya",
+        "type": "select",
+        "options": [
+          {
+            "value": "Vivek Acharya",
+            "label": "Vivek Acharya"
+          },
+          {
+            "value": "Neeranjan Acharya",
+            "label": "Neeranjan Acharya"
+          },
+          {
+            "value": "Gitanjali Acharya",
+            "label": "Gitanjali Acharya"
+          },
+          {
+            "value": "Bikram Acharya",
+            "label": "Bikram Acharya"
+          },
+          {
+            "value": "Esha Acharya",
+            "label": "Esha Acharya"
+          }
+        ]
+      },
+      {
+        "key": "cadence",
+        "label": "Cadence",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "Daily",
+            "label": "Daily"
+          },
+          {
+            "value": "Weekly",
+            "label": "Weekly"
+          },
+          {
+            "value": "Monthly",
+            "label": "Monthly"
+          },
+          {
+            "value": "On assignment",
+            "label": "On assignment"
+          }
+        ]
+      },
+      {
+        "key": "priority",
+        "label": "Priority",
+        "type": "select",
+        "options": [
+          {
+            "value": "High",
+            "label": "High"
+          },
+          {
+            "value": "Normal",
+            "label": "Normal"
+          },
+          {
+            "value": "Low",
+            "label": "Low"
+          }
+        ]
+      },
+      {
+        "key": "due_in_days",
+        "label": "Due in (days)",
+        "type": "number",
+        "hint": "Counted from the day the task is assigned."
+      },
+      {
+        "key": "ai_score_final",
+        "label": "AI score is final",
+        "type": "checkbox",
+        "hint": "On: the acharya's score stands and the task never reaches the review queue. Off: a manager accepts that score or enters their own."
+      },
+      {
+        "key": "description",
+        "label": "What it asks for",
+        "type": "textarea",
+        "placeholder": "One line the kaarigar reads before starting."
+      },
+      {
+        "key": "is_active",
+        "label": "Active",
+        "type": "checkbox"
+      }
+    ],
+    "detail": {
+      "action": "Steps",
+      "title": "Steps in {row}",
+      "itemsKey": "steps",
+      "singular": "Step",
+      "emptyMessage": "This task asks for nothing yet",
+      "columns": [
+        {
+          "key": "name",
+          "header": "Step",
+          "width": "minmax(180px, 2fr)"
+        },
+        {
+          "key": "evidence",
+          "header": "Evidence",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Photo": "ochre",
+            "Text": "neutral",
+            "Number": "green",
+            "Checklist": "green"
+          }
+        },
+        {
+          "key": "required",
+          "header": "Required",
+          "width": "110px",
+          "type": "flag"
+        }
+      ],
+      "fields": [
+        {
+          "key": "name",
+          "label": "Step",
+          "type": "text",
+          "required": true,
+          "placeholder": "Photograph the work face"
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "Photo",
+              "label": "Photo"
+            },
+            {
+              "value": "Text",
+              "label": "Text"
+            },
+            {
+              "value": "Number",
+              "label": "Number"
+            },
+            {
+              "value": "Checklist",
+              "label": "Checklist"
+            }
+          ]
+        },
+        {
+          "key": "required",
+          "label": "Required",
+          "type": "checkbox"
+        }
+      ]
+    },
+    "emptyMessage": "No default tasks yet",
+    "emptyHint": "A default task is one the system assigns without anyone asking.",
+    "rows": [
+      {
+        "id": "dt1",
+        "title": "Daily site photo",
+        "kind": "Evidence",
+        "acharya": "Bikram Acharya",
+        "cadence": "Daily",
+        "priority": "Normal",
+        "due_in_days": 1,
+        "ai_score_final": true,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt1s1",
+            "name": "Photograph the site board",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt1s2",
+            "name": "Photograph the work face",
+            "evidence": "Photo",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt2",
+        "title": "Kaarigar attendance",
+        "kind": "Simple",
+        "acharya": "Bikram Acharya",
+        "cadence": "Daily",
+        "priority": "Normal",
+        "due_in_days": 1,
+        "ai_score_final": true,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt2s1",
+            "name": "Mark who came",
+            "evidence": "Checklist",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt3",
+        "title": "Weekly progress note",
+        "kind": "Scored",
+        "acharya": "Vivek Acharya",
+        "cadence": "Weekly",
+        "priority": "Normal",
+        "due_in_days": 7,
+        "ai_score_final": false,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt3s1",
+            "name": "Write what moved",
+            "evidence": "Text",
+            "required": true
+          },
+          {
+            "id": "dt3s2",
+            "name": "Name what is stuck",
+            "evidence": "Text",
+            "required": true
+          },
+          {
+            "id": "dt3s3",
+            "name": "Attach one photo",
+            "evidence": "Photo",
+            "required": false
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt4",
+        "title": "Quality check — finish",
+        "kind": "Scored",
+        "acharya": "Gitanjali Acharya",
+        "cadence": "On assignment",
+        "priority": "High",
+        "due_in_days": 2,
+        "ai_score_final": false,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt4s1",
+            "name": "Photograph each room",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt4s2",
+            "name": "Note the defects",
+            "evidence": "Text",
+            "required": true
+          },
+          {
+            "id": "dt4s3",
+            "name": "Sign off",
+            "evidence": "Checklist",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt5",
+        "title": "Dispatch confirmation",
+        "kind": "Evidence",
+        "acharya": "Bikram Acharya",
+        "cadence": "On assignment",
+        "priority": "High",
+        "due_in_days": 1,
+        "ai_score_final": true,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt5s1",
+            "name": "Photograph the loaded lot",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt5s2",
+            "name": "Record the lane",
+            "evidence": "Text",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt6",
+        "title": "Customer callback",
+        "kind": "Simple",
+        "acharya": "Esha Acharya",
+        "cadence": "On assignment",
+        "priority": "Normal",
+        "due_in_days": 1,
+        "ai_score_final": true,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt6s1",
+            "name": "Log the outcome",
+            "evidence": "Text",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt7",
+        "title": "Monthly kitchen-garden review",
+        "kind": "Scored",
+        "acharya": "Neeranjan Acharya",
+        "cadence": "Monthly",
+        "priority": "Low",
+        "due_in_days": 30,
+        "ai_score_final": false,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt7s1",
+            "name": "Photograph each bed",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt7s2",
+            "name": "Yield in kg",
+            "evidence": "Number",
+            "required": true
+          },
+          {
+            "id": "dt7s3",
+            "name": "What to change",
+            "evidence": "Text",
+            "required": false
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt8",
+        "title": "Safety walk",
+        "kind": "Evidence",
+        "acharya": "Gitanjali Acharya",
+        "cadence": "Weekly",
+        "priority": "High",
+        "due_in_days": 7,
+        "ai_score_final": false,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt8s1",
+            "name": "Photograph the scaffold",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt8s2",
+            "name": "Photograph the wiring",
+            "evidence": "Photo",
+            "required": true
+          },
+          {
+            "id": "dt8s3",
+            "name": "Anything unsafe",
+            "evidence": "Text",
+            "required": false
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt9",
+        "title": "Tool return",
+        "kind": "Simple",
+        "acharya": "Bikram Acharya",
+        "cadence": "Daily",
+        "priority": "Low",
+        "due_in_days": 1,
+        "ai_score_final": true,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt9s1",
+            "name": "Tick each tool back in",
+            "evidence": "Checklist",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      },
+      {
+        "id": "dt10",
+        "title": "Vernacular copy check",
+        "kind": "Scored",
+        "acharya": "Esha Acharya",
+        "cadence": "On assignment",
+        "priority": "Normal",
+        "due_in_days": 3,
+        "ai_score_final": false,
+        "description": "",
+        "steps": [
+          {
+            "id": "dt10s1",
+            "name": "Paste the copy",
+            "evidence": "Text",
+            "required": true
+          },
+          {
+            "id": "dt10s2",
+            "name": "What reads wrong",
+            "evidence": "Text",
+            "required": true
+          }
+        ],
+        "is_active": true,
+        "is_archived": false
+      }
+    ]
+  },
+  {
     "key": "trade-types",
     "label": "Trade Types",
     "singular": "Trade type",
@@ -4070,6 +4684,12 @@
     ],
     "columns": [
       {
+        "key": "color",
+        "header": "",
+        "width": "44px",
+        "type": "color"
+      },
+      {
         "key": "name",
         "header": "Name",
         "width": "minmax(150px, 1.5fr)"
@@ -4129,6 +4749,12 @@
         "required": true,
         "placeholder": "dispatch",
         "readOnlyOnEdit": true
+      },
+      {
+        "key": "description",
+        "label": "What this team does",
+        "type": "textarea",
+        "placeholder": "One line the rest of the workspace reads."
       },
       {
         "key": "lead",
@@ -4207,6 +4833,12 @@
         "type": "number"
       },
       {
+        "key": "color",
+        "label": "Colour",
+        "type": "color",
+        "hint": "Used wherever this team is named in OmniPulse."
+      },
+      {
         "key": "is_active",
         "label": "Active",
         "type": "checkbox"
@@ -4218,18 +4850,134 @@
         "name": "Dispatch",
         "slug": "dispatch",
         "lead": "Bikram Das",
-        "members": 9,
+        "members": 8,
         "department": "Operations",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#254a33",
+        "member_list": [
+          {
+            "id": "tm1m1",
+            "name": "Bikram Das",
+            "role": "Manager",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm1m2",
+            "name": "Chandni Roy",
+            "role": "Member",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm1m3",
+            "name": "Imran Sheikh",
+            "role": "Member",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm1m4",
+            "name": "Sneha Pal",
+            "role": "Member",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm1m5",
+            "name": "Arun Das",
+            "role": "Member",
+            "joined": "2026-06-23"
+          },
+          {
+            "id": "tm1m6",
+            "name": "Pinki Roy",
+            "role": "Member",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm1m7",
+            "name": "Rahul Mondal",
+            "role": "Member",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm1m8",
+            "name": "Farhan Ali",
+            "role": "Member",
+            "joined": "2026-02-02"
+          }
+        ]
       },
       {
         "id": "tm2",
         "name": "Warehouse",
         "slug": "warehouse",
         "lead": "Farhan Ali",
-        "members": 12,
+        "members": 10,
         "department": "Operations",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#a74a2d",
+        "member_list": [
+          {
+            "id": "tm2m1",
+            "name": "Farhan Ali",
+            "role": "Manager",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm2m2",
+            "name": "Sneha Pal",
+            "role": "Member",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm2m3",
+            "name": "Arun Das",
+            "role": "Member",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm2m4",
+            "name": "Pinki Roy",
+            "role": "Member",
+            "joined": "2026-06-23"
+          },
+          {
+            "id": "tm2m5",
+            "name": "Rahul Mondal",
+            "role": "Member",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm2m6",
+            "name": "Sujit Barman",
+            "role": "Member",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm2m7",
+            "name": "Harshit Sharma",
+            "role": "Member",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm2m8",
+            "name": "Bikram Das",
+            "role": "Member",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm2m9",
+            "name": "Chandni Roy",
+            "role": "Member",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm2m10",
+            "name": "Imran Sheikh",
+            "role": "Member",
+            "joined": "2026-06-23"
+          }
+        ]
       },
       {
         "id": "tm3",
@@ -4238,7 +4986,41 @@
         "lead": "Chandni Roy",
         "members": 5,
         "department": "Catalogue",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#a5711a",
+        "member_list": [
+          {
+            "id": "tm3m1",
+            "name": "Chandni Roy",
+            "role": "Manager",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm3m2",
+            "name": "Rahul Mondal",
+            "role": "Member",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm3m3",
+            "name": "Farhan Ali",
+            "role": "Member",
+            "joined": "2026-06-23"
+          },
+          {
+            "id": "tm3m4",
+            "name": "Sujit Barman",
+            "role": "Member",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm3m5",
+            "name": "Harshit Sharma",
+            "role": "Member",
+            "joined": "2026-01-14"
+          }
+        ]
       },
       {
         "id": "tm4",
@@ -4247,7 +5029,35 @@
         "lead": "Devraj Nair",
         "members": 4,
         "department": "Finance",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#376a46",
+        "member_list": [
+          {
+            "id": "tm4m1",
+            "name": "Devraj Nair",
+            "role": "Manager",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm4m2",
+            "name": "Harshit Sharma",
+            "role": "Member",
+            "joined": "2026-06-23"
+          },
+          {
+            "id": "tm4m3",
+            "name": "Bikram Das",
+            "role": "Member",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm4m4",
+            "name": "Chandni Roy",
+            "role": "Member",
+            "joined": "2026-01-14"
+          }
+        ]
       },
       {
         "id": "tm5",
@@ -4256,16 +5066,96 @@
         "lead": "Esha Khan",
         "members": 6,
         "department": "Support",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#8b3320",
+        "member_list": [
+          {
+            "id": "tm5m1",
+            "name": "Esha Khan",
+            "role": "Manager",
+            "joined": "2026-06-23"
+          },
+          {
+            "id": "tm5m2",
+            "name": "Imran Sheikh",
+            "role": "Member",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm5m3",
+            "name": "Sneha Pal",
+            "role": "Member",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm5m4",
+            "name": "Arun Das",
+            "role": "Member",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm5m5",
+            "name": "Pinki Roy",
+            "role": "Member",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm5m6",
+            "name": "Rahul Mondal",
+            "role": "Member",
+            "joined": "2026-05-06"
+          }
+        ]
       },
       {
         "id": "tm6",
         "name": "Web",
         "slug": "web",
         "lead": "Harshit Sharma",
-        "members": 7,
+        "members": 6,
         "department": "Platform",
-        "is_active": true
+        "is_active": true,
+        "description": "",
+        "color": "#254a33",
+        "member_list": [
+          {
+            "id": "tm6m1",
+            "name": "Harshit Sharma",
+            "role": "Manager",
+            "joined": "2026-08-11"
+          },
+          {
+            "id": "tm6m2",
+            "name": "Pinki Roy",
+            "role": "Member",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm6m3",
+            "name": "Rahul Mondal",
+            "role": "Member",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm6m4",
+            "name": "Farhan Ali",
+            "role": "Member",
+            "joined": "2026-03-19"
+          },
+          {
+            "id": "tm6m5",
+            "name": "Sujit Barman",
+            "role": "Member",
+            "joined": "2026-05-06"
+          },
+          {
+            "id": "tm6m6",
+            "name": "Bikram Das",
+            "role": "Member",
+            "joined": "2026-06-23"
+          }
+        ]
       },
       {
         "id": "tm7",
@@ -4274,9 +5164,133 @@
         "lead": "Gitanjali Bose",
         "members": 3,
         "department": "Quality",
-        "is_active": false
+        "is_active": false,
+        "description": "",
+        "color": "#a74a2d",
+        "member_list": [
+          {
+            "id": "tm7m1",
+            "name": "Gitanjali Bose",
+            "role": "Manager",
+            "joined": "2026-01-14"
+          },
+          {
+            "id": "tm7m2",
+            "name": "Sujit Barman",
+            "role": "Member",
+            "joined": "2026-02-02"
+          },
+          {
+            "id": "tm7m3",
+            "name": "Harshit Sharma",
+            "role": "Member",
+            "joined": "2026-03-19"
+          }
+        ]
       }
-    ]
+    ],
+    "detail": {
+      "action": "Members",
+      "title": "Who is in {row}",
+      "itemsKey": "member_list",
+      "singular": "Member",
+      "emptyMessage": "Nobody is in this team yet",
+      "columns": [
+        {
+          "key": "name",
+          "header": "Member",
+          "width": "minmax(170px, 2fr)",
+          "type": "user"
+        },
+        {
+          "key": "role",
+          "header": "Role",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Manager": "green",
+            "Member": "neutral"
+          }
+        },
+        {
+          "key": "joined",
+          "header": "Joined",
+          "width": "130px"
+        }
+      ],
+      "fields": [
+        {
+          "key": "name",
+          "label": "Member",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "value": "Harshit Sharma",
+              "label": "Harshit Sharma"
+            },
+            {
+              "value": "Bikram Das",
+              "label": "Bikram Das"
+            },
+            {
+              "value": "Chandni Roy",
+              "label": "Chandni Roy"
+            },
+            {
+              "value": "Imran Sheikh",
+              "label": "Imran Sheikh"
+            },
+            {
+              "value": "Sneha Pal",
+              "label": "Sneha Pal"
+            },
+            {
+              "value": "Arun Das",
+              "label": "Arun Das"
+            },
+            {
+              "value": "Pinki Roy",
+              "label": "Pinki Roy"
+            },
+            {
+              "value": "Rahul Mondal",
+              "label": "Rahul Mondal"
+            },
+            {
+              "value": "Farhan Ali",
+              "label": "Farhan Ali"
+            },
+            {
+              "value": "Sujit Barman",
+              "label": "Sujit Barman"
+            }
+          ]
+        },
+        {
+          "key": "role",
+          "label": "Role",
+          "type": "select",
+          "required": true,
+          "hint": "Managers can edit the team and add or remove people. Members can only look.",
+          "options": [
+            {
+              "value": "Manager",
+              "label": "Manager"
+            },
+            {
+              "value": "Member",
+              "label": "Member"
+            }
+          ]
+        },
+        {
+          "key": "joined",
+          "label": "Joined",
+          "type": "date"
+        }
+      ]
+    }
   },
   {
     "key": "sections",

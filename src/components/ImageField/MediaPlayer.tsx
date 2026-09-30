@@ -24,6 +24,10 @@ export interface MediaPlayerProps {
 export function MediaPlayer({ file, onRemove, height = 200 }: MediaPlayerProps) {
   const [failed, setFailed] = useState(false);
   const src = blobViewUrl(file.src);
+  // A row can exist before its file does — a listing that only knows the name,
+  // or a demo row. An element with an empty src makes the browser re-request
+  // the page, so there is nothing to render a player around.
+  const playable = Boolean(src) && !failed;
 
   return (
     <div
@@ -35,9 +39,9 @@ export function MediaPlayer({ file, onRemove, height = 200 }: MediaPlayerProps) 
         minWidth: 0,
       }}
     >
-      {failed ? (
+      {!playable ? (
         <p style={{ padding: "18px 12px", fontSize: 12.5, color: "var(--ink-mute)", textAlign: "center" }}>
-          This {file.kind} could not be played here.{" "}
+          {failed ? `This ${file.kind} could not be played here.` : `Nothing to play yet.`}{" "}
           {file.src && (
             <a href={downloadUrl(file.src)} download={file.name} style={{ color: "var(--green-deep)" }}>
               Download it instead

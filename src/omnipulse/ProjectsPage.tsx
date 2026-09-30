@@ -16,6 +16,7 @@ import {
 import type { OmniPulseProject, OmniPulseProjectsData, OmniPulseTeam } from "./types";
 import { CardGrid, ViewToggle } from "./cards";
 import { ProjectCard } from "./ProjectCard";
+import { ProjectForm } from "./ProjectForm";
 
 export interface ProjectsPageProps {
   data: OmniPulseProjectsData;
@@ -25,6 +26,8 @@ export interface ProjectsPageProps {
   onTeamChange: (teamId: string) => void;
   /** Open a project's board. */
   onOpen: (project: OmniPulseProject) => void;
+  /** Everyone who can lead a project, for the form's picker. */
+  people?: string[];
 }
 
 /**
@@ -36,7 +39,19 @@ export interface ProjectsPageProps {
  * sortable sorts, and the footer counts and pages exactly as the admin tables
  * do — it is the same `Pagination`.
  */
-export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }: ProjectsPageProps) {
+export function ProjectsPage({
+  data,
+  teams,
+  teamId = "",
+  onTeamChange,
+  onOpen,
+  people = [],
+}: ProjectsPageProps) {
+  // The rows live here now rather than only in the props: creating, editing
+  // and archiving change them, and nothing behind this screen will do that.
+  const [rows, setRows] = useState<OmniPulseProject[]>(data.rows);
+  /** null = closed; "new" = creating; a project = editing that one. */
+  const [editing, setEditing] = useState<OmniPulseProject | "new" | null>(null);
   const [view, setView] = useState("Table");
   const [search, setSearch] = useState("");
   const [showArchived, setShowArchived] = useState(false);
@@ -58,7 +73,7 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
   const teamName = teams.find((t) => t.id === teamId)?.name;
 
   const filtered = useMemo(() => {
-    const rows = data.rows.filter((p) => {
+    const found = rows.filter((p) => {
       if (Boolean(p.archived) !== showArchived) return false;
       if (teamId && p.teamId !== teamId) return false;
       if (teamFilter.length > 0 && !teamFilter.includes(p.team)) return false;
@@ -70,19 +85,43 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
       );
     });
     const dir = sort.dir === "asc" ? 1 : -1;
-    return [...rows].sort((a, b) => {
+    return [...found].sort((a, b) => {
       const x = a[sort.key as keyof OmniPulseProject];
       const y = b[sort.key as keyof OmniPulseProject];
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x ?? "").localeCompare(String(y ?? "")) * dir;
     });
-  }, [data.rows, showArchived, teamId, teamFilter, q, sort]);
+  }, [rows, showArchived, teamId, teamFilter, q, sort]);
 
   const { page, setPage, paginated, total } = usePagination(filtered, perPage);
   const narrowed = Boolean(q) || showArchived || Boolean(teamId) || teamFilter.length > 0;
 
   function toggleSort(key: string) {
     setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
+  }
+
+  /**
+   * A new project goes to the top; an edited one stays where it is.
+   *
+   * Sorting is the reader's choice on this screen, so a save that reordered
+   * the table would move the row they were looking at out from under them.
+   */
+  function save(next: OmniPulseProject) {
+    setRows((current) =>
+      current.some((p) => p.id === next.id)
+        ? current.map((p) => (p.id === next.id ? next : p))
+        : [next, ...current],
+    );
+  }
+
+  function archive(project: OmniPulseProject) {
+    setRows((current) =>
+      current.map((p) => (p.id === project.id ? { ...p, archived: !p.archived } : p)),
+    );
+    emitToast(
+      project.archived ? `${project.name} restored` : `${project.name} archived`,
+      project.archived ? "success" : "info",
+    );
   }
 
   const columns: Column<OmniPulseProject>[] = [
@@ -151,8 +190,13 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
             label={`${p.name} actions`}
             items={[
               { label: "Open board", onClick: () => onOpen(p) },
-              { label: "Project settings", onClick: () => emitToast("Settings — demo", "info") },
-              { label: "Archive project", onClick: () => emitToast("Archive — demo", "info"), tone: "danger", separated: true },
+              { label: "Project settings", onClick: () => setEditing(p) },
+              {
+                label: p.archived ? "Restore project" : "Archive project",
+                onClick: () => archive(p),
+                tone: p.archived ? undefined : "danger",
+                separated: true,
+              },
             ]}
           />
         </span>
@@ -210,7 +254,7 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
         />
         <div className="opx-toolbar__actions">
           <ViewToggle value={view} onChange={setView} options={["Card", "Table"]} />
-          <Button size="sm" onClick={() => emitToast("New project — demo", "info")}>
+          <Button size="sm" onClick={() => setEditing("new")}>
             + New Project
           </Button>
         </div>
@@ -247,7 +291,9 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
                 Clear search and filters
               </Button>
             ) : (
-              <Button size="sm">Add the first project</Button>
+              <Button size="sm" onClick={() => setEditing("new")}>
+                Add the first project
+              </Button>
             )
           }
         />
@@ -285,6 +331,15 @@ export function ProjectsPage({ data, teams, teamId = "", onTeamChange, onOpen }:
           />
         </>
       )}
+
+      <ProjectForm
+        open={editing != null}
+        project={editing === "new" ? null : editing}
+        teams={teams}
+        people={people}
+        onClose={() => setEditing(null)}
+        onSave={save}
+      />
     </div>
   );
 }
