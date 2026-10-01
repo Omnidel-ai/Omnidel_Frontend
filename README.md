@@ -121,6 +121,8 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
+| `npm test` | 30 interaction tests in jsdom — clicking, typing, cancelling, retrying |
+| `npm run test:watch` | the same, re-running as you edit |
 | `npm run smoke` | Server-renders 46 cases — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 25 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
 | `npm run preview` | Serve the production build |
 
@@ -620,6 +622,54 @@ It does not catch errors in event handlers, timers or promises — those do not
 happen during render, so React never sees them. Those are handled where they
 are thrown, which in this workspace means a toast.
 
+## Tests — `tests/`
+
+Two layers, because they answer different questions.
+
+```
+  npm run smoke    46 cases   does every screen render at all?
+  npm test         30 tests   does it do the right thing when you use it?
+```
+
+The smoke render draws a screen once to a string and stops, so it proves a
+screen exists and nothing more. It cannot click Cancel, type in a search box or
+watch a progress bar move. That needs a DOM, which is what Vitest and jsdom
+provide here.
+
+What the interaction tests cover is chosen by that difference — the behaviour
+the smoke render structurally cannot reach:
+
+| File | Covers |
+|---|---|
+| `upload.test.tsx` | a file through to stored, live **progress**, **cancel** mid-flight, **retry** after a failure, a refusal with its reason, removal |
+| `review-decision.test.tsx` | Use Acharya vs Enter my score, the input appearing, out-of-range, the collapsed choice for a simple task, the feedback counter |
+| `resilience.test.tsx` | `ErrorBoundary` catching, recovering and taking a custom fallback; a table's empty vs no-results vs loading |
+| `admin-page.test.tsx` | the engine behind 23 screens: search narrowing, no-results wording, the descriptor-built form, required fields, adding a row, the Active default view |
+
+**The upload tests are what the mock client was built for.** Progress, cancel
+and retry are the three states that are hardest to reach deliberately against a
+real store — you need a large file and a bad connection. `createMockUploadClient`
+gives them on demand: a duration you choose, and a file whose name contains
+"fail".
+
+`ErrorBoundary` is covered **only** here, and that is not an oversight: React's
+server renderer rethrows rather than letting a boundary catch, so a smoke case
+for it would have tested the harness.
+
+Four things the tests themselves had to learn, which are worth knowing before
+writing more:
+
+* `{n}/{max}` renders as three text nodes, so a text query for `1/10` finds
+  nothing — read `textContent` instead.
+* `user.upload` honours the input's `accept`, so testing the policy *behind*
+  the file dialog needs `userEvent.setup({ applyAccept: false })`.
+* Every screen opens through its skeleton, so rows arrive a tick late —
+  `findBy*`, not `getBy*`.
+* The view control is the application's own listbox, not a native `<select>`:
+  click the button, then the option.
+
+`tests/` is in the typecheck. A test file outside it rots quietly.
+
 ## Deploying to Vercel
 
 The workspace deploys as a Vite static build plus the functions in `api/`.
@@ -860,9 +910,10 @@ approach keeps the two identical and the dependency list at two packages.
 
 ## Known limitations
 
-* **No automated tests beyond the smoke render.** No Vitest/RTL setup yet;
-  `npm run smoke` renders 46 cases and checks the markup. Interaction
-  tests are the obvious next addition.
+* **Two layers of test, and a gap between them.** `npm test` drives 30
+  interaction tests through a real DOM; `npm run smoke` renders 46 cases and
+  checks the markup. Neither sees a pixel — a wrong colour or a broken layout
+  passes both. That is what the browser is for.
 * **The product screens were compared against the running application by eye**,
   in a browser, screen by screen — they were not diffed pixel by pixel, and the
   demo data behind them is invented. The shape, the wording and the controls are
