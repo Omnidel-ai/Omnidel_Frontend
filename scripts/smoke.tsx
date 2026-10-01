@@ -19,6 +19,11 @@ import { MissionsPage } from "../src/omnimart";
 import { AcharyaDashboard } from "../src/omnivarsity";
 import { ListPage } from "../src/lists";
 import { WorkHome } from "../src/home";
+import { HomePage as AboutPage } from "../src/playground/HomePage";
+import { AdminScreen } from "../src/admin/AdminScreen";
+import { MartScreen } from "../src/omnimart/MartScreen";
+import { VarsityScreen } from "../src/omnivarsity/VarsityScreen";
+import { PulseScreen } from "../src/omnipulse/PulseScreen";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
@@ -39,6 +44,10 @@ interface Screen {
   html: string;
   markers: Array<[string, string]>;
 }
+
+// `ErrorBoundary` is not covered here on purpose: React's server renderer
+// rethrows rather than letting a boundary catch, so a test of it would be a
+// test of the harness. It is a browser behaviour, checked in the browser.
 
 const screens: Screen[] = [
   {
@@ -204,6 +213,39 @@ const screens: Screen[] = [
       ["progress track", "mart-mission__track"],
       ["pace sentence", "Doing"],
     ],
+  },
+  {
+    // The About screen reads the masters. It was not covered here, and a change
+    // that stopped handing them down crashed it in the browser instead.
+    name: "about",
+    html: renderToString(<AboutPage data={DATA} onNavigate={() => undefined} />),
+    markers: [
+      ["brand", DATA.brand.name],
+      ["master count", String(DATA.masters.length)],
+      ["a master listed", DATA.masters[0].label],
+    ],
+  },
+  {
+    // The module screens: each owns its data now, so each is rendered from its
+    // route the way the application renders it.
+    name: "screens/admin by route",
+    html: renderToString(<AdminScreen masterKey="lanes" />),
+    markers: [["the right master", "LN-001"], ["table", "table-wrap"]],
+  },
+  {
+    name: "screens/omnimart by route",
+    html: renderToString(<MartScreen href="/omnimart/missions" />),
+    markers: [["missions", "mart-mission__track"]],
+  },
+  {
+    name: "screens/omnivarsity by route",
+    html: renderToString(<VarsityScreen href="/omnivarsity/acharyas" />),
+    markers: [["the acharya list", "table-header"]],
+  },
+  {
+    name: "screens/omnipulse by route",
+    html: renderToString(<PulseScreen href="/omnipulse/review" onNavigate={() => undefined} />),
+    markers: [["the review queue", "table-header"], ["a score out of ten", "/10"]],
   },
   {
     name: "omnivarsity/dashboard",

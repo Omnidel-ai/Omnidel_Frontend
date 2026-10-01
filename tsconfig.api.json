@@ -15,5 +15,5 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["api"]
+  "include": ["shared", "api"]
 }

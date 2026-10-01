@@ -23,17 +23,9 @@ export function NoAccessScreen({ area, message, action }: NoAccessScreenProps) {
       aria-labelledby="no-access-title"
       style={{ minHeight: "min(520px, 70vh)", display: "grid", placeItems: "center", padding: 24 }}
     >
-      <div
-        style={{
-          width: "min(460px, 100%)",
-          padding: "32px 28px",
-          textAlign: "center",
-          background: "var(--surface)",
-          border: "1px solid var(--rule)",
-          borderRadius: "var(--r-md)",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
+      <div className="ui-card"
+ style={{ width: "min(460px, 100%)", padding: "32px 28px", textAlign: "center", boxShadow: "var(--shadow-sm)" }}
+ >
         <div
           aria-hidden="true"
           style={{

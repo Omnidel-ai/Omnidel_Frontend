@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dropzone } from "./Dropzone";
 import { UploadList } from "./UploadList";
-import { FileRow } from "../ImageField";
+import { FileRow, MediaPlayer } from "../ImageField";
 import { useUploadClient, useUploadQueue } from "../../lib/upload";
 import type { BlobArea, StoredFile } from "../../lib/blob";
 
@@ -99,7 +99,13 @@ export function UploadField({
         <ul className="upload-field__stored">
           {stored.map((file) => (
             <li key={file.pathname || file.name}>
-              <FileRow file={file} onRemove={disabled ? undefined : () => remove(file)} />
+              {/* Video and audio are the two kinds you cannot judge from a
+                  name, so they get a player rather than a row. */}
+              {file.kind === "video" || file.kind === "audio" ? (
+                <MediaPlayer file={file} onRemove={disabled ? undefined : () => remove(file)} />
+              ) : (
+                <FileRow file={file} onRemove={disabled ? undefined : () => remove(file)} />
+              )}
             </li>
           ))}
         </ul>

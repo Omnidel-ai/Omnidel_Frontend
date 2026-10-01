@@ -25,6 +25,7 @@ export * from "./Badge";
 export * from "./Menu";
 export * from "./Disclosure";
 export * from "./EmptyState";
+export * from "./ErrorBoundary";
 export * from "./Skeleton";
 export * from "./StatusToggle";
 export * from "./Spinner";

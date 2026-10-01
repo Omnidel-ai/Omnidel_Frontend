@@ -11,18 +11,9 @@ export function SummaryStrip({ master, rows }: { master: DemoMaster; rows: DemoR
   if (items.length === 0) return null;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 18,
-        padding: "10px 14px",
-        marginBottom: 10,
-        background: "var(--surface)",
-        border: "1px solid var(--rule)",
-        borderRadius: "var(--r-md)",
-      }}
-    >
+    <div className="ui-card"
+ style={{ display: "flex", flexWrap: "wrap", gap: 18, padding: "10px 14px", marginBottom: 10 }}
+ >
       {items.map((s) => {
         const matching = s.where ? rows.filter((r) => r[s.where!.field] === s.where!.value) : rows;
         const value =
@@ -31,15 +22,7 @@ export function SummaryStrip({ master, rows }: { master: DemoMaster; rows: DemoR
             : matching.length;
         return (
           <span key={s.label} style={{ display: "inline-flex", alignItems: "baseline", gap: 7 }}>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink-mute)",
-              }}
-            >
+            <span className="ui-eyebrow ui-eyebrow--narrow">
               {s.label}
             </span>
             <span

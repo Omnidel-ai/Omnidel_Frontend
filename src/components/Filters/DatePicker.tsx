@@ -338,21 +338,11 @@ function FooterBtn({
   tone?: "green" | "mute";
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        background: "transparent",
-        border: "none",
-        padding: 0,
-        cursor: "pointer",
-        fontFamily: "var(--mono)",
-        fontSize: 10,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        color: tone === "green" ? "var(--green-deep)" : "var(--ink-mute)",
-      }}
-    >
+    <button className="ui-bare-btn"
+ type="button"
+ onClick={onClick}
+ style={{ cursor: "pointer", fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: tone === "green" ? "var(--green-deep)" : "var(--ink-mute)" }}
+ >
       {children}
     </button>
   );

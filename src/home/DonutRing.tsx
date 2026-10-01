@@ -32,7 +32,7 @@ export function DonutRing({
     <Panel
       title={title}
       actions={
-        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+        <span className="ui-meta" >
           {total} {unit}
         </span>
       }

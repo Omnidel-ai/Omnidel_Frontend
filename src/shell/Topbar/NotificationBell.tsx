@@ -73,34 +73,15 @@ export function NotificationBell({ items, onRead, onReadAll }: NotificationBellP
       {open && (
         <div style={panelStyle} role="dialog" aria-label="Notifications">
           <div style={panelHeadStyle}>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--ink-mute)",
-              }}
-            >
+            <span className="ui-eyebrow">
               Notifications
             </span>
-            <button
-              type="button"
-              onClick={onReadAll}
-              disabled={unread === 0}
-              style={{
-                background: "transparent",
-                border: "none",
-                padding: 0,
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: unread > 0 ? "var(--green-deep)" : "var(--ink-mute)",
-                cursor: unread > 0 ? "pointer" : "default",
-                opacity: unread > 0 ? 1 : 0.5,
-              }}
-            >
+            <button className="ui-bare-btn"
+ type="button"
+ onClick={onReadAll}
+ disabled={unread === 0}
+ style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase", color: unread > 0 ? "var(--green-deep)" : "var(--ink-mute)", cursor: unread > 0 ? "pointer" : "default", opacity: unread > 0 ? 1 : 0.5 }}
+ >
               Mark all read
             </button>
           </div>
@@ -164,15 +145,9 @@ export function NotificationBell({ items, onRead, onReadAll }: NotificationBellP
                     >
                       {n.body}
                     </span>
-                    <span
-                      style={{
-                        display: "block",
-                        fontFamily: "var(--mono)",
-                        fontSize: 10,
-                        color: "var(--ink-faint)",
-                        marginTop: 4,
-                      }}
-                    >
+                    <span className="ui-meta-faint"
+ style={{ display: "block", marginTop: 4 }}
+ >
                       {n.at}
                     </span>
                   </span>

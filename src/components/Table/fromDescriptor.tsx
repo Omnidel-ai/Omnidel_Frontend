@@ -107,7 +107,7 @@ export function toColumn(c: ColumnDescriptor): Column<DescriptorRow> {
                   flexShrink: 0,
                 }}
               />
-              <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+              <span className="ui-meta" >
                 {v || "—"}
               </span>
             </span>
@@ -129,7 +129,7 @@ export function toColumn(c: ColumnDescriptor): Column<DescriptorRow> {
                 </Badge>
               ))}
               {list.length > 3 && (
-                <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--ink-mute)" }}>
+                <span className="ui-meta-sm" >
                   +{list.length - 3}
                 </span>
               )}
@@ -204,7 +204,7 @@ export function toColumn(c: ColumnDescriptor): Column<DescriptorRow> {
           const v = r[c.key];
           if (v == null || v === "") return <Muted />;
           return (
-            <span style={{ fontFamily: "var(--mono)", fontVariantNumeric: "tabular-nums" }}>
+            <span className="ui-num" >
               {formatCompactInr(Number(v))}
             </span>
           );
@@ -251,7 +251,7 @@ export function toColumn(c: ColumnDescriptor): Column<DescriptorRow> {
 function Num({ value, suffix = "" }: { value: unknown; suffix?: string }) {
   const empty = value == null || value === "";
   return (
-    <span style={{ fontFamily: "var(--mono)", fontVariantNumeric: "tabular-nums" }}>
+    <span className="ui-num" >
       {empty ? "—" : `${value}${suffix}`}
     </span>
   );

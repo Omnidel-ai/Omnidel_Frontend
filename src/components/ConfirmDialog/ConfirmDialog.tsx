@@ -136,18 +136,10 @@ export function ConfirmDialog({
         zIndex: 2500,
       }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "var(--surface)",
-          border: "1px solid var(--rule)",
-          borderRadius: "var(--r-md)",
-          padding: 22,
-          maxWidth: 480,
-          width: "92%",
-          boxShadow: "var(--shadow-md)",
-        }}
-      >
+      <div className="ui-card"
+ onClick={(e) => e.stopPropagation()}
+ style={{ padding: 22, maxWidth: 480, width: "92%", boxShadow: "var(--shadow-md)" }}
+ >
         <h3
           id="confirm-dialog-title"
           style={{

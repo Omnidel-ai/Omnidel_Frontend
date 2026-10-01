@@ -7,3 +7,4 @@
 export { AcharyaDashboard } from "./AcharyaDashboard";
 export type { AcharyaDashboardProps } from "./AcharyaDashboard";
 export type * from "./types";
+export { VarsityScreen } from "./VarsityScreen";

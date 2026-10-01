@@ -82,15 +82,9 @@ export function MediaPlayer({ file, onRemove, height = 200 }: MediaPlayerProps) 
         <span className="picker-truncate" style={{ fontSize: 12.5, minWidth: 0 }} title={file.name}>
           {file.name}
         </span>
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            color: "var(--ink-mute)",
-            marginLeft: "auto",
-            flexShrink: 0,
-          }}
-        >
+        <span className="ui-meta-sm"
+ style={{ marginLeft: "auto", flexShrink: 0 }}
+ >
           {formatBytes(file.size)}
         </span>
         {file.src && (

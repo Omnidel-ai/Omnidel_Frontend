@@ -227,7 +227,7 @@ export function ReviewPage({ data }: ReviewPageProps) {
         eyebrow="OmniPulse"
         crumbs={[{ label: "OmniPulse" }, { label: data.label }]}
         actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+          <span className="ui-meta" >
             {pending} awaiting review
           </span>
         }
@@ -314,21 +314,10 @@ export function ReviewPage({ data }: ReviewPageProps) {
                 attachments are placeholders at the right shape and count. */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {Array.from({ length: open.attachments }).map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: 96,
-                    height: 72,
-                    borderRadius: "var(--r-sm)",
-                    background: "var(--surface-sunk)",
-                    border: "1px solid var(--rule)",
-                    display: "grid",
-                    placeItems: "center",
-                    fontFamily: "var(--mono)",
-                    fontSize: 10,
-                    color: "var(--ink-faint)",
-                  }}
-                >
+                <div className="ui-meta-faint"
+ key={i}
+ style={{ width: 96, height: 72, borderRadius: "var(--r-sm)", background: "var(--surface-sunk)", border: "1px solid var(--rule)", display: "grid", placeItems: "center" }}
+ >
                   IMG {i + 1}
                 </div>
               ))}

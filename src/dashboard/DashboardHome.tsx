@@ -83,16 +83,11 @@ export function DashboardHome({
       >
         {loading
           ? Array.from({ length: d.stats.length }).map((_, i) => (
-              <div
-                key={i}
-                aria-busy="true"
-                style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--rule)",
-                  borderRadius: "var(--r-md)",
-                  padding: "14px 16px",
-                }}
-              >
+              <div className="ui-card"
+ key={i}
+ aria-busy="true"
+ style={{ padding: "14px 16px" }}
+ >
                 <Skeleton width="45%" height={9} />
                 <Skeleton width="65%" height={24} style={{ marginTop: 10 }} />
                 <Skeleton width="55%" height={9} style={{ marginTop: 10 }} />
@@ -111,15 +106,7 @@ export function DashboardHome({
           flexWrap: "wrap",
         }}
       >
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--ink-mute)",
-          }}
-        >
+        <span className="ui-eyebrow">
           Range
         </span>
         <SubTabs variant="pill" tabs={RANGES} active={range} onChange={setRange} ariaLabel="Range" />
@@ -233,15 +220,9 @@ function ActivityFeed({ items }: { items: DemoActivity[] }) {
             />
             <span style={{ flex: 1, minWidth: 0, fontSize: 13, lineHeight: 1.5 }}>
               <strong style={{ fontWeight: 600 }}>{a.who}</strong> {a.what}
-              <span
-                style={{
-                  display: "block",
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  color: "var(--ink-faint)",
-                  marginTop: 3,
-                }}
-              >
+              <span className="ui-meta-faint"
+ style={{ display: "block", marginTop: 3 }}
+ >
                 {a.at}
               </span>
             </span>

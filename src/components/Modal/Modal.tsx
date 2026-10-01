@@ -111,21 +111,12 @@ export function Modal({
           >
             {title && <h3 style={{ marginBottom: description ? 6 : 12 }}>{title}</h3>}
             {!hideClose && (
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close"
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--ink-mute)",
-                  fontSize: 18,
-                  lineHeight: 1,
-                  cursor: "pointer",
-                  padding: 0,
-                  marginLeft: "auto",
-                }}
-              >
+              <button className="ui-bare-btn"
+ type="button"
+ onClick={onClose}
+ aria-label="Close"
+ style={{ color: "var(--ink-mute)", fontSize: 18, lineHeight: 1, cursor: "pointer", marginLeft: "auto" }}
+ >
                 ×
               </button>
             )}

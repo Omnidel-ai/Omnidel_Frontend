@@ -1,41 +1,52 @@
-import { useState } from "react";
-import { Toaster } from "./components";
+import { Suspense, lazy, useState, type ReactNode } from "react";
+import { ErrorBoundary, SkeletonCard, Toaster } from "./components";
 import { ShellLayout } from "./shell";
-import { AdminPage, SettingsPage } from "./admin";
-import { Playground } from "./playground/Playground";
-import { DashboardHome } from "./dashboard";
+import { SettingsPage } from "./admin";
 import { WorkHome } from "./home";
-import { BoardPage, ProjectsPage, ReviewPage, TeamsPage } from "./omnipulse";
-import { MissionsPage } from "./omnimart";
-import { AcharyaDashboard } from "./omnivarsity";
-import { ListPage } from "./lists";
-import { HomePage } from "./playground/HomePage";
 import { PlaceholderPage } from "./playground/PlaceholderPage";
 import demo from "./data/demo.json";
-import masters from "./data/masters.json";
-import omnipulse from "./data/omnipulse.json";
-import omnimart from "./data/omnimart.json";
-import omnivarsity from "./data/omnivarsity.json";
-import type { DemoData, DemoMaster } from "./data/types";
-import type { OmniPulseData } from "./omnipulse";
-import type { OmniMartData } from "./omnimart";
-import type { OmniVarsityData } from "./omnivarsity";
+import type { DemoData } from "./data/types";
 
-// One cast at the edge: JSON has no types, and everything downstream reads the
-// declared shapes. The shell's content and the admin descriptors are separate
-// files because they answer to different people — when the real API lands,
-// these are the lines that change.
-const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
-const PULSE = omnipulse as OmniPulseData;
-const MART = omnimart as OmniMartData;
-const VARSITY = omnivarsity as OmniVarsityData;
+/**
+ * One cast at the edge.
+ *
+ * JSON has no types; everything downstream reads the declared shapes. Only the
+ * shell's own content is loaded here — the nav, the person in the topbar, the
+ * notifications, Home and the dashboard. Each module's data loads with that
+ * module; see the lazy imports below.
+ */
+const DATA = demo as unknown as DemoData;
 
-/** /<module>/<key> → that module's list with that key. */
-function findList<T extends { key: string }>(href: string, prefix: string, lists: T[]): T | undefined {
-  return href.startsWith(prefix) ? lists.find((l) => l.key === href.slice(prefix.length)) : undefined;
-}
+/**
+ * The screens, fetched when they are first needed.
+ *
+ * Every one of these was a plain import, which meant the browser downloaded
+ * all 41 screens — and 221 KB of JSON describing them — before Home could
+ * paint. Someone who opens the workspace to look at Home now downloads Home.
+ *
+ * What stays eager is deliberate: the shell and Home, because they are what a
+ * visitor sees first, and a lazy landing screen would show a skeleton for no
+ * reason. Everything behind a click can afford a chunk fetch, which on a warm
+ * connection is imperceptible.
+ *
+ * `React.lazy` wants a module with a default export; each screen module has
+ * one, so these stay one line each.
+ */
+const AdminScreen = lazy(() => import("./admin/AdminScreen"));
+const MartScreen = lazy(() => import("./omnimart/MartScreen"));
+const PulseScreen = lazy(() => import("./omnipulse/PulseScreen"));
+const VarsityScreen = lazy(() => import("./omnivarsity/VarsityScreen"));
+const DashboardHome = lazy(() =>
+  import("./dashboard").then((m) => ({ default: m.DashboardHome })),
+);
+const Playground = lazy(() =>
+  import("./playground/Playground").then((m) => ({ default: m.Playground })),
+);
+const AboutPage = lazy(() =>
+  import("./playground/HomePage").then((m) => ({ default: m.HomePage })),
+);
 
-/** /admin/<key> → the master or the settings record with that key. */
+/** /admin/<key> → the key, for the master and settings lookups. */
 function adminKey(href: string): string | null {
   return href.startsWith("/admin/") ? href.slice("/admin/".length) : null;
 }
@@ -43,25 +54,17 @@ function adminKey(href: string): string | null {
 /**
  * Demo application.
  *
- * The shell, the admin screens and the playground, wired to `demo.json` and
- * nothing else — no API, no router, no database. `activeHref` is the whole
- * routing layer: the sidebar reports where to go, and this switch decides what
- * to render.
+ * `activeHref` is the whole routing layer: the sidebar reports where to go,
+ * and this component decides which module answers for it. It knows the module
+ * boundaries and nothing inside them — a module's own screens, its data and
+ * its internal navigation live with that module.
  */
 export function App() {
   const [activeHref, setActiveHref] = useState("/home");
   const [search, setSearch] = useState("");
-  // OmniPulse's own navigation state: which team narrows Projects, and which
-  // board is open. In the app these are route params.
-  const [teamId, setTeamId] = useState("");
-  const [boardId, setBoardId] = useState<string | null>(null);
 
   const key = adminKey(activeHref);
-  const master = key ? DATA.masters.find((m) => m.key === key) : undefined;
   const settings = key ? DATA.settings.find((s) => s.key === key) : undefined;
-  // /omnimart/<key> and /omnivarsity/<key> → the work list with that key.
-  // Both modules' lists are the same kind of thing, so one lookup serves both.
-  const list = findList(activeHref, "/omnimart/", MART.lists) ?? findList(activeHref, "/omnivarsity/", VARSITY.lists);
 
   return (
     <>
@@ -70,70 +73,110 @@ export function App() {
         activeHref={activeHref}
         onNavigate={(href) => {
           setActiveHref(href);
-          setBoardId(null);
-          if (!href.startsWith("/omnipulse")) setTeamId("");
           setSearch("");
         }}
         search={search}
         onSearchChange={setSearch}
       >
-        {master ? (
-          // The topbar search reaches the admin table so the shell's search is
-          // not decorative; the page keeps its own box too.
-          <AdminPage key={master.key} master={master} externalSearch={search} />
-        ) : settings ? (
-          <SettingsPage key={settings.key} settings={settings} />
-        ) : activeHref === "/admin/dashboard" ? (
-          // Admin's own dashboard is the dashboard — one component, two routes.
-          <DashboardHome data={DATA} onNavigate={setActiveHref} />
-        ) : list ? (
-          <ListPage key={list.key} list={list} externalSearch={search} />
-        ) : activeHref === "/omnimart/missions" ? (
-          <MissionsPage data={MART.missions} />
-        ) : activeHref === "/omnivarsity/dashboard" ? (
-          <AcharyaDashboard data={VARSITY.dashboard} />
-        ) : activeHref === "/omnipulse/boards" ? (
-          <TeamsPage
-            data={PULSE.teams}
-            onOpen={(team) => {
-              setTeamId(team.id);
-              setActiveHref("/omnipulse/projects");
-            }}
-          />
-        ) : activeHref === "/omnipulse/projects" ? (
-          boardId ? (
-            <BoardPage
-              board={PULSE.boards.find((b) => b.id === boardId) ?? PULSE.boards[0]}
-              data={PULSE}
-              onBack={() => setBoardId(null)}
-            />
-          ) : (
-            <ProjectsPage
-              data={PULSE.projects}
-              teams={PULSE.teams.rows}
-              people={PULSE.people}
-              teamId={teamId}
-              onTeamChange={setTeamId}
-              onOpen={(project) => {
-                // Only one board carries demo lists; the rest open it too
-                // rather than showing an empty kanban.
-                setBoardId(PULSE.boards.find((b) => b.id === project.id)?.id ?? PULSE.boards[0].id);
-              }}
-            />
-          )
-        ) : activeHref === "/omnipulse/review" ? (
-          <ReviewPage data={PULSE.review} />
-        ) : activeHref === "/playground" ? (
-          <Playground />
-        ) : activeHref === "/home" ? (
-          <WorkHome data={DATA.home} />
-        ) : activeHref === "/about" ? (
-          <HomePage data={DATA} onNavigate={setActiveHref} />
-        ) : (
-          <PlaceholderPage href={activeHref} onNavigate={setActiveHref} />
-        )}
+        {/* Keyed on the route so a crash on one screen is cleared by
+            navigating away, rather than following the person around. */}
+        <ErrorBoundary key={activeHref}>
+          <Screen href={activeHref} search={search} settings={settings} onNavigate={setActiveHref} />
+        </ErrorBoundary>
       </ShellLayout>
       <Toaster />
     </>
+  );
+}
+
+function Screen({
+  href,
+  search,
+  settings,
+  onNavigate,
+}: {
+  href: string;
+  search: string;
+  settings: DemoData["settings"][number] | undefined;
+  onNavigate: (href: string) => void;
+}) {
+  const missing = <PlaceholderPage href={href} onNavigate={onNavigate} />;
+
+  // Eager: what a visitor sees before they have clicked anything.
+  if (href === "/home") return <WorkHome data={DATA.home} />;
+  if (settings) return <SettingsPage key={settings.key} settings={settings} />;
+
+  if (href === "/admin/dashboard") {
+    // Admin's own dashboard is the dashboard — one component, two routes.
+    return (
+      <Lazy>
+        <DashboardHome data={DATA} onNavigate={onNavigate} />
+      </Lazy>
+    );
+  }
+  if (href.startsWith("/admin/")) {
+    return (
+      <Lazy>
+        <AdminScreen masterKey={href.slice("/admin/".length)} search={search} fallback={missing} />
+      </Lazy>
+    );
+  }
+  if (href.startsWith("/omnimart/")) {
+    return (
+      <Lazy>
+        <MartScreen href={href} search={search} fallback={missing} />
+      </Lazy>
+    );
+  }
+  if (href.startsWith("/omnivarsity/")) {
+    return (
+      <Lazy>
+        <VarsityScreen href={href} search={search} fallback={missing} />
+      </Lazy>
+    );
+  }
+  if (href.startsWith("/omnipulse/")) {
+    return (
+      <Lazy>
+        <PulseScreen href={href} onNavigate={onNavigate} />
+      </Lazy>
+    );
+  }
+  if (href === "/playground") {
+    return (
+      <Lazy>
+        <Playground />
+      </Lazy>
+    );
+  }
+  if (href === "/about") {
+    return (
+      <Lazy>
+        <AboutPage data={DATA} onNavigate={onNavigate} />
+      </Lazy>
+    );
+  }
+
+  return missing;
+}
+
+/**
+ * What fills the content area while a chunk is in flight.
+ *
+ * The same skeleton the screens themselves open through, so the fetch and the
+ * screen's own loading state read as one wait rather than two.
+ */
+function Lazy({ children }: { children: ReactNode }) {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ display: "grid", gap: 16, maxWidth: 1560 }}>
+          <SkeletonCard lines={2} />
+          <SkeletonCard lines={5} />
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
   );
 }

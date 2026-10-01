@@ -15,96 +15,55 @@
  * rather than implying the file went somewhere.
  */
 
-export type FileKind = "image" | "video" | "audio" | "document" | "data";
+import {
+  EXT_TYPE,
+  LIMITS,
+  PREFIXES,
+  TYPE_KIND,
+  bareType as bare,
+  formatBytes,
+  kindOfType,
+  type Kind,
+} from "../../shared/media";
 
-/** The prefixes `api/_lib/blob.ts` declares, and what each one takes. */
+/**
+ * The browser's names for the shared facts.
+ *
+ * `FileKind` and `BLOB_AREAS` are re-spellings of `Kind` and `PREFIXES` so a
+ * screen reads naturally — "which area does this picture belong to" — without
+ * a second copy of either existing.
+ */
+export type FileKind = Kind;
+export { LIMITS, formatBytes };
+
+/** Each area, with the prefix it writes under and what it accepts. */
 export const BLOB_AREAS = {
-  acharya: { prefix: "omnivarsity/acharya/", access: "private", kinds: ["image"] },
-  kaarigar: { prefix: "omnivarsity/kaarigar/", access: "private", kinds: ["image"] },
-  kb: { prefix: "omnivarsity/kb/", access: "private", kinds: ["document", "data"] },
-  pipeline: { prefix: "omnimart/pipeline/", access: "private", kinds: ["image", "document", "data"] },
-  store: { prefix: "omnimart/store/", access: "public", kinds: ["image"] },
-  task: { prefix: "omnipulse/task/", access: "private", kinds: ["image", "document", "data"] },
-  media: { prefix: "omnistudio/media/", access: "private", kinds: ["image", "video", "audio"] },
-  brand: { prefix: "omnistudio/brand/", access: "public", kinds: ["image", "document"] },
-} satisfies Record<string, { prefix: string; access: "public" | "private"; kinds: FileKind[] }>;
+  acharya: { prefix: "omnivarsity/acharya/", ...PREFIXES["omnivarsity/acharya/"] },
+  kaarigar: { prefix: "omnivarsity/kaarigar/", ...PREFIXES["omnivarsity/kaarigar/"] },
+  kb: { prefix: "omnivarsity/kb/", ...PREFIXES["omnivarsity/kb/"] },
+  pipeline: { prefix: "omnimart/pipeline/", ...PREFIXES["omnimart/pipeline/"] },
+  store: { prefix: "omnimart/store/", ...PREFIXES["omnimart/store/"] },
+  task: { prefix: "omnipulse/task/", ...PREFIXES["omnipulse/task/"] },
+  media: { prefix: "omnistudio/media/", ...PREFIXES["omnistudio/media/"] },
+  brand: { prefix: "omnistudio/brand/", ...PREFIXES["omnistudio/brand/"] },
+} as const;
 
 export type BlobArea = keyof typeof BLOB_AREAS;
 
-/** Content type → kind. The same table the functions use, for the same reasons. */
-const TYPE_KIND: Record<string, FileKind> = {
-  "image/jpeg": "image",
-  "image/png": "image",
-  "image/webp": "image",
-  "image/gif": "image",
-  "image/avif": "image",
-  "image/svg+xml": "image",
-  "video/mp4": "video",
-  "video/webm": "video",
-  "video/quicktime": "video",
-  "video/x-matroska": "video",
-  "audio/mpeg": "audio",
-  "audio/mp4": "audio",
-  "audio/wav": "audio",
-  "audio/x-wav": "audio",
-  "audio/webm": "audio",
-  "audio/ogg": "audio",
-  "audio/flac": "audio",
-  "application/pdf": "document",
-  "application/msword": "document",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "document",
-  "application/vnd.ms-excel": "document",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "document",
-  "application/vnd.ms-powerpoint": "document",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "document",
-  "application/rtf": "document",
-  "text/plain": "data",
-  "text/markdown": "data",
-  "text/x-markdown": "data",
-  "text/csv": "data",
-  "application/json": "data",
-};
-
-/** What may pass through a function, and what may go browser-direct. */
-export const LIMITS: Record<FileKind, { fn: number; client: number }> = {
-  image: { fn: 4 * 1024 * 1024, client: 25 * 1024 * 1024 },
-  document: { fn: 4 * 1024 * 1024, client: 50 * 1024 * 1024 },
-  data: { fn: 4 * 1024 * 1024, client: 25 * 1024 * 1024 },
-  audio: { fn: 4 * 1024 * 1024, client: 200 * 1024 * 1024 },
-  video: { fn: 4 * 1024 * 1024, client: 1024 * 1024 * 1024 },
-};
-
-const EXT_TYPE: Record<string, string> = {
-  jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp",
-  gif: "image/gif", avif: "image/avif", svg: "image/svg+xml",
-  mp4: "video/mp4", m4v: "video/mp4", webm: "video/webm", mov: "video/quicktime",
-  mkv: "video/x-matroska",
-  mp3: "audio/mpeg", m4a: "audio/mp4", wav: "audio/wav", ogg: "audio/ogg",
-  oga: "audio/ogg", flac: "audio/flac",
-  pdf: "application/pdf", doc: "application/msword",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  xls: "application/vnd.ms-excel",
-  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  ppt: "application/vnd.ms-powerpoint",
-  pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  rtf: "application/rtf", txt: "text/plain", md: "text/markdown",
-  csv: "text/csv", json: "application/json",
-};
-
 /** The kind of a file, from its type and then, failing that, its name. */
 export function kindOf(file: { type?: string; name?: string }): FileKind | null {
-  const byType = TYPE_KIND[bare(file.type)];
+  const byType = kindOfType(bare(file.type));
   if (byType) return byType;
   const ext = file.name?.split(".").pop()?.toLowerCase();
   const byExt = ext ? EXT_TYPE[ext] : undefined;
-  return byExt ? (TYPE_KIND[byExt] ?? null) : null;
+  return byExt ? kindOfType(byExt) : null;
 }
 
 /** The kind of a stored key, which is all a listing gives you. */
 export function kindOfPath(pathname: string): FileKind | null {
   const ext = pathname.split(".").pop()?.toLowerCase();
   const type = ext ? EXT_TYPE[ext] : undefined;
-  return type ? (TYPE_KIND[type] ?? null) : null;
+  return type ? kindOfType(type) : null;
 }
 
 /** The types an area accepts, as an `<input accept>` string. */
@@ -114,15 +73,6 @@ export function acceptFor(area: BlobArea): string {
     .filter(([, k]) => kinds.includes(k))
     .map(([t]) => t)
     .join(",");
-}
-
-/** 1.4 MB, 812 KB, 340 bytes — sizes as a person reads them. */
-export function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes < 0) return "—";
-  if (bytes < 1024) return `${bytes} bytes`;
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-  const mb = bytes / 1024 / 1024;
-  return mb < 100 ? `${Math.round(mb * 10) / 10} MB` : `${Math.round(mb)} MB`;
 }
 
 export interface StoredFile {
@@ -177,10 +127,6 @@ export function publicBlobUrl(pathname: string): string {
 export function downloadUrl(src: string): string {
   if (!src.startsWith("/api/blob/")) return src;
   return `${src}${src.includes("?") ? "&" : "?"}download=1`;
-}
-
-function bare(value: string | null | undefined): string {
-  return (value ?? "").split(";")[0]!.trim().toLowerCase();
 }
 
 /** The extension to store under, from the type and then the name. */

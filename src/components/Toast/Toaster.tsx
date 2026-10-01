@@ -93,23 +93,15 @@ export function Toaster({ autoDismissMs = AUTO_DISMISS_MS }: ToasterProps = {}) 
             style={{ background: c.bg, color: c.fg, border: `1px solid ${c.bd}` }}
           >
             <span style={{ flex: 1 }}>{t.message}</span>
-            <button
-              type="button"
-              aria-label="Dismiss"
-              onClick={(e) => {
-                e.stopPropagation();
-                dismiss(t.id);
-              }}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "inherit",
-                cursor: "pointer",
-                fontSize: 16,
-                lineHeight: 1,
-                padding: 0,
-              }}
-            >
+            <button className="ui-bare-btn"
+ type="button"
+ aria-label="Dismiss"
+ onClick={(e) => {
+ e.stopPropagation();
+ dismiss(t.id);
+ }}
+ style={{ color: "inherit", cursor: "pointer", fontSize: 16, lineHeight: 1 }}
+ >
               ×
             </button>
           </div>

@@ -199,7 +199,7 @@ export function Profile({ user, onLanguageChange, onSignOut, compact = false }: 
                   }}
                 >
                   <span style={{ flex: 1 }}>{l.label}</span>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--ink-mute)" }}>
+                  <span className="ui-meta-sm" >
                     {l.code}
                   </span>
                   {active && <Check />}

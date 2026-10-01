@@ -273,34 +273,15 @@ export function MultiFilter({
                 marginBottom: 8,
               }}
             >
-              <span
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--ink-mute)",
-                }}
-              >
+              <span className="ui-eyebrow">
                 Filters
               </span>
-              <button
-                type="button"
-                onClick={clearAll}
-                disabled={activeCount === 0}
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  background: "transparent",
-                  color: activeCount > 0 ? "var(--green-deep)" : "var(--ink-mute)",
-                  border: "none",
-                  padding: 0,
-                  cursor: activeCount > 0 ? "pointer" : "default",
-                  opacity: activeCount > 0 ? 1 : 0.5,
-                }}
-              >
+              <button className="ui-bare-btn"
+ type="button"
+ onClick={clearAll}
+ disabled={activeCount === 0}
+ style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase", color: activeCount > 0 ? "var(--green-deep)" : "var(--ink-mute)", cursor: activeCount > 0 ? "pointer" : "default", opacity: activeCount > 0 ? 1 : 0.5 }}
+ >
                 Uncheck all
               </button>
             </div>
@@ -399,16 +380,9 @@ export function MultiFilter({
 function Section({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div style={{ marginBottom: 12 }}>
-      <div
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "var(--ink-mute)",
-          marginBottom: 6,
-        }}
-      >
+      <div className="ui-eyebrow ui-eyebrow--narrow"
+ style={{ marginBottom: 6 }}
+ >
         {label}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>{children}</div>
@@ -423,7 +397,7 @@ function OptionRow({ option, children }: { option: FilterOption; children: React
     >
       {children}
       {option.count != null && (
-        <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--ink-mute)" }}>
+        <span className="ui-meta-sm" >
           {option.count}
         </span>
       )}

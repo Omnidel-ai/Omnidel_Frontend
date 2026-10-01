@@ -1,5 +1,16 @@
 import { Badge, Button, PageHeader } from "../components";
-import type { DemoData } from "../data/types";
+import masters from "../data/masters.json";
+import type { DemoData, DemoMaster } from "../data/types";
+
+/**
+ * The masters, loaded here rather than handed down.
+ *
+ * This screen is lazy-loaded, so importing the 139 KB of descriptors here
+ * keeps them out of the application's own bundle — and it means the screen
+ * cannot be rendered with a `data` object that happens to be missing them,
+ * which is a crash this page has already had once.
+ */
+const MASTERS = masters as DemoMaster[];
 
 /**
  * Landing screen for the demo shell.
@@ -9,7 +20,7 @@ import type { DemoData } from "../data/types";
  * is demo content, like the playground.
  */
 export function HomePage({ data, onNavigate }: { data: DemoData; onNavigate: (href: string) => void }) {
-  const totalRows = data.masters.reduce((n, m) => n + m.rows.length, 0);
+  const totalRows = MASTERS.reduce((n, m) => n + m.rows.length, 0);
 
   return (
     <div>
@@ -41,13 +52,13 @@ export function HomePage({ data, onNavigate }: { data: DemoData; onNavigate: (hr
       <div className="pg-grid-2" style={{ marginTop: 22 }}>
         <Stat label="Shared components" value="16" hint="Buttons, inputs, table, filters, overlays" />
         <Stat label="Shell components" value="5" hint="Sidebar, topbar, profile, status bar, assistant" />
-        <Stat label="Admin screens" value={String(data.masters.length)} hint="One component, five descriptors" />
+        <Stat label="Admin screens" value={String(MASTERS.length)} hint="One component, five descriptors" />
         <Stat label="Demo rows" value={String(totalRows)} hint="In memory — edits reset on reload" />
       </div>
 
       <h3 style={{ marginTop: 32, marginBottom: 12, fontSize: 18 }}>Masters</h3>
       <div className="pg-grid-2">
-        {data.masters.map((m) => (
+        {MASTERS.map((m) => (
           <button
             key={m.key}
             type="button"
@@ -79,15 +90,7 @@ export function HomePage({ data, onNavigate }: { data: DemoData; onNavigate: (hr
 function Stat({ label, value, hint }: { label: string; value: string; hint: string }) {
   return (
     <div className="pg-card">
-      <div
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--ink-mute)",
-        }}
-      >
+      <div className="ui-eyebrow">
         {label}
       </div>
       <div style={{ fontFamily: "var(--serif)", fontSize: 28, marginTop: 6 }}>{value}</div>
