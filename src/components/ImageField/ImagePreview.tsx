@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { PrivateImage } from "../Upload/PrivateImage";
 import { blobViewUrl } from "../../lib/blob";
-import { initials } from "../Avatar";
 
 export interface ImagePreviewProps {
   /** A blob URL, a stored key, or nothing. Private ones are proxied for you. */
@@ -14,87 +13,28 @@ export interface ImagePreviewProps {
 }
 
 /**
- * An image with somewhere to stand before and instead of itself.
+ * An image, with somewhere to stand before and instead of itself.
  *
- * Three states, and the reason this is a component rather than an `<img>`:
+ * This is `PrivateImage` with the resolver already chosen. The two were
+ * separate components with the same hundred lines in each — the loading
+ * shimmer, the initials fallback, the hold-until-decoded — which is one
+ * component too many: a fix to the fallback had to be made twice or it was
+ * made once and they drifted.
  *
- *   - **loading** — the box holds its size and shimmers, so a row of portraits
- *     does not reflow as each one arrives;
- *   - **loaded** — the image, cropped to fill;
- *   - **nothing, or failed** — the person's initials. A private blob whose
- *     session has lapsed fails exactly like a missing one, and neither is worth
- *     a broken-image glyph.
- *
- * `src` may be a full URL or a stored key; private keys are routed through the
- * view function, because a private blob cannot be loaded any other way.
+ * The difference that justified two of them is only how the picture is
+ * addressed: a caller with a URL already in hand uses this; a caller holding a
+ * stored id and its own way of resolving one uses `PrivateImage` directly.
+ * That is a default argument, not a second component.
  */
-export function ImagePreview({
-  src,
-  name = "",
-  size = 88,
-  shape = "square",
-  className,
-}: ImagePreviewProps) {
-  const url = blobViewUrl(src);
-  const [state, setState] = useState<"idle" | "loading" | "ok" | "failed">(
-    url ? "loading" : "idle",
-  );
-
-  useEffect(() => {
-    setState(url ? "loading" : "idle");
-  }, [url]);
-
-  const radius = shape === "circle" ? "50%" : "var(--r-md)";
-
+export function ImagePreview({ src, name, size, shape, className }: ImagePreviewProps) {
   return (
-    <div
+    <PrivateImage
+      fileId={src}
+      resolveUrl={blobViewUrl}
+      name={name}
+      size={size}
+      shape={shape}
       className={className}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: radius,
-        border: "1px solid var(--rule)",
-        background: "var(--surface-sunk)",
-        overflow: "hidden",
-        flexShrink: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-        fontFamily: "var(--serif)",
-        fontSize: Math.max(13, Math.round(size * 0.27)),
-        fontWeight: 600,
-        color: "var(--ink-mute)",
-      }}
-    >
-      {state === "idle" || state === "failed" ? (
-        <span aria-hidden={Boolean(name)}>{initials(name) || "?"}</span>
-      ) : (
-        <>
-          {state === "loading" && (
-            <span
-              className="skeleton-bar"
-              aria-hidden="true"
-              style={{ position: "absolute", inset: 0, height: "auto", borderRadius: radius }}
-            />
-          )}
-          <img
-            src={url}
-            alt={name ? `${name}'s picture` : ""}
-            onLoad={() => setState("ok")}
-            onError={() => setState("failed")}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              // Held back until it has actually decoded, so the skeleton is
-              // never seen through a half-painted image.
-              opacity: state === "ok" ? 1 : 0,
-              transition: "opacity 140ms ease",
-            }}
-          />
-        </>
-      )}
-    </div>
+    />
   );
 }

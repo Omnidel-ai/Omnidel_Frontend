@@ -35,15 +35,9 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section
-      style={{
-        background: "var(--surface)",
-        border: "1px solid var(--rule)",
-        borderRadius: "var(--r-md)",
-        padding: "var(--card-pad)",
-        minWidth: 0,
-      }}
-    >
+    <section className="ui-card ui-card--pad"
+ style={{ minWidth: 0 }}
+ >
       <header
         style={{
           display: "flex",
@@ -57,16 +51,9 @@ export function Panel({
         <div style={{ minWidth: 0 }}>
           <h3 style={{ fontSize: 16, fontFamily: "var(--serif)" }}>{title}</h3>
           {subtitle && (
-            <p
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink-mute)",
-                marginTop: 4,
-              }}
-            >
+            <p className="ui-eyebrow ui-eyebrow--narrow"
+ style={{ marginTop: 4 }}
+ >
               {subtitle}
             </p>
           )}
@@ -327,15 +314,9 @@ export function BarRows({ points }: { points: DemoPoint[] }) {
               }}
             />
           </span>
-          <span
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 11.5,
-              color: "var(--ink)",
-              textAlign: "right",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
+          <span className="ui-num"
+ style={{ fontSize: 11.5, color: "var(--ink)", textAlign: "right" }}
+ >
             {p.value}
           </span>
         </div>
@@ -392,25 +373,14 @@ export function StatusBreakdown({
               }}
             />
             <span style={{ flex: 1, fontSize: 13, color: "var(--ink-soft)" }}>{i.label}</span>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 11.5,
-                color: "var(--ink)",
-                fontVariantNumeric: "tabular-nums",
-              }}
-            >
+            <span className="ui-num"
+ style={{ fontSize: 11.5, color: "var(--ink)" }}
+ >
               {i.value}
             </span>
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                color: "var(--ink-faint)",
-                width: 34,
-                textAlign: "right",
-              }}
-            >
+            <span className="ui-meta-faint"
+ style={{ width: 34, textAlign: "right" }}
+ >
               {Math.round((i.value / total) * 100)}%
             </span>
           </div>

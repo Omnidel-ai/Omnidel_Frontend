@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { FileField, FileRow, ImageField, ImagePreview, MediaPlayer } from "../components";
+import { FileRow, ImageField, ImagePreview, MediaPlayer, UploadField } from "../components";
 import { formatBytes, readApiStatus, LIMITS, type StoredFile } from "../lib/blob";
 import { Case, Section } from "./Case";
 
@@ -85,7 +85,7 @@ export function UploadsSection() {
 
       <Case label="Documents — the acharya knowledge base" stack>
         <div style={{ width: "100%", maxWidth: 620 }}>
-          <FileField
+          <UploadField
             area="kb"
             slug="vivek-acharya"
             label="Documents"
@@ -104,7 +104,7 @@ export function UploadsSection() {
 
       <Case label="Video & audio — studio media, played in place" stack>
         <div style={{ width: "100%", maxWidth: 620 }}>
-          <FileField
+          <UploadField
             area="media"
             slug="diwali-dispatch"
             label="Media"

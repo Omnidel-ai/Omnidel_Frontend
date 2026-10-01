@@ -63,17 +63,9 @@ export function Input({
         {...rest}
       />
       {addonRight && (
-        <span
-          style={{
-            position: "absolute",
-            right: 8,
-            display: "inline-flex",
-            alignItems: "center",
-            color: "var(--ink-mute)",
-            fontSize: 11,
-            fontFamily: "var(--mono)",
-          }}
-        >
+        <span className="ui-meta"
+ style={{ position: "absolute", right: 8, display: "inline-flex", alignItems: "center" }}
+ >
           {addonRight}
         </span>
       )}

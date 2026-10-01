@@ -115,16 +115,9 @@ export function EmptyState({
 
   if (size === "card") {
     return (
-      <div
-        style={{
-          background: "var(--surface)",
-          border: "1px solid var(--rule)",
-          borderRadius: "var(--r-md)",
-          display: "grid",
-          placeItems: "center",
-          minHeight: 260,
-        }}
-      >
+      <div className="ui-card"
+ style={{ display: "grid", placeItems: "center", minHeight: 260 }}
+ >
         {body}
       </div>
     );

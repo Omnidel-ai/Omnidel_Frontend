@@ -41,24 +41,12 @@ export function Disclosure({
       }}
     >
       <header style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: open ? 12 : 0 }}>
-        <button
-          type="button"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            background: "transparent",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            fontFamily: "var(--serif)",
-            fontSize: 19,
-            fontWeight: 500,
-            color: "var(--ink)",
-          }}
-        >
+        <button className="ui-bare-btn"
+ type="button"
+ onClick={() => setOpen((o) => !o)}
+ aria-expanded={open}
+ style={{ display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer", fontFamily: "var(--serif)", fontSize: 19, fontWeight: 500, color: "var(--ink)" }}
+ >
           {title}
           {meta != null && (
             <span style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--ink-mute)" }}>

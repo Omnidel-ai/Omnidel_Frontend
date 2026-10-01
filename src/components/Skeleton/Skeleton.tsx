@@ -78,16 +78,10 @@ export interface SkeletonCardProps {
 /** Card-shaped placeholder — a stat tile, a panel, a feed item. */
 export function SkeletonCard({ avatar = false, lines = 3, media, style }: SkeletonCardProps) {
   return (
-    <div
-      aria-busy="true"
-      style={{
-        background: "var(--surface)",
-        border: "1px solid var(--rule)",
-        borderRadius: "var(--r-md)",
-        padding: "var(--card-pad)",
-        ...style,
-      }}
-    >
+    <div className="ui-card ui-card--pad"
+ aria-busy="true"
+ style={{ ...style }}
+ >
       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
         {avatar && <Skeleton shape="circle" width={32} />}
         <Skeleton height={12} width="45%" />

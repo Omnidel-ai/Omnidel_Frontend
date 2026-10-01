@@ -17,24 +17,10 @@ const DELTA_COLOR: Record<string, string> = {
 export function StatTile({ stat }: { stat: DemoStat }) {
   const color = DELTA_COLOR[stat.deltaTone] ?? DELTA_COLOR.neutral;
   return (
-    <div
-      style={{
-        background: "var(--surface)",
-        border: "1px solid var(--rule)",
-        borderRadius: "var(--r-md)",
-        padding: "14px 16px",
-        minWidth: 0,
-      }}
-    >
-      <div
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--ink-mute)",
-        }}
-      >
+    <div className="ui-card"
+ style={{ padding: "14px 16px", minWidth: 0 }}
+ >
+      <div className="ui-eyebrow">
         {stat.label}
       </div>
       <div

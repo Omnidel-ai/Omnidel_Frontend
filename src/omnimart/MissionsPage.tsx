@@ -55,7 +55,7 @@ export function MissionsPage({ data }: MissionsPageProps) {
         eyebrow="OmniMart"
         crumbs={[{ label: "OmniMart" }, { label: data.label }]}
         actions={
-          <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+          <span className="ui-meta" >
             {atRisk === 0 ? "all on track" : `${atRisk} needing attention`}
           </span>
         }

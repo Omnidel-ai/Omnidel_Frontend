@@ -51,6 +51,7 @@ OmniDel/                    ← existing Next.js app, untouched
 ├── src/ app/ …
 └── frontend/               ← this project
     ├── api/                ← Vercel Functions: Blob upload, view, public, list
+    ├── shared/             ← facts both sides need: what may be stored, how large
     ├── src/
     │   ├── components/     ← 1. shared UI components
     │   │   └── acharya-app/   ← reference copy, excluded from the build
@@ -120,7 +121,7 @@ npm run dev        # http://localhost:5300
 | `npm run build` | Typecheck, then production build to `dist/` |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint (flat config, this project only) |
-| `npm run smoke` | Server-renders all 41 screens — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 25 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
+| `npm run smoke` | Server-renders 46 cases — shell, Home, playground, dashboard, the four OmniPulse screens, the six work lists, the Acharya Dashboard and all 25 admin screens — and asserts the markup, including each descriptor parameter that a screen declares |
 | `npm run preview` | Serve the production build |
 
 Requirements: Node 20+ (developed on 22.17). The stylesheet pulls Fraunces,
@@ -504,11 +505,10 @@ route before it gets users.
 |---|---|
 | `Dropzone` | drag files in, or click — with the policy written on it |
 | `UploadList` | what is in flight: progress, **cancel**, **retry**, the reason it failed |
-| `UploadField` | the three together: dropzone, queue, and what has landed |
+| `UploadField` | the three together: dropzone, queue, and what has landed — **the one attachment field** |
 | `PrivateImage` | a stored **id**, rendered through a `resolveUrl` prop |
 | `ImageField` | one picture on a record — the application's avatar field |
-| `ImagePreview` | showing one, with its loading, empty and failed states |
-| `FileField` | attachments: many files, any kind the prefix allows |
+| `ImagePreview` | `PrivateImage` with the resolver already chosen |
 | `FileRow` | one attached file — glyph, name, size, download, remove |
 | `MediaPlayer` | video and audio, played in place |
 | `FileKindIcon` | one glyph per kind |
@@ -543,9 +543,9 @@ in the app, a mock in the playground, or a signed URL if the store ever hands
 those out.
 
 `ImageField` **replaces before it deletes**, so a failed delete leaves a stray
-blob rather than a record pointing at nothing. `FileField` offers only the types
-its prefix accepts, reports real progress on the browser-direct route — a 200 MB
-recording gets a bar, not a spinner — and gives video and audio a player,
+blob rather than a record pointing at nothing. `UploadField` offers only the
+types its prefix accepts, reports real progress on the browser-direct route — a
+200 MB recording gets a bar, not a spinner — and gives video and audio a player,
 because those are the two kinds you cannot judge from a name.
 
 **With no store, nothing is hidden.** Files are shown from an object URL and the
@@ -562,6 +562,63 @@ like the normal deployment. For the real thing, see the next section.
 functions run on Node, not in the browser, and are deliberately not part of the
 SPA's build. `@vercel/blob` is loaded through a dynamic import in the browser, so
 it is a separate chunk and never enters the main bundle.
+
+## How it loads, and what happens when it breaks
+
+Three decisions here are about the application as a running thing rather than
+as a set of screens.
+
+### One table, two sides — `shared/`
+
+What may be uploaded, how large it may be, and which prefix it belongs to are
+facts the **browser** needs (to offer a file picker and refuse a file early)
+and the **server** needs (to enforce it). They lived in two files, one per
+side, holding the same thirty content types. They agreed, but nothing made them
+agree — and the failure that produces is the nastiest kind: the browser accepts
+a file, the upload runs, and the server rejects it at the end.
+
+`shared/media.ts` is now the only place those facts exist. It imports nothing
+from React, Node or Vercel, so both sides can load it, and both tsconfigs
+include it.
+
+### Nobody downloads a screen they did not open
+
+```
+   before          one bundle                           568 KB
+   after           entry                                305 KB
+                   + masters.json         on demand      75 KB
+                   + OmniPulse            on demand      56 KB
+                   + the playground       on demand      48 KB
+                   + OmniMart             on demand      19 KB
+                   + Admin                on demand      12 KB
+                   + OmniVarsity          on demand       8 KB
+```
+
+Each module now owns its data — `AdminScreen` imports `masters.json`,
+`PulseScreen` imports `omnipulse.json`, and so on — and `App` imports those
+screens with `React.lazy`. The bundler follows: a module's code and its data
+travel in one chunk, fetched the first time someone navigates there.
+
+The shell and Home stay eager on purpose. They are what a visitor sees before
+they click anything, and a lazy landing screen would show a skeleton for no
+reason.
+
+This also moved two things out of `App` that were never its business: the
+admin key lookup, and OmniPulse's internal navigation (which team narrows
+Projects, which board is open). `App` now knows the module boundaries and
+nothing inside them.
+
+### A broken screen is a broken screen, not a broken app
+
+An error thrown during render unmounts the whole React tree — sidebar, topbar
+and content all vanish, leaving a white page with no navigation to escape
+through. `ErrorBoundary` wraps the content area, keyed on the route, so the
+shell survives, the content area explains itself, and every other screen is
+still one click away. Navigating away clears it.
+
+It does not catch errors in event handlers, timers or promises — those do not
+happen during render, so React never sees them. Those are handled where they
+are thrown, which in this workspace means a toast.
 
 ## Deploying to Vercel
 
@@ -804,7 +861,7 @@ approach keeps the two identical and the dependency list at two packages.
 ## Known limitations
 
 * **No automated tests beyond the smoke render.** No Vitest/RTL setup yet;
-  `npm run smoke` renders all 41 screens and checks the markup. Interaction
+  `npm run smoke` renders 46 cases and checks the markup. Interaction
   tests are the obvious next addition.
 * **The product screens were compared against the running application by eye**,
   in a browser, screen by screen — they were not diffed pixel by pixel, and the

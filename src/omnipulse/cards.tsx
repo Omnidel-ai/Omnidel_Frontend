@@ -132,17 +132,9 @@ export function CardTitle({ children, pad = true }: { children: ReactNode; pad?:
 
 export function CardMeta({ children }: { children: ReactNode }) {
   return (
-    <span
-      style={{
-        fontFamily: "var(--mono)",
-        fontSize: 11,
-        color: "var(--ink-mute)",
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 10,
-        marginTop: 2,
-      }}
-    >
+    <span className="ui-meta"
+ style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 2 }}
+ >
       {children}
     </span>
   );
@@ -295,16 +287,9 @@ export function TaskProgress({
         {seg(doing, "var(--amber)", "In progress")}
         {seg(todo, "var(--rule-strong)", "To do")}
       </span>
-      <span
-        style={{
-          display: "flex",
-          gap: 10,
-          marginTop: 6,
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          color: "var(--ink-mute)",
-        }}
-      >
+      <span className="ui-meta-sm"
+ style={{ display: "flex", gap: 10, marginTop: 6 }}
+ >
         <span>{done} done</span>
         <span>{doing} doing</span>
         <span>{todo} to do</span>
@@ -342,14 +327,9 @@ export function Avatars({ names, size = 22 }: { names: string[]; size?: number }
         </span>
       ))}
       {names.length > 3 && (
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            color: "var(--ink-mute)",
-            marginLeft: 4,
-          }}
-        >
+        <span className="ui-meta-sm"
+ style={{ marginLeft: 4 }}
+ >
           +{names.length - 3}
         </span>
       )}

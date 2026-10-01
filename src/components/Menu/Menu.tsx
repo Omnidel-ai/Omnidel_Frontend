@@ -195,30 +195,17 @@ export interface PinButtonProps {
 export function PinButton({ pinned, onToggle, label = "item", size = "md" }: PinButtonProps) {
   const px = size === "sm" ? 20 : 24;
   return (
-    <button
-      type="button"
-      aria-pressed={pinned}
-      aria-label={pinned ? `Unpin ${label}` : `Pin ${label}`}
-      title={pinned ? "Unpin" : "Pin"}
-      onClick={(e) => {
-        e.stopPropagation();
-        onToggle(!pinned);
-      }}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: px,
-        height: px,
-        padding: 0,
-        background: "transparent",
-        border: "none",
-        borderRadius: "var(--r-sm)",
-        color: pinned ? "var(--green-deep)" : "var(--ink-mute)",
-        cursor: "pointer",
-        flexShrink: 0,
-      }}
-    >
+    <button className="ui-bare-btn"
+ type="button"
+ aria-pressed={pinned}
+ aria-label={pinned ? `Unpin ${label}` : `Pin ${label}`}
+ title={pinned ? "Unpin" : "Pin"}
+ onClick={(e) => {
+ e.stopPropagation();
+ onToggle(!pinned);
+ }}
+ style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: px, height: px, borderRadius: "var(--r-sm)", color: pinned ? "var(--green-deep)" : "var(--ink-mute)", cursor: "pointer", flexShrink: 0 }}
+ >
       <svg
         width="13"
         height="13"

@@ -83,7 +83,7 @@ export function SettingsPage({ settings }: SettingsPageProps) {
               </Button>
             </>
           ) : (
-            <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+            <span className="ui-meta" >
               No unsaved changes
             </span>
           )
@@ -106,15 +106,9 @@ export function SettingsPage({ settings }: SettingsPageProps) {
 
       <div style={{ display: "grid", gap: 18 }}>
         {settings.groups.map((g) => (
-          <section
-            key={g.title}
-            style={{
-              background: "var(--surface)",
-              border: "1px solid var(--rule)",
-              borderRadius: "var(--r-md)",
-              padding: "var(--card-pad)",
-            }}
-          >
+          <section className="ui-card ui-card--pad"
+ key={g.title}
+ >
             <header style={{ marginBottom: 14 }}>
               <h3 style={{ fontSize: 16 }}>{g.title}</h3>
               {g.description && (
@@ -153,15 +147,9 @@ export function SettingsSkeleton() {
   return (
     <div style={{ display: "grid", gap: 18 }}>
       {[0, 1].map((i) => (
-        <div
-          key={i}
-          aria-busy="true"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--rule)",
-            borderRadius: "var(--r-md)",
-            padding: "var(--card-pad)",
-          }}
+        <div className="ui-card ui-card--pad"
+ key={i}
+ aria-busy="true"
         >
           <Skeleton width="30%" height={13} />
           <div className="settings-grid" style={{ marginTop: 16 }}>

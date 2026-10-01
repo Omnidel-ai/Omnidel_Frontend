@@ -31,15 +31,7 @@ export function PlaceholderPage({
         style={{ display: "grid", placeItems: "center", minHeight: 280, textAlign: "center" }}
       >
         <div style={{ maxWidth: "46ch" }}>
-          <div
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 10,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--ink-mute)",
-            }}
-          >
+          <div className="ui-eyebrow">
             Not part of the demo
           </div>
           <h3 style={{ margin: "10px 0 8px", fontSize: 22, textTransform: "capitalize" }}>{title}</h3>

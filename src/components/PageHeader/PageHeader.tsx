@@ -30,16 +30,9 @@ export function PageHeader({
   return (
     <div style={{ marginBottom }}>
       {eyebrow && (
-        <div
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 10,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--ink-mute)",
-            marginBottom: 6,
-          }}
-        >
+        <div className="ui-eyebrow"
+ style={{ marginBottom: 6 }}
+ >
           {eyebrow}
         </div>
       )}

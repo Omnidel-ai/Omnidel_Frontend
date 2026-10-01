@@ -202,7 +202,7 @@ export function AdminPage({ master, externalSearch }: AdminPageProps) {
         onNavigate={() => undefined}
         actions={
           <>
-            <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--ink-mute)" }}>
+            <span className="ui-meta" >
               {liveRows.length} {master.label.toLowerCase()}
             </span>
             <Button variant="ghost" size="sm" onClick={api.reload}>
@@ -435,7 +435,7 @@ function Chevron({ up = false }: { up?: boolean }) {
 function Count({ n }: { n: number }) {
   if (n === 0) return null;
   return (
-    <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--ink-mute)", marginLeft: 4 }}>
+    <span className="ui-meta-sm" style={{ marginLeft: 4 }}>
       {n}
     </span>
   );

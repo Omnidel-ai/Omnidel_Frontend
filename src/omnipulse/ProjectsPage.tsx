@@ -154,7 +154,7 @@ export function ProjectsPage({
         }
         if (c.key === "total" || c.key === "mine") {
           return (
-            <span style={{ fontFamily: "var(--mono)", fontVariantNumeric: "tabular-nums" }}>
+            <span className="ui-num" >
               {p[c.key]}
             </span>
           );

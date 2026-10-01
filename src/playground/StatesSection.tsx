@@ -35,7 +35,7 @@ export function StatesSection() {
     <Section id="states" title="Empty states & skeletons">
       <Case label="Empty state — three variants, three different actions" stack>
         <div className="pg-grid-2" style={{ width: "100%" }}>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r-md)", minHeight: 240, display: "flex" }}>
+          <div className="ui-card" style={{ minHeight: 240, display: "flex" }}>
             <EmptyState
               variant="empty"
               title="No trade types yet"
@@ -43,7 +43,7 @@ export function StatesSection() {
               action={<Button size="sm">Add the first trade type</Button>}
             />
           </div>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r-md)", minHeight: 240, display: "flex" }}>
+          <div className="ui-card" style={{ minHeight: 240, display: "flex" }}>
             <EmptyState
               variant="no-results"
               title="No lanes match “barasat overnight”"
@@ -55,7 +55,7 @@ export function StatesSection() {
               }
             />
           </div>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--rule)", borderRadius: "var(--r-md)", minHeight: 240, display: "flex" }}>
+          <div className="ui-card" style={{ minHeight: 240, display: "flex" }}>
             <EmptyState
               variant="error"
               title="Couldn’t load locations"
