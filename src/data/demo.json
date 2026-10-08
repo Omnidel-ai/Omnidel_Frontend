@@ -385,6 +385,11 @@
       "tone": "info"
     }
   ],
+  "urgent": [
+    { "id": "t-razorpay", "title": "Integrate Razorpay payment gateway into vatika.ai", "assignee": "Shubham Gupta", "project": "Vatika", "due": "Overdue", "overdue": true },
+    { "id": "t-admin-layer", "title": "Admin and Customer Layer (setup)", "assignee": "Shubham Gupta", "project": "Platform", "due": "Due today", "overdue": true },
+    { "id": "t-malayalam", "title": "Publish approved Malayalam pages", "assignee": "Ananya Rao", "project": "Bengali Translation", "due": "Due 12 Oct" }
+  ],
   "assistant": {
     "name": "MahAcharya",
     "greeting": "Ask me about anything on this screen — the masters, the shell, or what a component does.",

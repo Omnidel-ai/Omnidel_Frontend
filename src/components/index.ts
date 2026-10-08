@@ -27,6 +27,7 @@ export * from "./EmptyState";
 export * from "./Skeleton";
 export * from "./StatusToggle";
 export * from "./Spinner";
+export * from "./TimerRing";
 
 export { useIsMobile } from "../hooks/useIsMobile";
 export { useHScrollThumb } from "../hooks/useHScrollThumb";

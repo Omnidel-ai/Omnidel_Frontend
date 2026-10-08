@@ -1,0 +1,68 @@
+{
+  "extraMinutesPerAttempt": 60,
+  "running": {
+    "taskId": "t-admin-layer",
+    "session": 1,
+    "elapsedSeconds": 1860,
+    "breaksUsed": 0
+  },
+  "tasks": [
+    {
+      "id": "t-admin-layer",
+      "title": "Admin and Customer Layer (setup)",
+      "workspace": "Platform",
+      "board": "Core Admin",
+      "status": "Doing",
+      "due": "Wed, 8 Oct",
+      "description": "Set up the admin layer and the customer layer for the new instance: roles, the staff invite flow and the customer-facing account pages. Keep both behind the existing auth middleware.",
+      "sessions": 2,
+      "sessionMinutes": 45,
+      "breaksPerSession": 1,
+      "acharya": { "name": "Acharya Vishwakarma", "initials": "AV" },
+      "subtasks": [
+        { "id": "s1", "title": "Roles and permissions table", "session": 1, "status": "done", "workedSeconds": 1140 },
+        { "id": "s2", "title": "Staff invite flow", "session": 1, "status": "current" },
+        { "id": "s3", "title": "Customer account pages", "session": 2, "status": "pending" },
+        { "id": "s4", "title": "Wire both layers to auth", "session": 2, "status": "pending" }
+      ],
+      "updates": [
+        {
+          "id": "up1",
+          "at": "10:18 am",
+          "text": "Roles table migrated and seeded with Admin, Manager and Staff. RLS policies checked against the Staff role.",
+          "photos": 2,
+          "session": 1
+        }
+      ]
+    },
+    {
+      "id": "t-razorpay",
+      "title": "Integrate Razorpay payment gateway into vatika.ai",
+      "workspace": "Vatika",
+      "board": "Website",
+      "status": "Planned",
+      "due": "Fri, 10 Oct",
+      "description": "You need to integrate the entire Razorpay payment gateway into our vatika.ai website so that we can transact properly through it. In order to do that, whatever is required has to be executed. This is an extremely important task.",
+      "sessions": 2,
+      "sessionMinutes": 45,
+      "breaksPerSession": 1,
+      "acharya": { "name": "Acharya Vishwakarma", "initials": "AV" },
+      "attempt": { "n": 2, "of": 3, "score": 80 },
+      "updates": []
+    },
+    {
+      "id": "t-malayalam",
+      "title": "Publish approved Malayalam pages",
+      "workspace": "Design",
+      "board": "Bengali Translation",
+      "status": "Review",
+      "due": "Sun, 12 Oct",
+      "description": "Publish the Malayalam pages that passed language review. Check every page renders with the Indic font scope before you mark it done.",
+      "sessions": 1,
+      "sessionMinutes": 45,
+      "breaksPerSession": 1,
+      "acharya": { "name": "Acharya Shilpa", "initials": "AS" },
+      "updates": []
+    }
+  ]
+}

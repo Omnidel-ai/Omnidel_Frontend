@@ -16,10 +16,12 @@ import masters from "./data/masters.json";
 import omnipulse from "./data/omnipulse.json";
 import omnimart from "./data/omnimart.json";
 import omnivarsity from "./data/omnivarsity.json";
+import tasktimer from "./data/tasktimer.json";
 import type { DemoData, DemoMaster } from "./data/types";
 import type { OmniPulseData } from "./omnipulse";
 import type { OmniMartData } from "./omnimart";
 import type { OmniVarsityData } from "./omnivarsity";
+import type { TaskTimerData } from "./tasktimer";
 
 // One cast at the edge: JSON has no types, and everything downstream reads the
 // declared shapes. The shell's content and the admin descriptors are separate
@@ -29,6 +31,7 @@ const DATA = { ...demo, masters: masters as DemoMaster[] } as DemoData;
 const PULSE = omnipulse as OmniPulseData;
 const MART = omnimart as OmniMartData;
 const VARSITY = omnivarsity as OmniVarsityData;
+const TIMER = tasktimer as TaskTimerData;
 
 /** /<module>/<key> → that module's list with that key. */
 function findList<T extends { key: string }>(href: string, prefix: string, lists: T[]): T | undefined {
@@ -76,6 +79,7 @@ export function App() {
         }}
         search={search}
         onSearchChange={setSearch}
+        taskTimer={TIMER}
       >
         {master ? (
           // The topbar search reaches the admin table so the shell's search is

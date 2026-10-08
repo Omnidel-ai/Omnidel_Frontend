@@ -70,7 +70,10 @@ export function AskMache({ assistant, side = "right", defaultOpen = false }: Ask
     }, 550);
   }
 
-  const edge: CSSProperties = dock === "right" ? { right: 20 } : { left: 20 };
+  // `--shell-dock-right` is set by the shell while the task timer panel is open,
+  // so the pill rides left with the page instead of sitting on top of the panel.
+  const edge: CSSProperties =
+    dock === "right" ? { right: "calc(var(--shell-dock-right, 0px) + 20px)" } : { left: 20 };
 
   if (!open) {
     return (
@@ -249,7 +252,7 @@ const fabStyle: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: 8,
-  transition: "left 0.18s ease, right 0.18s ease, transform 0.18s ease",
+  transition: "left 0.18s ease, right 0.32s cubic-bezier(0.32, 0.72, 0, 1), transform 0.18s ease",
 };
 
 const panelStyle: CSSProperties = {

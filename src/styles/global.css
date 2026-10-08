@@ -1828,3 +1828,144 @@ input, button, select, textarea { font-family: var(--sans); }
   .console-head__title { font-size: 24px; }
   .console-viewing { padding: 7px 16px; }
 }
+
+/* ─── Task timer ──────────────────────────────────────────────────────────
+   The topbar chip and the side panel it opens. The panel is a flex sibling
+   of the app column, not an overlay: opening it animates its width, so the
+   page squeezes left to make room and widens back when it closes. */
+@keyframes timer-expired-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.timer-expired-pulse { animation: timer-expired-pulse 1.4s ease-in-out infinite; }
+
+@keyframes timer-live-dot {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 45%, transparent); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.tt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 34px;
+  max-width: 300px;
+  min-width: 0;
+  padding: 0 6px 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: background 0.15s, border-color 0.15s;
+}
+.tt-chip:hover { background: var(--surface-sunk); border-color: var(--rule-strong); }
+.tt-chip:focus-visible { outline: 2px solid var(--rule-strong); outline-offset: 2px; }
+.tt-chip[aria-expanded="true"] { background: var(--surface-sunk); border-color: var(--rule-strong); }
+.tt-chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  animation: timer-live-dot 1.8s ease-out infinite;
+}
+.tt-chip__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.tt-chip__clock {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.tt-dock {
+  flex-shrink: 0;
+  overflow: hidden;
+  height: 100%;
+  border-left: 1px solid var(--rule);
+  background: var(--page);
+  transition: width 0.32s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.32s;
+}
+.tt-dock[data-open="false"] { border-left-color: transparent; }
+.tt-dock__inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.2s ease, transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.tt-dock[data-open="false"] .tt-dock__inner { opacity: 0; transform: translateX(24px); }
+
+/* Phones: no room to squeeze, so the panel slides over the page instead. */
+.tt-dock--sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  width: 100%;
+  border-left: none;
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.32s;
+}
+.tt-dock--sheet[data-open="false"] { transform: translateX(100%); visibility: hidden; }
+
+.tt-section-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.tt-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.tt-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 13px 14px;
+}
+.tt-cta {
+  width: 100%;
+  min-height: 46px;
+  border-radius: var(--r-lg);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  transition: transform 0.12s ease, background 0.15s;
+}
+.tt-cta:active:not(:disabled) { transform: scale(0.98); }
+.tt-cta:disabled { opacity: 0.6; cursor: not-allowed; }
+.tt-cta:focus-visible { outline: 2px solid var(--rule-strong); outline-offset: 2px; }
+.tt-cta--primary { background: var(--green-deep); color: #f4efdf; }
+.tt-cta--primary:hover:not(:disabled) { background: var(--green); }
+.tt-cta--ochre { background: var(--ochre); color: #f4efdf; }
+.tt-cta--crit { background: var(--crit); color: #f4efdf; }
+.tt-cta--outline { background: transparent; color: var(--ink-soft); border-color: var(--rule-strong); font-weight: 600; }
+.tt-cta--outline:hover:not(:disabled) { background: var(--surface-sunk); }
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-expired-pulse { animation: none; }
+  .tt-chip__dot { animation: none; }
+  .tt-dock, .tt-dock__inner, .tt-dock--sheet { transition-duration: 0.01ms; }
+}

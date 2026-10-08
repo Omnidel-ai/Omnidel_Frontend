@@ -51,6 +51,17 @@ export interface DemoNotification {
   tone: "info" | "success" | "warn" | "crit";
 }
 
+/** An open task with priority "urgent" — the topbar's warning triangle. */
+export interface DemoUrgentTask {
+  id: string;
+  title: string;
+  assignee?: string;
+  project?: string;
+  /** Already worded: "Overdue", "Due today", "Due 12 Oct". */
+  due?: string;
+  overdue?: boolean;
+}
+
 export interface DemoStatusItem {
   key: string;
   label: string;
@@ -253,6 +264,7 @@ export interface DemoData {
   nav: DemoNavItem[];
   status: DemoStatusItem[];
   notifications: DemoNotification[];
+  urgent: DemoUrgentTask[];
   assistant: DemoAssistant;
   /** From `masters.json`, merged in at the edge (see App.tsx). */
   masters: DemoMaster[];
