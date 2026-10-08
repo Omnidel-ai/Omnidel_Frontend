@@ -3,8 +3,9 @@ import { SearchBar } from "../../components/SearchBar";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { Profile } from "../Profile/Profile";
 import { NotificationBell } from "./NotificationBell";
+import { UrgentBell } from "./UrgentBell";
 import { SHELL_TOPBAR_H } from "../Sidebar/Sidebar";
-import type { DemoNotification, DemoUser } from "../../data/types";
+import type { DemoNotification, DemoUrgentTask, DemoUser } from "../../data/types";
 
 export interface TopbarProps {
   user: DemoUser;
@@ -16,11 +17,14 @@ export interface TopbarProps {
   notifications?: DemoNotification[];
   onNotificationRead?: (id: string) => void;
   onNotificationsReadAll?: () => void;
+  /** Open urgent tasks. Omit and the warning triangle is not drawn. */
+  urgent?: DemoUrgentTask[];
+  onUrgentOpen?: (task: DemoUrgentTask) => void;
   onLanguageChange?: (code: string) => void;
   onSignOut?: () => void;
   /** Rendered on phones only; opens the sidebar drawer. */
   onMenuClick?: () => void;
-  /** Extra controls between the search and the bell. */
+  /** Extra controls between the search and the urgent triangle — the task timer chip. */
   extra?: ReactNode;
 }
 
@@ -39,6 +43,8 @@ export function Topbar({
   notifications,
   onNotificationRead,
   onNotificationsReadAll,
+  urgent,
+  onUrgentOpen,
   onLanguageChange,
   onSignOut,
   onMenuClick,
@@ -118,9 +124,12 @@ export function Topbar({
           gap: isMobile ? 8 : 12,
           marginLeft: "auto",
           minWidth: 0,
+          // The controls keep their size; the search box is what gives way.
+          flexShrink: 0,
         }}
       >
         {extra}
+        {urgent && <UrgentBell items={urgent} onOpen={onUrgentOpen} />}
         {notifications && (
           <NotificationBell
             items={notifications}

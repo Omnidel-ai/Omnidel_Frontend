@@ -508,6 +508,35 @@ Everything else is Vercel's defaults on purpose: the Vite preset already knows
 the output directory and the SPA fallback, and configuration that only restates
 a default is configuration that goes stale.
 
+## Task timer — `src/tasktimer/` (UI only, not wired to an API)
+
+The Acharya app's **task detail** and **active session** screens, folded into
+one OmniDel panel. It is a design for a feature that is not built yet: when a
+person has a task session running, OmniDel shows it.
+
+* **Chip** (`TaskTimerChip`): sits in the topbar left of the urgent triangle
+  and shows the running task's name and its clock. It turns ochre in the last
+  quarter, crit at time up, and reads "On break" while paused. It is drawn only
+  while a timer is held.
+* **Panel** (`TaskTimerPanel`): clicking the chip opens it on the right. It is a
+  flex sibling of the app column, not an overlay. Its width animates, so the page
+  squeezes left to make room and spreads back when it closes. On phones it is a
+  full-screen sheet.
+  * From top to bottom it shows: title and board, session N of M with breaks, the
+    `TimerRing`, then one primary action or the proof form that action opened.
+  * Below that come the detail screen's reference material: description, session
+    plan, subtasks and updates already shared.
+  * When another task holds the timer, the panel reads as the detail screen,
+    with "Another task is running" and **Go to running task**.
+* **State** (`useTaskTimer`): simulates the attempts API on the wall clock,
+  using `data/tasktimer.json`. It enforces one running task, a deadline anchored
+  to the local clock, breaks that hold the remaining time, an update owed at
+  time up, and a final update that sends the task to review. When the feature
+  is built, this hook is what gets replaced; the chip and the panel take a
+  `TaskTimerView` and stay as they are.
+* Open a different task from the urgent triangle to see the blocked state.
+  Every state, frozen, is under **Components → Task timer**.
+
 ## Dashboard home — `src/dashboard/`
 
 `DashboardHome` reads `data.dashboard` and nothing else. `StatTile` for the
