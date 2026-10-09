@@ -12,7 +12,7 @@ import {
   TableRowActions,
   emitToast,
   type Column,
-} from "../components";
+} from "../components/common";
 import type { OmniPulseReviewData, OmniPulseSubmission } from "./types";
 import { Avatars } from "./cards";
 import {

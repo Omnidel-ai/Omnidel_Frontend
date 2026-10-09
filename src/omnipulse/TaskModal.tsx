@@ -10,7 +10,7 @@ import {
   MultiSelect,
   Textarea,
   emitToast,
-} from "../components";
+} from "../components/common";
 import type { OmniPulseCard, OmniPulseTaskMeta } from "./types";
 
 const STATUSES = ["Planned", "Doing", "Done"];

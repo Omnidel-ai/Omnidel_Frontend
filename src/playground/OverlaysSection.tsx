@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, ConfirmDialog, Input, Modal, emitToast } from "../components";
+import { Button, ConfirmDialog, Input, Modal, emitToast } from "../components/common";
 import { Case, Section } from "./Case";
 
 export function OverlaysSection() {

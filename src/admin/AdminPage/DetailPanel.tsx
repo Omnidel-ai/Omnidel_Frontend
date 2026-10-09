@@ -8,7 +8,7 @@ import {
   TableAction,
   TableRowActions,
   type Column,
-} from "../../components";
+} from "../../components/common";
 import type { DemoDetailPanel, DemoRow } from "../../data/types";
 import { toColumn } from "./columns";
 import { MasterForm } from "./MasterForm";

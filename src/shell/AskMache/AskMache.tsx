@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { DemoAssistant, DemoAssistantMessage } from "../../data/types";
-import { Spinner } from "../../components/Spinner";
+import { Spinner } from "../../components/common/Spinner";
 
 export interface AskMacheProps {
   assistant: DemoAssistant;

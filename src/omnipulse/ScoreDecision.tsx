@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Badge } from "../components";
+import { Badge } from "../components/common";
 
 export interface ScoreDecisionValue {
   /** Whether the acharya's score stands, or the reviewer's replaces it. */

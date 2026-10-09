@@ -10,7 +10,7 @@ import {
   TableAction,
   TableRowActions,
   type Column,
-} from "../../components";
+} from "../../components/common";
 import type { DemoMaster, DemoRow } from "../../data/types";
 import { toColumn } from "./columns";
 import { DetailPanel } from "./DetailPanel";

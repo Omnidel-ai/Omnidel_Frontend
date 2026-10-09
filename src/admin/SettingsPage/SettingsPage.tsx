@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, PageHeader, Skeleton, emitToast } from "../../components";
+import { Button, PageHeader, Skeleton, emitToast } from "../../components/common";
 import type { DemoSettings } from "../../data/types";
 import { FieldControl, coerce, defaultFor, validate } from "../fields";
 

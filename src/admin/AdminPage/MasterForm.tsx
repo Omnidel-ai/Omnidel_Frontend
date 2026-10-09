@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, Modal } from "../../components";
+import { Button, Modal } from "../../components/common";
 import type { DemoMaster, DemoRow } from "../../data/types";
 import { FieldControl, coerce, defaultFor, validate } from "../fields";
 

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { ErrorBoundary, Table, type Column } from "../src/components";
+import { ErrorBoundary, Table, type Column } from "../src/components/common";
 
 /**
  * The two behaviours that only exist in a browser.

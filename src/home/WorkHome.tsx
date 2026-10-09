@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Panel, PanelCount, PanelExpand, Skeleton, StatTile, SubTabs } from "../components";
+import { Panel, PanelCount, PanelExpand, Skeleton, StatTile, SubTabs } from "../components/common";
 import { DonutRing } from "./DonutRing";
 import type { HomeData, HomeRow } from "./types";
 

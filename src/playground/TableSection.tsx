@@ -10,7 +10,7 @@ import {
   TableRowActions,
   usePagination,
   type Column,
-} from "../components";
+} from "../components/common";
 import { Case, Section } from "./Case";
 
 /**

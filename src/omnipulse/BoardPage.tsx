@@ -13,7 +13,7 @@ import {
   emitToast,
   type BadgeTone,
   type Column,
-} from "../components";
+} from "../components/common";
 import type { OmniPulseBoard, OmniPulseCard, OmniPulseData, OmniPulseList } from "./types";
 import { BoardHeader } from "./BoardHeader";
 import { ViewToggle } from "./cards";

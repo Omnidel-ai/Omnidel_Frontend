@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox, Input, Textarea } from "../components";
+import { Checkbox, Input, Textarea } from "../components/common";
 import { Case, Section } from "./Case";
 
 export function InputsSection() {

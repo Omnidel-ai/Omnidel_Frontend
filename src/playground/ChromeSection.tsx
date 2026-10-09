@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Badge, Button, NoAccessScreen, PageHeader, StatusToggle, emitToast } from "../components";
+import { Badge, Button, NoAccessScreen, PageHeader, StatusToggle, emitToast } from "../components/common";
 import { Case, Section } from "./Case";
 
 export function ChromeSection() {

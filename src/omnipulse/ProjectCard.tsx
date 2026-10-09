@@ -1,4 +1,4 @@
-import { Menu, PinButton } from "../components";
+import { Menu, PinButton } from "../components/common";
 import type { OmniPulseProject } from "./types";
 
 /**

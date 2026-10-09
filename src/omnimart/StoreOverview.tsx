@@ -1,4 +1,4 @@
-import { Badge, Button, Skeleton, emitToast, formatCompactInr, type BadgeTone } from "../components";
+import { Badge, Button, Skeleton, emitToast, formatCompactInr, type BadgeTone } from "../components/common";
 import type { ListOverview } from "../lists";
 
 const TONE: Record<string, BadgeTone> = {

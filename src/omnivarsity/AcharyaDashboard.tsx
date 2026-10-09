@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PageHeader, Panel, PanelCount, Skeleton, StatTile, SubTabs } from "../components";
+import { PageHeader, Panel, PanelCount, Skeleton, StatTile, SubTabs } from "../components/common";
 import type { AcharyaDashboardData, DashboardPanel } from "./types";
 
 export interface AcharyaDashboardProps {

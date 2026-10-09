@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Button, PrivateImage, UploadField } from "../components";
+import { Button, PrivateImage, UploadField } from "../components/common";
 import { UploadClientProvider, createMockUploadClient } from "../lib/upload";
 import type { StoredFile } from "../lib/blob";
 import { Case, Section } from "./Case";

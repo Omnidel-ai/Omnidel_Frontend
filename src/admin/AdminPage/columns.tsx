@@ -3,5 +3,5 @@
  * OmniMart work lists render their columns the same way. Re-exported here so
  * the admin screens keep importing from where they always did.
  */
-export { toColumn, initials, formatInr, formatCompactInr } from "../../components";
-export type { ColumnDescriptor, DescriptorRow } from "../../components";
+export { toColumn, initials, formatInr, formatCompactInr } from "../../components/common";
+export type { ColumnDescriptor, DescriptorRow } from "../../components/common";

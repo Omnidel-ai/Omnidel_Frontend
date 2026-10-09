@@ -1,6 +1,7 @@
-# Not part of a deployment: the reference copy of the acharya app, the SSR
-# smoke harness, and local build output.
-src/components/acharya-app
+# Not part of a deployment: the reference copies of the acharya and omnidel
+# apps' components, the SSR smoke harness, and local build output.
+src/components/acharya
+src/components/omnidel
 scripts
 .smoke
 dist
