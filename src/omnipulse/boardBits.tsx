@@ -1,4 +1,4 @@
-import { AvatarStack } from "../components";
+import { AvatarStack } from "../components/common";
 import type { OmniPulseCard } from "./types";
 
 /** Tone class for a list column, from the list's own `tone`. */

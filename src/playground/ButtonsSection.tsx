@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Spinner } from "../components";
+import { Button, Spinner } from "../components/common";
 import { Case, Section } from "./Case";
 
 export function ButtonsSection() {

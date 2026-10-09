@@ -8,7 +8,7 @@ import {
   SkeletonCard,
   SkeletonText,
   SubTabs,
-} from "../components";
+} from "../components/common";
 import type { DemoActivity, DemoData } from "../data/types";
 import { StatTile } from "./StatTile";
 import { BarColumns, BarRows, Panel, PanelToggle, PointTable, StatusBreakdown } from "./charts";

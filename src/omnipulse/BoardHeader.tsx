@@ -1,4 +1,4 @@
-import { AvatarStack } from "../components";
+import { AvatarStack } from "../components/common";
 import type { OmniPulseBoard } from "./types";
 
 /**

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useState, type ReactNode } from "react";
-import { ErrorBoundary, SkeletonCard, Toaster } from "./components";
+import { ErrorBoundary, SkeletonCard, Toaster } from "./components/common";
 import { ShellLayout } from "./shell";
 import { SettingsPage } from "./admin";
 import { WorkHome } from "./home";

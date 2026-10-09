@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SubTabs } from "../components";
+import { SubTabs } from "../components/common";
 import { ButtonsSection } from "./ButtonsSection";
 import { InputsSection } from "./InputsSection";
 import { SelectionSection } from "./SelectionSection";

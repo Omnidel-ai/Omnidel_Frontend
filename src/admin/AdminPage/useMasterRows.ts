@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { emitToast } from "../../components";
+import { emitToast } from "../../components/common";
 import type { DemoMaster, DemoRow } from "../../data/types";
 
 export interface MasterRowsApi {

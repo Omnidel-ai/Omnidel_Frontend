@@ -1,4 +1,4 @@
-import type { ColumnDescriptor, DescriptorRow } from "../../components";
+import type { ColumnDescriptor, DescriptorRow } from "../../components/common";
 
 /** RFC 4180 quoting: wrap in quotes and double any quote inside. */
 function cell(value: unknown): string {

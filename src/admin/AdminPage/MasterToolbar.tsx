@@ -1,4 +1,4 @@
-import { Button, CustomSelect, TableAddButton, TableControls } from "../../components";
+import { Button, CustomSelect, TableAddButton, TableControls } from "../../components/common";
 import type { DemoMaster } from "../../data/types";
 
 export type View = "active" | "inactive" | "all" | "archived";

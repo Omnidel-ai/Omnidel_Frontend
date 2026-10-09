@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { FileRow, ImageField, ImagePreview, MediaPlayer, UploadField } from "../components";
+import { FileRow, ImageField, ImagePreview, MediaPlayer, UploadField } from "../components/common";
 import { formatBytes, readApiStatus, LIMITS, type StoredFile } from "../lib/blob";
 import { Case, Section } from "./Case";
 

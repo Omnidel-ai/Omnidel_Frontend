@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Table, type Column } from "../components";
+import { Table, type Column } from "../components/common";
 import type { DemoPoint } from "../data/types";
 
 /**

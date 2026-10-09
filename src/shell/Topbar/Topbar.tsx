@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { SearchBar } from "../../components/SearchBar";
+import { SearchBar } from "../../components/common/SearchBar";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { Profile } from "../Profile/Profile";
 import { NotificationBell } from "./NotificationBell";

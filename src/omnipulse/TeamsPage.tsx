@@ -6,7 +6,7 @@ import {
   SearchBar,
   SkeletonCard,
   emitToast,
-} from "../components";
+} from "../components/common";
 import type { OmniPulseTeam, OmniPulseTeamsData } from "./types";
 import { Card, CardGrid, CardIcon, CardMeta, CardTitle, PeopleGlyph, QuickToggle, TeamGlyph } from "./cards";
 

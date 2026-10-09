@@ -1,4 +1,4 @@
-import type { ColumnDescriptor } from "../components";
+import type { ColumnDescriptor } from "../components/common";
 
 /**
  * A work list, as JSON describes it.

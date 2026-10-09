@@ -5,7 +5,7 @@ import {
   Input,
   MultiSelect,
   Textarea,
-} from "../components";
+} from "../components/common";
 import type { DemoField } from "../data/types";
 
 /**

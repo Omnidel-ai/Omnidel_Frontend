@@ -1,4 +1,4 @@
-import { Badge, Button, PageHeader } from "../components";
+import { Badge, Button, PageHeader } from "../components/common";
 import masters from "../data/masters.json";
 import type { DemoData, DemoMaster } from "../data/types";
 

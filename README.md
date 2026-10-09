@@ -1,13 +1,15 @@
 # OmniDel — Shared Components, Shell & Product Screens
 
-An **isolated** frontend workspace: shared UI components, the application
-shell, Home, the complete admin area, OmniPulse, OmniMart and OmniVarsity —
-every screen on demo data — plus a set of Vercel Functions for Vercel Blob:
-images, video, audio and documents, public and private.
+An **isolated** frontend workspace. It lives beside the Next.js application in
+this repository and shares nothing with it: its own `package.json`, its own
+TypeScript config, its own CSS, its own dev server, its own `node_modules`.
 
-It is developed in the main OmniDel repository as a standalone folder
-(`frontend/`) that the Next.js application does not import and was not modified
-to accommodate, and published here so it can be worked on on its own.
+Nothing in the main application was changed to add it, and nothing here is
+imported by the main application. Every screen runs on demo data — no
+application API, no database, no auth, by design. The only server code is the
+handful of Vercel Functions in `api/`, which store and serve files and are
+optional: without a Blob store they refuse, and the workspace runs entirely in
+the browser.
 
 ## What is in here
 
@@ -53,8 +55,10 @@ OmniDel/                    ← existing Next.js app, untouched
     ├── api/                ← Vercel Functions: Blob upload, view, public, list
     ├── shared/             ← facts both sides need: what may be stored, how large
     ├── src/
-    │   ├── components/     ← 1. shared UI components
-    │   │   └── acharya-app/   ← reference copy, excluded from the build
+    │   ├── components/
+    │   │   ├── common/     ← 1. shared UI components (used by both apps)
+    │   │   ├── acharya/    ← Acharya app components, reference copy (not built)
+    │   │   └── omnidel/    ← OmniDel app components, reference copy (not built)
     │   ├── shell/          ← 2. shell components (sidebar, topbar, …)
     │   ├── data/            ← 3. demo data (demo.json + masters.json)
     │   ├── admin/          ← 5. the admin screens, two layouts
@@ -84,7 +88,7 @@ the arrangement changed.
 ```
 Existing Next.js app → inspect only → current UI / design
           ↓
-1. Shared components   src/components/      ✅
+1. Shared components   src/components/common/  ✅
 2. Shell components    src/shell/           ✅
 3. Demo data           src/data/demo.json   ✅
 4. Shell layout        src/App.tsx          ✅
@@ -167,7 +171,7 @@ fall back to Georgia / system sans / a mono face and nothing else changes.
 
 ---
 
-## 1. Shared components — `src/components/`
+## 1. Shared components — `src/components/common/`
 
 Generic and reusable. A shared component owns presentation; the feature owns
 the data.
@@ -208,16 +212,25 @@ feature-owned, not shared: `master-form`, `export-csv-modal`, `task-checklist`,
 13-component Collaboration cluster (comments, mentions, rich text, share
 sheet) — each carries domain knowledge or a heavy dependency.
 
-### `components/acharya-app/` — reference only
+### `components/acharya/` and `components/omnidel/` — reference only
 
-The Acharya karigar portal's complete `src/components` tree (64 files, 19k
-lines), copied in so the shared-UI work can see what it will eventually cover.
-It is written for Next.js and reaches for that app's `@/lib`, `@/hooks` and its
-AI/voice packages, so it **does not compile here** and is excluded in
-`tsconfig.json` and `eslint.config.js`. Nothing imports it; the build output is
-byte-identical with and without it. It is the source to port *from* — see
-`src/components/acharya-app/README.md` for the inventory and which 16 files are
-portable as they stand.
+`src/components/` is split three ways so both apps can live in one repo:
+
+| Folder | What is in it | Built here? |
+|---|---|---|
+| `common/` | The domain-free library above — what both apps share | yes |
+| `acharya/` | The Acharya karigar portal's `src/components` (omnidel-acharya PR #207) | no |
+| `omnidel/` | The OmniDel Next.js app's `src/components` | no |
+
+`acharya/` and `omnidel/` are written for Next.js and reach for their app's
+`@/lib`, `@/hooks`, `next/*` and AI/voice packages, so they **do not compile
+here** and are excluded in `tsconfig.json`, `eslint.config.js` and
+`.vercelignore`. Their own `@/components/…` imports were rewritten to
+`@/components/acharya/…` and `@/components/omnidel/…` so each folder points at
+itself. Nothing imports them. They are the source to port *from*. A component
+moves into `common/` once it has been made domain-free and both apps can use
+it. See each folder's `README.md` for its source commit and the overlap with
+`common/`.
 
 ## 2. Shell components — `src/shell/`
 
@@ -695,7 +708,7 @@ vercel dev                        # SPA + functions together, on one port
 — 60s for the ones that stream or receive a file, 5s for the manifest — and the
 static headers: `nosniff`, `strict-origin-when-cross-origin`, `SAMEORIGIN`, and a
 year of immutable caching for the fingerprinted assets. `.vercelignore` keeps the
-acharya-app reference copy and the smoke harness out of the deployment.
+acharya/ and omnidel/ reference copies and the smoke harness out of the deployment.
 `engines.node` pins Node 20 or newer.
 
 Everything else is Vercel's defaults on purpose: the Vite preset already knows

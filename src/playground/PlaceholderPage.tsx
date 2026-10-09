@@ -1,4 +1,4 @@
-import { Button, PageHeader } from "../components";
+import { Button, PageHeader } from "../components/common";
 
 /**
  * Stand-in for a route the demo does not implement.

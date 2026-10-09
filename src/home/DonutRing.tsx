@@ -1,4 +1,4 @@
-import { Panel } from "../components";
+import { Panel } from "../components/common";
 
 export interface DonutRow {
   label: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CustomSelect, DatePicker, MultiFilter, MultiSelect, SubTabs } from "../components";
+import { CustomSelect, DatePicker, MultiFilter, MultiSelect, SubTabs } from "../components/common";
 import { Case, Section } from "./Case";
 
 const STATUS_OPTIONS = [

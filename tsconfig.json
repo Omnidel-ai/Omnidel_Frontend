@@ -19,5 +19,5 @@
     "paths": { "@/*": ["src/*"] }
   },
   "include": ["shared", "src", "scripts", "tests", "vite.config.ts", "vitest.config.ts", "eslint.config.js"],
-  "exclude": ["src/components/acharya-app"]
+  "exclude": ["src/components/acharya", "src/components/omnidel"]
 }

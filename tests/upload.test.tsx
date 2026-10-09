@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it } from "vitest";
-import { UploadField } from "../src/components";
+import { UploadField } from "../src/components/common";
 import { UploadClientProvider, createMockUploadClient } from "../src/lib/upload";
 import type { StoredFile } from "../src/lib/blob";
 

@@ -1,4 +1,4 @@
-import type { PanelAccent } from "../components";
+import type { PanelAccent } from "../components/common";
 import type { ListDescriptor } from "../lists";
 
 /**

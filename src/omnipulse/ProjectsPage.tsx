@@ -12,7 +12,7 @@ import {
   emitToast,
   usePagination,
   type Column,
-} from "../components";
+} from "../components/common";
 import type { OmniPulseProject, OmniPulseProjectsData, OmniPulseTeam } from "./types";
 import { CardGrid, ViewToggle } from "./cards";
 import { ProjectCard } from "./ProjectCard";

@@ -13,7 +13,7 @@ import {
   toColumn,
   usePagination,
   type Column,
-} from "../components";
+} from "../components/common";
 import { downloadCsv } from "../admin/AdminPage/exportCsv";
 import type { ListDescriptor, ListRow } from "./types";
 import { StoreOverview } from "../omnimart/StoreOverview";

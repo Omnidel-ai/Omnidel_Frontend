@@ -7,7 +7,7 @@ import {
   SearchBar,
   SkeletonCard,
   type BadgeTone,
-} from "../components";
+} from "../components/common";
 import { CardGrid } from "../omnipulse/cards";
 import type { MartMission, MartMissionsData } from "./types";
 

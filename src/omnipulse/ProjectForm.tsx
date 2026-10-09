@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, Modal, emitToast } from "../components";
+import { Button, Modal, emitToast } from "../components/common";
 import { FieldControl, coerce, defaultFor, validate } from "../admin";
 import type { DemoField } from "../data/types";
 import type { OmniPulseProject } from "./types";
