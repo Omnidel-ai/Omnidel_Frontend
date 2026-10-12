@@ -1,0 +1,31 @@
+{
+  // The Acharya app's own compiler settings (from omnidel-acharya's
+  // tsconfig.json), so its code typechecks exactly as it does upstream.
+  // The OmniDel workspace's tsconfig.json is stricter in ways this code was
+  // never written for (verbatimModuleSyntax, noUnusedLocals), and excludes it.
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "next/navigation": ["src/acharya/next/navigation.ts"],
+      "next/link": ["src/acharya/next/link.tsx"],
+      "next/image": ["src/acharya/next/image.tsx"],
+      "next/dynamic": ["src/acharya/next/dynamic.tsx"],
+      "next/font/google": ["src/acharya/next/font-google.ts"]
+    }
+  },
+  "include": ["src/acharya", "src/components/acharya", "src/component-catalog.d.ts", "scripts/component-catalog.ts", "vite.acharya.config.ts"]
+}

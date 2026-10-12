@@ -1,0 +1,469 @@
+{
+  "dashboard": {
+    "label": "Acharya Dashboard",
+    "tabs": [
+      "Overview",
+      "Chats",
+      "Rating",
+      "Quiz"
+    ],
+    "ranges": [
+      "1D",
+      "7D",
+      "30D"
+    ],
+    "defaultRange": "7D",
+    "tiles": [
+      {
+        "key": "total",
+        "label": "Total",
+        "value": "109",
+        "hint": "last 7d",
+        "tone": "green"
+      },
+      {
+        "key": "chats",
+        "label": "Chats",
+        "value": "0",
+        "tone": "green"
+      },
+      {
+        "key": "rating",
+        "label": "Rating",
+        "value": "109",
+        "tone": "terra"
+      },
+      {
+        "key": "quiz",
+        "label": "Quiz attempts",
+        "value": "0",
+        "tone": "ochre"
+      },
+      {
+        "key": "completions",
+        "label": "Completions",
+        "value": "13",
+        "tone": "green"
+      },
+      {
+        "key": "cost",
+        "label": "Cost",
+        "value": "$0.00",
+        "tone": "green"
+      }
+    ],
+    "panels": [
+      {
+        "key": "chats",
+        "title": "Recent chats",
+        "accent": "green",
+        "count": 0,
+        "empty": "No data",
+        "items": []
+      },
+      {
+        "key": "rating",
+        "title": "Recent rating",
+        "accent": "crit",
+        "count": 3,
+        "empty": "No data",
+        "items": [
+          {
+            "id": "r1",
+            "text": "Invitation letter for the Gunakul open day",
+            "meta": "1 submission"
+          },
+          {
+            "id": "r2",
+            "text": "Group Task for 2026 intake",
+            "meta": "1 submission"
+          },
+          {
+            "id": "r3",
+            "text": "Draft the KRL for the dispatch team",
+            "meta": "1 submission"
+          }
+        ]
+      },
+      {
+        "key": "quiz",
+        "title": "Recent quiz attempts",
+        "accent": "ochre",
+        "count": 0,
+        "empty": "No data",
+        "items": []
+      },
+      {
+        "key": "completions",
+        "title": "Recent completions",
+        "accent": "green",
+        "count": 4,
+        "empty": "No data",
+        "items": [
+          {
+            "id": "c1",
+            "text": "Kitchen-garden basics — Neeranjan Acharya",
+            "meta": "2 h ago"
+          },
+          {
+            "id": "c2",
+            "text": "Money habits, week 1 — Vivek Acharya",
+            "meta": "Yesterday"
+          },
+          {
+            "id": "c3",
+            "text": "Pipeline etiquette — Lakshman Acharya",
+            "meta": "2 days ago"
+          },
+          {
+            "id": "c4",
+            "text": "Focus blocks — Soumyajit Acharya",
+            "meta": "3 days ago"
+          }
+        ]
+      }
+    ]
+  },
+  "lists": [
+    {
+      "key": "acharyas",
+      "module": "OmniVarsity",
+      "label": "Acharyas",
+      "singular": "Acharya",
+      "searchPlaceholder": "Search acharyas...",
+      "emptyMessage": "No acharyas yet",
+      "emptyHint": "An acharya is a mentor with a subject and a voice.",
+      "countLabel": "acharyas",
+      "minWidth": 980,
+      "addLabel": "+ New acharya",
+      "filters": [
+        {
+          "key": "type",
+          "label": "Type",
+          "options": [
+            "Finance",
+            "Farmer",
+            "Sales",
+            "General",
+            "Craft",
+            "Wellness"
+          ]
+        },
+        {
+          "key": "featured",
+          "label": "Featured",
+          "options": [
+            "Featured"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "seq",
+          "header": "#",
+          "width": "56px",
+          "type": "code"
+        },
+        {
+          "key": "name",
+          "header": "Acharya",
+          "width": "minmax(260px, 2.4fr)",
+          "type": "person",
+          "sub": "blurb",
+          "badge": "featured"
+        },
+        {
+          "key": "type",
+          "header": "Type",
+          "width": "130px",
+          "type": "badge",
+          "tones": {
+            "Finance": "neutral",
+            "Farmer": "green",
+            "Sales": "ochre",
+            "General": "neutral",
+            "Craft": "green",
+            "Wellness": "ochre"
+          }
+        },
+        {
+          "key": "updated",
+          "header": "Updated",
+          "width": "130px"
+        }
+      ],
+      "rowActions": [
+        "View",
+        "Edit",
+        "Feature",
+        "Archive"
+      ],
+      "rows": [
+        {
+          "id": "ac1",
+          "seq": "1",
+          "name": "Vivek Acharya",
+          "blurb": "AI finance mentor in Gunakul, guiding money habits.",
+          "type": "Finance",
+          "updated": "8/18/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac2",
+          "seq": "2",
+          "name": "Neeranjan Acharya",
+          "blurb": "Farming practice, seasons and soil — the kitchen-garden guide.",
+          "type": "Farmer",
+          "updated": "8/25/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac3",
+          "seq": "3",
+          "name": "Lakshman Acharya",
+          "blurb": "Lakshya Acharya is the sales mentor for the pipeline team.",
+          "type": "Sales",
+          "updated": "8/18/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac4",
+          "seq": "4",
+          "name": "MahAcharya",
+          "blurb": "MahAcharya'ji — founding Acharya of the Gunakul.",
+          "type": "General",
+          "updated": "8/31/2026",
+          "featured": "Featured"
+        },
+        {
+          "id": "ac5",
+          "seq": "5",
+          "name": "Soumyajit Acharya",
+          "blurb": "Desk-work discipline, sessions and focus blocks.",
+          "type": "General",
+          "updated": "8/12/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac6",
+          "seq": "6",
+          "name": "Gitanjali Acharya",
+          "blurb": "Quality, audits and the standard a job is held to.",
+          "type": "Craft",
+          "updated": "7/29/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac7",
+          "seq": "7",
+          "name": "Ananya Acharya",
+          "blurb": "Vernacular first — language, tone and the words we use.",
+          "type": "General",
+          "updated": "9/02/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac8",
+          "seq": "8",
+          "name": "Bikram Acharya",
+          "blurb": "Dispatch, lanes and the day's route.",
+          "type": "Craft",
+          "updated": "8/07/2026",
+          "featured": ""
+        },
+        {
+          "id": "ac9",
+          "seq": "9",
+          "name": "Esha Acharya",
+          "blurb": "Support, replies and the two-hour promise.",
+          "type": "Wellness",
+          "updated": "9/11/2026",
+          "featured": ""
+        }
+      ]
+    },
+    {
+      "key": "kaarigars",
+      "module": "OmniVarsity",
+      "label": "Kaarigars",
+      "singular": "Kaarigar",
+      "searchPlaceholder": "Search kaarigars...",
+      "emptyMessage": "No kaarigars in the network yet",
+      "emptyHint": "New registrations appear here automatically.",
+      "countLabel": "kaarigars",
+      "minWidth": 1000,
+      "addLabel": "+ Invite kaarigar",
+      "tabs": [
+        {
+          "label": "Kaarigars"
+        },
+        {
+          "label": "Requests",
+          "field": "status",
+          "value": "Requested"
+        }
+      ],
+      "filters": [
+        {
+          "key": "trade",
+          "label": "Trade",
+          "options": [
+            "Carpentry",
+            "Plumbing",
+            "Wiring",
+            "Painting",
+            "Masonry"
+          ]
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "options": [
+            "Kolkata",
+            "Howrah",
+            "Barasat",
+            "Sonarpur",
+            "Bagnan"
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "key": "name",
+          "header": "Kaarigar",
+          "width": "minmax(200px, 2fr)",
+          "type": "user"
+        },
+        {
+          "key": "code",
+          "header": "ID",
+          "width": "130px",
+          "type": "code"
+        },
+        {
+          "key": "trade",
+          "header": "Trade",
+          "width": "140px",
+          "type": "badge",
+          "tones": {
+            "Carpentry": "green",
+            "Plumbing": "ochre",
+            "Wiring": "neutral",
+            "Painting": "green",
+            "Masonry": "ochre"
+          }
+        },
+        {
+          "key": "city",
+          "header": "City",
+          "width": "140px"
+        },
+        {
+          "key": "jobs",
+          "header": "Jobs",
+          "width": "100px",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "status",
+          "header": "Status",
+          "width": "120px",
+          "type": "badge",
+          "tones": {
+            "Active": "ok",
+            "Paused": "amber",
+            "Requested": "neutral"
+          }
+        }
+      ],
+      "rowActions": [
+        "View",
+        "Assign"
+      ],
+      "rows": [
+        {
+          "id": "kg1",
+          "name": "Rahul Mondal",
+          "code": "KG-1041",
+          "trade": "Carpentry",
+          "city": "Kolkata",
+          "jobs": 34,
+          "status": "Active"
+        },
+        {
+          "id": "kg2",
+          "name": "Sneha Pal",
+          "code": "KG-1042",
+          "trade": "Plumbing",
+          "city": "Howrah",
+          "jobs": 12,
+          "status": "Active"
+        },
+        {
+          "id": "kg3",
+          "name": "Imran Sheikh",
+          "code": "KG-1043",
+          "trade": "Wiring",
+          "city": "Kolkata",
+          "jobs": 27,
+          "status": "Active"
+        },
+        {
+          "id": "kg4",
+          "name": "Farhan Ali",
+          "code": "KG-1044",
+          "trade": "Carpentry",
+          "city": "Barasat",
+          "jobs": 41,
+          "status": "Active"
+        },
+        {
+          "id": "kg5",
+          "name": "Sujit Barman",
+          "code": "KG-1045",
+          "trade": "Painting",
+          "city": "Sonarpur",
+          "jobs": 8,
+          "status": "Paused"
+        },
+        {
+          "id": "kg6",
+          "name": "Arun Das",
+          "code": "KG-1046",
+          "trade": "Masonry",
+          "city": "Bagnan",
+          "jobs": 19,
+          "status": "Active"
+        },
+        {
+          "id": "kg7",
+          "name": "Pinki Roy",
+          "code": "KG-1047",
+          "trade": "Plumbing",
+          "city": "Kolkata",
+          "jobs": 5,
+          "status": "Active"
+        },
+        {
+          "id": "kg8",
+          "name": "Manoj Ghosh",
+          "code": "KG-1048",
+          "trade": "Wiring",
+          "city": "Kolkata",
+          "jobs": 0,
+          "status": "Requested"
+        },
+        {
+          "id": "kg9",
+          "name": "Rita Paul",
+          "code": "KG-1049",
+          "trade": "Painting",
+          "city": "Howrah",
+          "jobs": 0,
+          "status": "Requested"
+        }
+      ]
+    }
+  ]
+}

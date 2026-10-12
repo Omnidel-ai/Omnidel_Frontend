@@ -1,0 +1,7 @@
+# Not part of a deployment: the SSR smoke harness and local build output.
+# (src/components/acharya and omnidel stay: the Components page lists them.)
+scripts/smoke.tsx
+.smoke
+dist
+tests
+dist-acharya

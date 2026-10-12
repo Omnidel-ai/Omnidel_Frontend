@@ -1,0 +1,51 @@
+{
+  "name": "@omnidel/shared-components",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OmniDel frontend: the OmniDel workspace and the Acharya karigar app, on one shared component library.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:acharya": "vite --config vite.acharya.config.ts",
+    "build": "npm run typecheck && vite build",
+    "build:acharya": "tsc -p tsconfig.acharya.json && vite build --config vite.acharya.config.ts",
+    "preview": "vite preview",
+    "preview:acharya": "vite preview --config vite.acharya.config.ts",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.api.json --noEmit && tsc -p tsconfig.acharya.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "vite build --ssr scripts/smoke.tsx --outDir .smoke && node .smoke/smoke.js"
+  },
+  "dependencies": {
+    "@anam-ai/js-sdk": "4.13.1",
+    "@daily-co/daily-js": "0.92.2",
+    "@vercel/blob": "^2.8.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
+    "zustand": "5.0.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.39.0",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "4.3.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.0",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

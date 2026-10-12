@@ -1,0 +1,321 @@
+/* Acharya: original cream / forest / earth palette, compact work-first surfaces.
+   Circles identify people and actions; panels group controls; work reads as a list. */
+.journey-app {
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --journey-accent: var(--green-deep);
+  --journey-dial-track: var(--surface-sunk);
+}
+.journey-app {
+  --serif: var(--sans);
+  --mono: var(--sans);
+  --journey-nav-height: 0px;
+  min-height: 100dvh;
+  max-width: 1120px;
+  margin-inline: auto;
+  position: relative;
+  background: var(--page);
+  font-variant-numeric: tabular-nums;
+}
+.journey-app[data-top-level] { --journey-nav-height: 120px; }
+/* Acharya shell screens measure themselves against --acharya-app-height (the
+   visualViewport, tracked in AcharyaShell). The frame's own min-height: 100dvh
+   sat underneath that and won: on Android Chrome dvh keeps the collapsed URL
+   bar in the layout, so the document ran past the visible viewport, the PAGE
+   scrolled behind the shell, and that scroll read as dead space under the chat
+   composer. Clamp the frame to the same measurement — every shell screen owns
+   an internal scroll area, so nothing needs the page to scroll. */
+.journey-app:has(.journey-acharya-shell) {
+  min-height: 0;
+  height: var(--acharya-app-height, 100svh);
+  overflow: hidden;
+}
+/* The other half of that clamp: the DOCUMENT must not scroll either. A shell
+   screen fills the visual viewport exactly and scrolls internally, so any page
+   scroll is the browser's own — chasing a focused chat composer when the
+   keyboard opens — and it shows as the header sliding away and a band of bare
+   page under the composer. `overscroll-behavior` stops the rubber-band that
+   does the same thing on a flick. Set by AcharyaShell for as long as it is
+   mounted, so every other screen keeps its normal page scroll. */
+html[data-acharya-shell-open],
+html[data-acharya-shell-open] body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.journey-app :is(h1, h2, h3) { font-family: var(--sans) !important; font-style: normal !important; letter-spacing: -.025em; }
+.journey-app :is(button, a, [role="link"], input, select, textarea):focus-visible { outline: 3px solid var(--green-deep); outline-offset: 3px; }
+.journey-app :is(button, a, [role="button"], .press) { -webkit-tap-highlight-color: transparent; }
+/* A tap that drifts a pixel is a drag to Android, and a drag across words is a
+   text selection — so tapping a task card left it striped with highlight as if
+   the karigar had deliberately selected it, and the highlight stayed. Nothing
+   inside a card, a button or the dock is text anyone copies; the prose that IS
+   (task descriptions, comments, chat) sits outside them and stays selectable. */
+.journey-app :is(a, button, [role="button"], [role="link"], .press, .journey-navigation) { -webkit-user-select: none; user-select: none; }
+.journey-app :is(input, textarea, [contenteditable="true"]) { -webkit-user-select: text; user-select: text; }
+.journey-app a { text-underline-offset: 3px; }
+.journey-home { background: var(--page); }
+.journey-home-header { background: transparent !important; padding: max(env(safe-area-inset-top), 16px) 16px 10px !important; }
+.journey-home-header h1 { font-size: 25px !important; font-weight: 650 !important; letter-spacing: -.05em; }
+.journey-home-header p { font-family: var(--sans) !important; text-transform: none !important; letter-spacing: 0 !important; color: var(--ink-mute) !important; font-size: 12px !important; }
+.journey-home-header > div > div:last-child > :is(button, div) > button,
+.journey-home-header > div > div:last-child > button { border-radius: 50% !important; min-width: 44px; min-height: 44px; }
+.journey-home-content { padding-inline: 16px !important; padding-top: 0 !important; padding-bottom: calc(env(safe-area-inset-bottom) + 136px) !important; }
+.journey-home-top { display: grid; gap: 12px; }
+.journey-home-guide { min-width: 0; display: grid; gap: 10px; }
+.journey-eyebrow { display: block; font-size: 11px; color: var(--ink-mute); font-weight: 500; margin: 0; line-height: 1.5; }
+.journey-feature {
+  display: grid !important; grid-template-columns: 88px minmax(0, 1fr) !important;
+  align-items: start; column-gap: 14px; row-gap: 10px;
+  border: 1px solid var(--rule) !important; padding: 16px; border-radius: 20px !important;
+  background: var(--surface) !important; margin-bottom: 0 !important; box-shadow: var(--shadow-sm) !important;
+}
+ .journey-guide-portrait { width: 88px; height: 88px; padding: 0; border: 4px solid var(--surface); outline: 1px solid var(--rule); border-radius: 50%; overflow: hidden; grid-row: 1 / 3; align-self: center; background: var(--green-wash); cursor: pointer; position: relative; }
+.journey-feature-info { padding: 0 !important; min-width: 0; background: transparent !important; }
+.journey-feature-info h2 { font-size: 22px !important; line-height: 1.12 !important; font-weight: 650 !important; white-space: normal !important; margin: 3px 0 7px !important; }
+.journey-feature-info > .journey-guide-eyebrow { margin: 0 !important; font-size: 10px !important; letter-spacing: .08em; line-height: 1.4 !important; color: var(--ink-mute) !important; }
+.journey-feature-info > span { font-size: 10px !important; letter-spacing: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; color: var(--green-deep) !important; font-weight: 600; }
+.journey-feature-info > p:not(.journey-guide-eyebrow) { font-size: 12px !important; line-height: 1.45 !important; margin: 7px 0 0 !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.journey-feature-controls { gap: 8px; position: static !important; grid-column: 2; display: flex !important; justify-content: flex-start; flex-wrap: wrap; min-width: 0; }
+.journey-voice-action { max-width: 100%; font-size: 13px; font-weight: 600; min-height: 46px; height: auto !important; padding-block: 10px !important; text-align: start; }
+.journey-voice-action > span { line-height: 1.3; }
+.journey-voice-action > svg { flex-shrink: 0; }
+.journey-feature-controls > span { min-width: 0; max-width: 100%; }
+.journey-video-action { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--rule); border-radius: 50%; background: var(--surface); color: var(--green-deep); cursor: pointer; }
+.journey-video-action[data-live] { background: var(--crit); color: var(--surface); }
+.journey-video-action:disabled { opacity: .55; cursor: default; }
+.journey-next-task { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 20px; background: var(--green-deep); color: var(--surface); text-decoration: none; }
+.journey-next-task > span:nth-child(2) { flex: 1; min-width: 0; }
+.journey-next-task strong { display: block; font-size: 14px; font-weight: 600; margin: 3px 0 0; line-height: 1.3; overflow-wrap: anywhere; }
+.journey-next-task small, .journey-next-task .journey-eyebrow { color: var(--green-wash); font-size: 11px; }
+.journey-next-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #ffffff18; flex-shrink: 0; }
+.journey-next-task > svg { flex-shrink: 0; }
+.journey-next-task-empty { background: var(--surface); color: var(--ink); }
+.journey-next-task-empty small { color: var(--ink-mute); }
+.journey-overview { min-width: 0; padding: 14px; border: 1px solid var(--rule); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow-sm); }
+.journey-progress-summary { display: flex; align-items: center; gap: 10px; }
+.journey-progress-summary > div:nth-child(2) { flex: 1; min-width: 0; }
+.journey-progress-summary h2 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+.journey-progress-summary p { margin: 0; font-size: 12px; line-height: 1.4; color: var(--ink-mute); }
+.journey-round-link { border: 1px solid var(--rule); width: 44px; height: 44px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; color: var(--green-deep); flex-shrink: 0; }
+.journey-dial { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
+.journey-dial > svg { width: 100%; height: 100%; display: block; }
+.journey-dial-value { position: absolute; inset: 0; display: grid; place-items: center; }
+.journey-dial-value strong { font-size: 22px; line-height: 1; letter-spacing: -.05em; font-weight: 550; }
+.journey-dial-value strong > span { font-size: 10px; margin-left: 1px; color: var(--ink-mute); }
+.journey-status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 12px; padding-block: 4px; border-radius: 12px; background: var(--page); }
+.journey-status-grid > a { display: flex; align-items: center; gap: 6px; justify-content: center; padding: 6px 4px; min-height: 44px; text-decoration: none; color: var(--ink); border-right: 1px solid var(--rule); }
+.journey-status-grid > a:last-child { border-right: 0; }
+.journey-status-grid > a > span { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--ink-mute); line-height: 1.25; }
+.journey-status-grid svg { width: 16px; height: 16px; }
+.journey-status-grid strong { order: -1; font-size: 25px; line-height: 1; font-weight: 500; margin-right: 2px; }
+.journey-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0 4px; }
+.journey-section-heading h2 { margin: 0; font-size: 17px; font-weight: 600; }
+.journey-section-heading a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 12px; text-decoration: none; color: var(--green-deep); }
+.journey-section-heading svg { width: 14px; height: 14px; }
+/* Guide cards, following the reference the founder gave (the vaccination and
+   surgical-procedure tiles): the PHOTOGRAPH is the top of the card, edge to
+   edge, and the words sit under it on the left with the arrow opposite them.
+   Two up, so the face gets the width — a 3-up grid is what made the acharya a
+   thumbnail. Colours, tints and type are this app's own and unchanged; only
+   the arrangement comes from the reference. */
+.journey-mentor-list { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px !important; }
+.journey-mentor-row { flex-direction: column; align-items: stretch; text-align: left; border: 1px solid var(--rule) !important; background: var(--surface) !important; padding: 0 !important; gap: 0 !important; border-radius: 18px !important; overflow: hidden; box-shadow: var(--shadow-sm); position: relative; }
+.journey-mentor-row[data-field="finance"] { background: color-mix(in srgb, var(--ochre-wash) 60%, var(--surface)) !important; }
+.journey-mentor-row[data-field="guide"], .journey-mentor-row[data-field="technology"] { background: color-mix(in srgb, var(--green-wash) 70%, var(--surface)) !important; }
+.journey-mentor-row[data-field="sales"], .journey-mentor-row[data-field="business"] { background: color-mix(in srgb, var(--terra-wash) 55%, var(--surface)) !important; }
+.journey-mentor-row[data-field="operations"], .journey-mentor-row[data-field="general"] { background: color-mix(in srgb, var(--slate-wash) 65%, var(--surface)) !important; }
+/* The portrait IS the card's top: square, full bleed, clipped by the card's
+   own radius. No ring — a border around a full-bleed photo reads as a frame
+   inside a frame. */
+.journey-mentor-row > span:first-child { display: block !important; position: relative; width: 100% !important; height: auto !important; aspect-ratio: 1 / 1; border: 0 !important; border-radius: 0 !important; outline: 0 !important; }
+/* Pinned rather than sized at 100% height: the band's height comes from
+   aspect-ratio, and a percentage height against that has been unreliable. */
+.journey-mentor-row > span:first-child > img { position: absolute; inset: 0; width: 100% !important; height: 100% !important; object-fit: cover; }
+.journey-mentor-row > span:first-child > span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 40px !important; }
+/* Right padding clears the arrow so a long name never runs under it. */
+.journey-mentor-row > div { width: 100%; box-sizing: border-box; padding: 10px 46px 12px 12px; }
+.journey-mentor-row > div > p { font-size: 13.5px !important; font-weight: 650 !important; line-height: 1.25 !important; }
+/* Field and count on ONE line under the name — the reference keeps its meta to
+   a single line, and stacked they pushed every card 14px taller. */
+.journey-mentor-row > div > div { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px !important; margin-top: 5px !important; }
+.journey-mentor-row > div > div > span:first-child { font-size: 9px !important; border: 0 !important; letter-spacing: 0.06em !important; padding: 0 !important; color: var(--ink-mute) !important; background: transparent !important; }
+.journey-mentor-row > div > div > span:nth-child(2) { font-size: 10px !important; line-height: 1.4; white-space: normal !important; overflow-wrap: anywhere; }
+/* The affordance the reference puts on every tile. It was in the markup all
+   along, hidden by the 3-up layout that had no room for it. */
+.journey-mentor-chevron { display: inline-flex !important; position: absolute; right: 10px; bottom: 10px; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--surface); border: 1px solid var(--rule); color: var(--green-deep) !important; }
+.journey-mentor-chevron > svg { width: 15px; height: 15px; }
+/* Onto the photograph's corner — its old home was the lower right of a circle
+   that no longer exists. */
+.journey-mentor-badge { position: absolute; top: 10px; right: 10px; border: 2px solid var(--surface); }
+/* A floating navigation surface, with its own clearance above the home indicator. */
+.journey-navigation { --journey-mic-rise: 26px; position: fixed; z-index: 35; bottom: max(env(safe-area-inset-bottom), 12px); left: 50%; transform: translateX(-50%); width: min(calc(100% - 32px), 440px); min-height: 68px; padding: 5px; display: grid; grid-template-columns: 1fr 1fr 68px 1fr 1fr; gap: 4px; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--rule-strong); border-radius: 40px; box-shadow: 0 8px 28px #231d141a, inset 0 1px 0 #fff8; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.journey-navigation a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--ink-mute); min-height: 56px; min-width: 0; text-decoration: none; font-size: 10px; padding: 5px 2px; border-radius: 30px; transition: background-color 120ms ease, color 120ms ease; }
+.journey-navigation a > svg { width: 22px; height: 22px; flex-shrink: 0; }
+.journey-navigation a[aria-current] { color: var(--green-deep); font-weight: 650; background: var(--green-wash); }
+.journey-navigation a:focus-visible { outline-offset: -3px; border-radius: 30px; }
+/* The centre control rises out of the pill; its cream rim separates surfaces. */
+.journey-dock-mic { display: flex; flex-direction: column; align-items: center; min-width: 0; align-self: start; }
+.journey-dock-mic-control { display: grid; place-items: center; width: 68px; height: 68px; flex-shrink: 0; margin-top: calc(-1 * var(--journey-mic-rise)); border: 5px solid var(--page); border-radius: 50%; background: var(--page); box-shadow: 0 3px 10px #231d1424; }
+.journey-dock-mic-control button { border-radius: 50%; box-shadow: inset 0 1px 0 #ffffff26; }
+.journey-dock-mic-control button > svg { width: 24px; height: 24px; }
+.journey-dock-mic-label { margin-top: 3px; font-size: 10px; font-weight: 650; line-height: 1.2; color: var(--green-deep); text-align: center; }
+.journey-dock-mic-fallback { width: 58px; height: 58px; display: grid; place-items: center; border: 0; background: var(--green-deep); color: var(--surface); cursor: pointer; }
+.journey-dock-mic-fallback:disabled { opacity: .55; cursor: default; }
+
+/* Stories runs the portrait edge to edge on black — the page behind it, not
+   the dock. The dock keeps its normal cream look on every tab. */
+html:has(.journey-home[data-view="stories"]), body:has(.journey-home[data-view="stories"]), .journey-app:has(.journey-home[data-view="stories"]) { background: #000; }
+
+.journey-home[data-stories] .journey-home-header { padding: 0 !important; }
+.journey-work-page, .journey-profile-page, .journey-settings-page { padding-bottom: calc(env(safe-area-inset-bottom) + 136px) !important; }
+.journey-work-page > header, .journey-profile-page > header { background: var(--page) !important; padding: 16px !important; border-bottom: 0 !important; }
+.journey-work-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.journey-work-toolbar h1 { margin: 0; font-size: 25px; font-weight: 650; line-height: 1.2; }
+.journey-toolbar-actions { display: flex; align-items: center; gap: 8px; }
+.journey-toolbar-avatar, .journey-refresh { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--rule); background: var(--surface); color: var(--green-deep); cursor: pointer; }
+/* A filled disc, not an outlined hole: beside the avatar's photo an empty ring
+   read as a gap in the row rather than a control. */
+.journey-refresh { border-color: color-mix(in srgb, var(--green-deep) 22%, var(--rule)); background: var(--green-wash); box-shadow: var(--shadow-sm); }
+.journey-toolbar-avatar { padding: 3px; }
+.journey-refresh:disabled { opacity: .5; cursor: default; }
+.journey-acharya-shell { background: var(--page); }
+.journey-acharya-header { background: var(--page) !important; border-bottom: none !important; }
+.journey-acharya-header h1 { font-weight: 600 !important; }
+.journey-lane-tabs { background: var(--surface-sunk); border-radius: 28px; margin: 0 16px 12px !important; padding: 4px !important; gap: 0 !important; }
+.journey-lane-tabs > button { border: 0 !important; background: transparent !important; border-radius: 24px !important; letter-spacing: 0 !important; color: var(--ink-mute) !important; font-size: 11px !important; padding: 9px 4px !important; gap: 4px !important; }
+.journey-lane-tabs > button[aria-selected="true"] { background: var(--green-deep) !important; color: var(--surface) !important; }
+/* Badge only (the count is the button's last span). Matching every span also
+   boxed the label — "To do" sat in a faint rectangle that read as selected text. */
+.journey-lane-tabs > button[aria-selected="true"] > span:last-child { color: inherit !important; background: #ffffff18 !important; }
+.journey-task-card { border: 1px solid var(--rule) !important; border-radius: 16px !important; box-shadow: var(--shadow-sm) !important; background: var(--surface) !important; overflow: hidden !important; padding-left: 10px; }
+.journey-task-card[data-lane="doing"] { border-color: color-mix(in srgb, var(--ochre) 40%, var(--rule)) !important; background: color-mix(in srgb, var(--ochre-wash) 25%, var(--surface)) !important; }
+.journey-task-card[data-lane="review"] { border-color: color-mix(in srgb, var(--slate) 35%, var(--rule)) !important; background: color-mix(in srgb, var(--slate-wash) 38%, var(--surface)) !important; }
+.journey-task-card[data-lane="done"] { background: color-mix(in srgb, var(--green-wash) 32%, var(--surface)) !important; }
+.journey-task-symbol { flex-shrink: 0; width: 48px; }
+.journey-task-card .journey-task-body { padding: 12px 12px 12px 10px !important; }
+.journey-task-card h3 { white-space: normal !important; font-size: 15px !important; font-weight: 600 !important; line-height: 1.35 !important; }
+/* The chip that used to follow the title now sits in the tag row ABOVE it,
+   so this rule keeps matching nothing; the tag row styles itself. */
+.journey-task-card .journey-task-tags span { border-radius: 999px !important; font-size: 10px !important; letter-spacing: 0 !important; }
+.journey-task-card p { margin-top: 4px !important; }
+.journey-board-progress { display: flex; gap: 12px; align-items: center; margin: 10px 16px 12px; padding: 14px; border: 1px solid var(--rule); border-radius: 16px; background: var(--surface); }
+.journey-board-progress > strong { font-size: 26px; line-height: 1; font-weight: 500; letter-spacing: -.05em; color: var(--green-deep); }
+.journey-board-progress-body { flex: 1; min-width: 0; }
+.journey-board-progress-label { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; margin-bottom: 7px; color: var(--ink-soft); }
+.journey-board-progress-track { height: 5px; background: var(--surface-sunk); border-radius: 999px; overflow: hidden; }
+.journey-board-progress-track > div { height: 100%; background: var(--green-deep); border-radius: inherit; }
+.journey-timer { padding: 12px; border-radius: 50%; background: radial-gradient(circle, var(--surface) 0 54%, var(--surface-sunk) 55% 65%, transparent 66%); }
+.journey-timer [style*="font-family"] { font-family: var(--sans) !important; font-style: normal !important; font-weight: 400 !important; }
+
+.journey-task-detail > main { padding-inline: 16px; padding-top: 10px; }
+/* The task body is a flex column that scrolls. Flex items shrink by default, so
+   its sections were squeezed to fit the screen instead of running past it — and
+   anything that clips (overflow: hidden) was cut off with nothing to scroll to.
+   Keep every section at its natural height; Chat is the exception, sized to the
+   screen because its thread scrolls above the composer. */
+.journey-task-detail > main:not([data-section="chat"]) > * { flex-shrink: 0; }
+.journey-task-sections { gap: 0 !important; padding: 3px !important; border: 0 !important; background: var(--surface-sunk) !important; border-radius: 14px !important; }
+.journey-task-sections > button { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; min-height: 55px; padding: 7px 3px !important; font-size: 11px !important; border: 0 !important; border-radius: 11px !important; flex: 1; }
+/* Selected tab: the app's green, not white — cream rail, green pick, as in every other segmented control here. */
+.journey-task-sections > button[aria-current] { background: var(--green-deep) !important; color: var(--surface) !important; box-shadow: var(--shadow-sm); }
+.journey-task-heading { display: flex; gap: 10px; align-items: center; margin: 0 0 12px; }
+.journey-task-heading > svg { flex-shrink: 0; }
+.journey-task-heading h1 { font-size: 22px; font-weight: 600 !important; margin: 0; overflow-wrap: anywhere; }
+.journey-task-description { padding: 0 !important; border: 0 !important; background: transparent !important; }
+.journey-session-info { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 0 10px; border: 0 !important; border-block: 1px solid var(--rule) !important; border-radius: 0 !important; padding: 12px 0 !important; background: transparent !important; box-shadow: none !important; }
+.journey-session-icon { grid-row: 1 / 3; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--ochre-wash); color: var(--ink-soft); }
+.journey-task-actions { max-width: 820px; margin-inline: auto; }
+.journey-task-actions button { border-radius: 28px; }
+.journey-task-history { border: 1px solid var(--rule) !important; border-radius: 20px !important; background: var(--surface) !important; box-shadow: var(--shadow-sm) !important; padding: 14px !important; }
+.journey-profile-sections { border-radius: 24px !important; background: var(--surface-sunk) !important; padding: 4px !important; }
+.journey-profile-sections > button { border: 0 !important; border-radius: 20px !important; font-size: 12px !important; }
+.journey-profile-sections > button[aria-current] { background: var(--green-deep) !important; color: var(--surface) !important; }
+.journey-profile-sections > button > span { display: none; }
+.journey-profile-sections > button:focus-visible { outline: 2px solid var(--green-deep); outline-offset: -2px; }
+.journey-profile-sections > button:active { transform: none; }
+.journey-identity { border: 1px solid var(--rule) !important; border-radius: 20px !important; box-shadow: var(--shadow-sm) !important; background: var(--surface) !important; padding: 16px !important; }
+.journey-profile-stats { gap: 8px !important; padding-block: 0; margin-block: 12px; }
+.journey-profile-stat { min-height: 0 !important; padding: 14px 6px !important; align-items: center !important; text-align: center; border: 1px solid var(--rule) !important; border-radius: 16px !important; background: var(--surface) !important; box-shadow: var(--shadow-sm) !important; }
+.journey-profile-stat:first-child { background: color-mix(in srgb, var(--green-wash) 50%, var(--surface)) !important; }
+.journey-profile-stat:nth-child(2) { background: color-mix(in srgb, var(--ochre-wash) 30%, var(--surface)) !important; }
+.journey-profile-stat > span { width: 44px !important; height: 44px !important; border-radius: 50% !important; margin-bottom: 8px; }
+.journey-profile-stat > p { font-family: var(--sans) !important; }
+.journey-profile-stat > p:first-of-type { font-size: 30px !important; font-weight: 550 !important; }
+.journey-profile-stat > p:last-of-type { font-size: 11px !important; letter-spacing: 0 !important; text-transform: none !important; }
+/* ── Settings ──────────────────────────────────────────────────────────────
+   One rule across every panel: the SECTION NAME is the card's title, and
+   everything under it is either a control or a muted helper line. Three
+   hierarchies were competing before — the heading was the SMALLEST text on
+   its own card at 13px, under a 15px switch label and a 16px/750 "Open tasks
+   in" that outranked the section it belonged to — so no two cards announced
+   themselves the same way. No copy is dropped; it is re-ranked. */
+.journey-settings-list > section { border: 1px solid var(--rule) !important; border-radius: 16px !important; box-shadow: var(--shadow-sm) !important; background: var(--surface) !important; padding: 16px !important; margin-bottom: 12px !important; }
+.journey-settings-heading { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 15.5px; font-weight: 680; letter-spacing: -0.01em; color: var(--ink); }
+.journey-settings-heading > span { width: 32px; height: 32px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; background: var(--green-wash); color: var(--green-deep); }
+.journey-settings-heading svg { width: 17px; height: 17px; }
+/* Helper lines and the demoted sub-label share one size and one colour, so a
+   card's second line always means the same thing. */
+.journey-settings-hint, .journey-settings-sub { font-size: 13px !important; font-weight: 400 !important; line-height: 1.5 !important; color: var(--ink-mute) !important; }
+.journey-settings-sub { margin: -4px 0 10px !important; }
+/* The thing being switched, set below the title rather than level with it. */
+.journey-settings-row > span:first-child { font-size: 14.5px !important; line-height: 1.4; color: var(--ink) !important; }
+.journey-settings-list [role="switch"]::before { content: ""; position: absolute; inset: -8px 0; }
+/* Choice groups read as ONE control now — a sunk track with a pill in it,
+   the same segmented control the lane tabs use. Three separately bordered
+   boxes with gaps between them read as three buttons that happen to be
+   adjacent, which is not what "pick one" looks like anywhere else here. */
+.journey-settings-list [role="radiogroup"] { gap: 4px !important; padding: 4px; border-radius: 999px; background: var(--surface-sunk); border: 1px solid var(--rule); }
+/* The task-language dropdown: a transparent <select> over a pill, so the ring goes on the pill. */
+.journey-lang-select:focus-within { outline: 2px solid var(--green-deep); outline-offset: 2px; }
+.journey-settings-list [role="radio"] { min-height: 52px !important; border: 0 !important; border-radius: 999px !important; background: transparent !important; box-shadow: none !important; color: var(--ink-soft) !important; }
+.journey-settings-list [role="radio"][aria-checked="true"] { background: var(--green-deep) !important; color: var(--surface) !important; box-shadow: 0 1px 2px #231d141f !important; }
+#setting-language [role="radiogroup"] { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+#setting-language [role="radio"] { flex-direction: column; justify-content: center; gap: 4px; padding: 10px 6px !important; }
+#setting-language [role="radio"][aria-checked="true"] > span:last-child { opacity: .72; }
+/* The way out, not the loudest thing on the page. A full-bleed solid crimson
+   slab outshouted every card above it for an action nobody is looking for. */
+#setting-account button { border-radius: 999px !important; background: color-mix(in srgb, var(--crit-wash) 50%, var(--surface)) !important; border-color: color-mix(in srgb, var(--crit) 32%, transparent) !important; color: var(--crit) !important; }
+/* The share link gets its own line instead of being squeezed to an ellipsis
+   by the two buttons next to it; the buttons then get half the width each. */
+.journey-settings-linkrow { display: block !important; }
+.journey-settings-linkrow > span:first-child { display: block !important; width: 100%; padding: 11px 12px; border-radius: 10px; background: var(--surface-sunk); border: 1px solid var(--rule); color: var(--ink-soft) !important; }
+.journey-settings-linkrow > div { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.journey-settings-linkrow > div > * { width: 100%; border-radius: 999px !important; }
+@media (hover: hover) {
+  .journey-status-grid > a:hover, .journey-round-link:hover { background: var(--green-wash); }
+  .journey-mentor-row:hover > span:first-child { outline-color: var(--green); }
+  .journey-next-task:hover { background: var(--green); }
+  .journey-task-card:hover { border-color: var(--rule-strong) !important; box-shadow: var(--shadow-md) !important; }
+  .journey-profile-sections > button:not([aria-current]):hover { background: var(--green-wash) !important; color: var(--green-deep) !important; }
+  .journey-profile-sections > button[aria-current]:hover { background: var(--green-deep) !important; color: var(--surface) !important; }
+  .journey-navigation a:hover { color: var(--green-deep); }
+}
+@media (min-width: 760px) {
+  .journey-home-header { padding: 20px 24px 12px !important; }
+  .journey-home-content { padding: 0 24px 136px !important; }
+  .journey-home-top { grid-template-columns: 1.15fr 1fr; align-items: stretch; gap: 16px; }
+  .journey-overview { display: flex; flex-direction: column; justify-content: center; }
+  .journey-feature { grid-template-columns: 96px minmax(0, 1fr) !important; }
+  .journey-guide-portrait { width: 96px; height: 96px; }
+  /* Four, not six: these are photo cards now, and six across a tablet puts the
+     acharya back to the thumbnail this layout exists to stop being. */
+  .journey-mentor-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .journey-section-heading { margin-top: 16px; }
+  .journey-acharya-shell { max-width: 820px; margin-inline: auto; }
+}
+@media (max-width: 360px) {
+  .journey-feature { grid-template-columns: 72px minmax(0, 1fr) !important; column-gap: 12px; padding: 12px; }
+  .journey-guide-portrait { width: 72px; height: 72px; }
+  .journey-feature-info h2 { font-size: 20px !important; }
+  /* Already two up; just tighten the gutter and the words on a narrow phone. */
+  .journey-mentor-list { gap: 10px !important; }
+  .journey-mentor-row > div { padding: 9px 42px 11px 10px; }
+  .journey-mentor-row > div > p { font-size: 12.5px !important; }
+  .journey-status-grid > a { padding-inline: 3px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey-app *, .journey-app *::before, .journey-app *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

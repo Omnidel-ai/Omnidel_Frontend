@@ -1,0 +1,163 @@
+.identityCard {
+  background: var(--green-deep) !important;
+  border-color: var(--green-deep) !important;
+}
+
+.identityCard h2 {
+  overflow-wrap: anywhere;
+}
+
+.detailsPanel {
+  margin-bottom: 12px;
+}
+
+.panelHeading {
+  margin: 0 0 10px;
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.groupGrid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.groupCard {
+  --profile-accent: var(--green);
+  --profile-wash: var(--green-wash);
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid color-mix(in srgb, var(--profile-wash) 78%, var(--rule));
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--profile-wash) 28%, var(--surface));
+}
+
+.groupCard[data-tone="sage"] {
+  --profile-accent: var(--green);
+  --profile-wash: var(--green-wash);
+}
+
+.groupCard[data-tone="ochre"] {
+  --profile-accent: var(--ochre);
+  --profile-wash: var(--ochre-wash);
+}
+
+.groupCard[data-tone="terracotta"] {
+  --profile-accent: var(--terracotta);
+  --profile-wash: var(--terra-wash);
+}
+
+.groupCard[data-tone="slate"] {
+  --profile-accent: var(--slate);
+  --profile-wash: var(--slate-wash);
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  margin-bottom: 8px;
+}
+
+.groupIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--profile-wash);
+  color: var(--profile-accent);
+}
+
+.groupIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.groupTitle {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fieldList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 0 2px;
+  border-top: 1px solid color-mix(in srgb, var(--profile-wash) 60%, var(--rule));
+}
+
+.fieldLabel {
+  min-width: 0;
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.fieldValue {
+  min-width: 0;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+  font-weight: 550;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.fieldValue[data-empty="true"] {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.bioValue {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.bioValue[data-empty="true"] {
+  color: var(--ink-faint);
+}
+
+@media (max-width: 520px) {
+  .groupGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groupCard,
+  .groupIcon {
+    transition: none;
+  }
+}

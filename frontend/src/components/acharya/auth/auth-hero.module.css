@@ -1,0 +1,819 @@
+/* ===========================================================================
+ * Sign-in chrome — the phone-auth flow (request-otp / verify-otp).
+ *
+ * The LAYOUT is the founder's reference comp: one centred column, a full-bleed
+ * photograph behind the top of it, pill fields, pill actions, an "or" rule.
+ * The PALETTE is this app's own — parchment, ink and green, the same tokens
+ * every other screen uses. Nothing here introduces a colour of its own, so a
+ * change to --page or --green-deep reaches this screen like any other.
+ * ======================================================================== */
+
+.root {
+  /* Height of the photograph behind the header. The hero spacer below is
+     derived from it, so the two cannot drift apart. */
+  --auth-photo-h: clamp(300px, 44dvh, 380px);
+
+  position: relative;
+  /* MahAcharya'ji is the ground this screen stands on: he gets more of it on
+     sign-in, where nothing but a phone field competes with him, and less on
+     register, where a ten-field form has to fit underneath. Both screens keep
+     the same band, the same fade and the same crop — only its height moves. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding-top: max(18px, env(safe-area-inset-top));
+  padding-bottom: max(26px, env(safe-area-inset-bottom));
+  background: var(--page);
+  color: var(--ink);
+}
+
+/* Sign-in: the photograph IS the screen — one field stands under it, so the
+   band takes as much height as a phone can spare. */
+.photoTall {
+  --auth-photo-h: clamp(300px, 46dvh, 420px);
+}
+
+/* Register: same band, same crop, same fade — shorter, because a ten-field
+   form has to start above the fold underneath it. */
+.photoCompact {
+  --auth-photo-h: clamp(228px, 30dvh, 296px);
+}
+
+/* ── The acharya, behind the words ──────────────────────────────────────── */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.photoBand {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--auth-photo-h);
+}
+
+/*
+ * The source is a 16:9 studio frame with the face ~46% across and ~24% down,
+ * not a headshot. It COVERS the band edge to edge at every width — the old
+ * fixed-width (620px-capped) image left a strip of bare page down the left and
+ * stopped short of the band's bottom on anything wider than a phone.
+ */
+.portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 46% 22%;
+}
+
+/* Dissolves the photograph into the page at the bottom only, so it reads as
+   the ground the header stands on. No side fades: those read as a left gap. */
+.photoFade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 38%,
+    color-mix(in srgb, var(--page) 72%, transparent) 76%,
+    var(--page) 100%
+  );
+}
+
+/* Phone: no card — its children lay out as if it were not there. */
+.card {
+  display: contents;
+}
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+
+.frame {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 27rem;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.back {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  z-index: 2;
+}
+
+.backControl {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  color: var(--green-deep);
+  cursor: pointer;
+}
+
+/* Reserves the photograph's room. `position: relative` because the mic is
+   pinned inside it — the photo itself cannot hold the mic, the backdrop is
+   pointer-events: none. */
+.hero {
+  position: relative;
+  height: calc(var(--auth-photo-h) - 48px);
+  flex-shrink: 0;
+}
+
+/* Bottom-right, the one place this app ever puts the mic. */
+.micSlot {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  display: inline-flex;
+}
+
+.livePill {
+  position: absolute;
+  left: 0;
+  bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--crit);
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--crit);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* Always two lines tall, so the field below starts at the same height on the
+   number screen and the code screen even when one subtitle is shorter. */
+.subtitle {
+  margin: 10px auto 0;
+  min-height: 3em;
+  max-width: 21rem;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+
+/* Everything between the header and the footer. It grows, so `.actions` can
+   sit at the bottom of the screen on sign-in and simply follow the last field
+   on register — one rule, both shapes. */
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 26px;
+}
+
+/* The buttons follow the field directly. They used to be pushed to the bottom
+   of the screen (`margin-top: auto`), which left a wide empty gap between
+   "Enter your mobile number" and "Send code". */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+/* What the acharya is saying, under the form — the karigar is looking at the
+   field he is filling, not at the mic. */
+.caption {
+  margin: 14px 0 0;
+  padding: 11px 14px;
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid var(--rule);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.captionWho {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* ── Form furniture, shared by both steps ───────────────────────────────── */
+
+.form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.fieldIcon {
+  flex-shrink: 0;
+  color: var(--ink-faint);
+}
+
+.prefix {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-mute);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.input::placeholder {
+  color: var(--ink-faint);
+  letter-spacing: normal;
+}
+
+/* The code, one box per digit. The real input sits over the row, invisible,
+   so autofill, paste and backspace all behave like one field. */
+.otpBoxes {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.otpBox {
+  flex: 1 1 0;
+  max-width: 56px;
+  aspect-ratio: 1 / 1.1;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.otpBoxFilled {
+  border-color: color-mix(in srgb, var(--green-deep) 45%, var(--rule));
+}
+
+/* The next box to fill — only while the field actually has focus. */
+.otpBoxes:focus-within .otpBoxActive {
+  border-color: var(--green-deep);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green-deep) 18%, transparent);
+}
+
+.otpBoxesInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  font-size: 16px; /* stops iOS zooming on focus */
+  cursor: text;
+}
+
+/* "Didn't receive the code? Resend", under the submit button. */
+.resendRow {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+
+.resendBtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 650;
+  color: var(--green-deep);
+  cursor: pointer;
+}
+
+.resendBtn:disabled {
+  color: var(--ink-mute);
+  cursor: default;
+}
+
+.phoneStrong {
+  font-weight: 650;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 0 14px;
+  font-size: 13px;
+  color: var(--crit);
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 22px;
+  border: 1px solid var(--green-deep);
+  border-radius: 999px;
+  background: var(--green-deep);
+  color: var(--surface);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 15px 22px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid var(--green-deep);
+  background: var(--surface);
+  color: var(--green-deep);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 2px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.dividerLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.hint {
+  margin: 0;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+
+.hintCode {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* Dev-only quick sign-in. */
+.demoLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.demoLabel::before,
+.demoLabel::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.demoLabelText {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-mute);
+}
+
+.demoRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-sm);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+ * Register — the same chrome, carrying a long form.
+ *
+ * Sign-in is one pill and two buttons; register is ten fields. Everything below
+ * is the furniture that difference needs: a label over each pill, rows that pair
+ * two fields, a textarea that cannot be a pill. The pill itself, the primary and
+ * secondary actions, the divider and the caption are the SAME classes sign-in
+ * uses — that is what makes the two screens read as one product.
+ * ======================================================================== */
+
+.registerForm {
+  gap: 14px;
+}
+
+/* Label above its field. A `div` rather than a `label` when the control is a
+   listbox button, so the wrapper never steals its click. */
+.block {
+  display: block;
+  min-width: 0;
+}
+
+.fieldLabel {
+  display: block;
+  margin: 0 0 6px 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.optional {
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ink-faint);
+}
+
+/* Two fields on one line (first/last name, state/city). They wrap rather than
+   squeeze on the narrowest phones. */
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Names and addresses are prose, not digits — the mono `.input` is for the
+   things read back aloud (phone, code, PIN). */
+.inputText {
+  font-family: var(--sans);
+  letter-spacing: normal;
+}
+
+.textareaField {
+  display: block;
+  padding: 13px 20px;
+  border-radius: var(--r-xl);
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 74px;
+  box-sizing: border-box;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  outline: none;
+  resize: vertical;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.textarea::placeholder {
+  color: var(--ink-faint);
+}
+
+/* Language, chat and mic on one line under the subtitle, where the karigar is
+   already looking for "how do I do this?". Each pill starts at its own content
+   width and they share what is left, so "English" is never clipped and the row
+   still fits on one line on a 360px phone. */
+.assistRow {
+  display: flex;
+  gap: 8px;
+  margin: -6px 0 18px;
+}
+
+.assistBtn {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--green-deep);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.assistBtn:disabled {
+  color: var(--ink-mute);
+  cursor: default;
+}
+
+.assistLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The mic is the primary way in, so it carries the fill. */
+.assistBtnMic {
+  border-color: var(--green-deep);
+  background: var(--green-deep);
+  color: var(--surface);
+}
+
+.assistBtnLive {
+  border-color: var(--crit);
+  background: var(--crit);
+  color: var(--surface);
+}
+
+/* The pill is the look; a transparent native <select> laid over it is the
+   control, so phones open their own picker and keyboards work as usual. */
+.langSelectNative {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px; /* stops iOS zooming on focus */
+}
+
+.langSelect:focus-within {
+  outline: 2px solid var(--green-deep);
+  outline-offset: 2px;
+}
+
+/* Who the karigar will be learning with, once approved. */
+.learnStrip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--green-wash) 45%, var(--surface));
+}
+
+.learnLabel {
+  width: 100%;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.avatarStack {
+  display: flex;
+}
+
+.avatarStack > * + * {
+  margin-left: -8px;
+}
+
+.learnNames {
+  flex: 1;
+  min-width: 10rem;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* ===========================================================================
+ * Wide screens — a card on a deep-green ground: the form on the left, the
+ * acharya's portrait in its own rounded panel on the right. Below 900px none
+ * of this applies and the phone layout above is untouched.
+ * ======================================================================== */
+
+@media (min-width: 900px) {
+  .root {
+    --auth-pad: clamp(24px, 4vw, 56px);
+    /* The card's height on sign-in; a long register form simply grows past it. */
+    --auth-card-h: min(820px, calc(100dvh - 2 * var(--auth-pad)));
+
+    align-items: center;
+    justify-content: center;
+    padding: var(--auth-pad);
+    background: var(--green-deep);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    width: min(1200px, 100%);
+    min-height: var(--auth-card-h);
+    padding: 18px;
+    box-sizing: border-box;
+    border-radius: 40px;
+    background: var(--page);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.25);
+  }
+
+  .frame {
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: center;
+    max-width: 25rem;
+    padding: 48px 8px;
+  }
+
+  /* The portrait panel. Sticky, so a long register form scrolls past a
+     portrait that stays in view instead of stretching it. */
+  .backdrop {
+    position: sticky;
+    top: var(--auth-pad);
+    inset-inline: auto;
+    bottom: auto;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    height: calc(var(--auth-card-h) - 36px);
+    border-radius: 28px;
+  }
+
+  .photoBand {
+    inset: 0;
+    height: auto;
+  }
+
+  .portrait {
+    object-position: 46% 30%;
+  }
+
+  /* The panel stands on its own — nothing to dissolve into. */
+  .photoFade {
+    display: none;
+  }
+
+  /* No photograph above the header any more, so no room reserved for one. */
+  .hero {
+    display: flex;
+    justify-content: flex-end;
+    height: auto;
+  }
+
+  .micSlot {
+    position: static;
+    margin-bottom: 12px;
+  }
+
+  .back {
+    top: 24px;
+    left: 8px;
+  }
+
+  .title {
+    font-size: 2.6rem;
+  }
+
+  .subtitle {
+    font-size: 14.5px;
+  }
+
+  /* Centred as one block; no stretch pushing the footer away. */
+  .body,
+  .form {
+    flex: 0 0 auto;
+  }
+
+  .footer {
+    margin-top: 28px;
+  }
+}

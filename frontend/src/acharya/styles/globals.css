@@ -1,0 +1,670 @@
+@import "tailwindcss";
+/* Vite build: the app and its components live in two folders; scan both. */
+@source "../";
+@source "../../components/acharya";
+
+/* ===========================================================================
+ * omnidel-acharya — palette aligned with OmniDel main app.
+ * Reference: OmniDel/src/app/globals.css. Tokens here are the same hex values,
+ * exposed under both the OmniDel-native names (--page, --green-deep, --rule)
+ * AND aliased into the karigar-app token names the components already use
+ * (--color-paper, --color-accent, --color-line, etc.) via @theme inline below.
+ * =========================================================================== */
+
+:root {
+  --stories-surface: #14110c;
+  /* ── OmniDel-native tokens (source of truth) ──────────────────────── */
+  --page:           #efe9dc;
+  --surface:        #f6f1e3;
+  --surface-sunk:   #e5dcc4;
+  --rule:           #d6cca9;
+  --rule-strong:    #b5a77a;
+
+  --ink:            #231d14;
+  --ink-soft:       #4a4030;
+  /* Darkened for WCAG AA ≥4.5:1 on --page/--surface (was #8b7d60 ≈3.57:1). */
+  --ink-mute:       #6b5f47;
+  --ink-faint:      #9a8d70;
+
+  --green-deep:     #254a33;
+  --green:          #376a46;
+  --green-soft:     #c7d6bd;
+  --green-wash:     #dde5cb;
+
+  --terracotta:     #a74a2d;
+  --terra-soft:     #e7bfa5;
+  --terra-wash:     #eccfb5;
+
+  --ochre:          #a5711a;
+  --ochre-wash:     #e6cf9a;
+
+  --ok:             #3b6f49;
+  --ok-wash:        #d3ddc3;
+  --crit:           #8b3320;
+  --crit-wash:      #e5c0ae;
+
+  /* Muted slate — the one cool hue in an otherwise earth-tone palette. Used to
+     separate the third KPI (jobs done) from the green/ochre pair beside it. */
+  --slate:          #3f5a72;
+  --slate-wash:     #dde4ec;
+
+  /* Tight, enterprise-feel radii — matches OmniDel */
+  --r-sm: 3px;
+  --r-md: 4px;
+  --r-lg: 8px;
+  /* Soft radius for the karigar-facing home + profile cards. Deliberately
+     rounder than the OmniDel-aligned scale above: those screens are the
+     worker's own surface, not the enterprise board. */
+  --r-xl: 12px;
+
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, .04), 0 1px 2px rgba(26, 31, 23, .04);
+  --shadow-md: 0 1px 2px rgba(26, 31, 23, .04), 0 8px 24px -10px rgba(26, 31, 23, .12);
+  --shadow-lg: 0 1px 2px rgba(26, 31, 23, .04), 0 20px 48px -16px rgba(26, 31, 23, .16);
+
+  /* Components use --serif/--sans/--mono; map straight to next/font variables. */
+  --sans: var(--font-inter-tight), -apple-system, system-ui, sans-serif;
+  --serif: var(--font-fraunces), "PT Serif", Georgia, serif;
+  --mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* ── @theme inline: expose tokens to Tailwind v4 utility generation ──
+ *
+ *   - Native OmniDel names (bg-page, text-ink, border-rule, bg-green-deep…)
+ *   - Karigar-aliases (bg-paper, bg-cream, bg-parchment, border-line…) so the
+ *     existing components keep compiling without a rewrite.
+ *
+ *   The green-deep is the primary action colour. Status lane colours map to
+ *   OmniDel's domain ramp (green for done, ochre for in-progress, etc.).
+ * ─────────────────────────────────────────────────────────────────── */
+@theme inline {
+  /* Native — same names as OmniDel uses internally */
+  --color-page:         var(--page);
+  --color-surface:      var(--surface);
+  --color-surface-sunk: var(--surface-sunk);
+  --color-rule:         var(--rule);
+  --color-rule-strong:  var(--rule-strong);
+  --color-ink:          var(--ink);
+  --color-ink-soft:     var(--ink-soft);
+  --color-ink-mute:     var(--ink-mute);
+  --color-ink-faint:    var(--ink-faint);
+  --color-green-deep:   var(--green-deep);
+  --color-green:        var(--green);
+  --color-green-soft:   var(--green-soft);
+  --color-green-wash:   var(--green-wash);
+  --color-terracotta:   var(--terracotta);
+  --color-terra-soft:   var(--terra-soft);
+  --color-terra-wash:   var(--terra-wash);
+  --color-ochre:        var(--ochre);
+  --color-ochre-wash:   var(--ochre-wash);
+  --color-slate:        var(--slate);
+  --color-slate-wash:   var(--slate-wash);
+  --color-crit:         var(--crit);
+
+  /* Karigar-aliases (so existing components keep compiling) */
+  --color-paper:        var(--page);              /* bg-paper      */
+  --color-cream:        var(--surface);           /* bg-cream      */
+  --color-parchment:    var(--surface-sunk);      /* bg-parchment  */
+  --color-parchment-2:  var(--rule);              /* bg-parchment-2 */
+  --color-line:         var(--rule);              /* border-line   */
+  --color-line-soft:    var(--surface-sunk);
+  --color-muted:        var(--ink-mute);          /* text-muted    */
+  --color-charcoal:     var(--ink-soft);          /* text-charcoal */
+  --color-accent:       var(--green);             /* primary action */
+  --color-accent-deep:  var(--green-deep);
+  --color-accent-soft:  var(--green-wash);
+  --color-leaf:         var(--green);
+  --color-leaf-deep:    var(--green-deep);
+  --color-gold:         var(--ochre);
+  --color-gold-soft:    var(--ochre-wash);
+  --color-danger:       var(--crit);
+  --color-ink-blue:     var(--ink-soft);
+
+  /* Lane status colours — domain-mapped to OmniDel's ramp */
+  --color-status-todo:    var(--terracotta);
+  --color-status-doing:   var(--ochre);
+  --color-status-done:    var(--green);
+  --color-status-blocked: var(--crit);
+
+  /* Fonts — match OmniDel exactly (Fraunces + Inter Tight + JetBrains Mono).
+     Hind Siliguri + Hind + Hind Guntur + Noto Sans Ethiopic kept for Bengali / Devanagari / Telugu / Amharic content from the karigar. */
+  --font-sans:  var(--font-inter-tight), -apple-system, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), "PT Serif", Georgia, serif;
+  --font-mono:  var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-beng:  var(--font-hind-siliguri), "Noto Sans Bengali", system-ui, sans-serif;
+  --font-deva:  var(--font-hind), "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-telu:  var(--font-hind-guntur), "Noto Sans Telugu", system-ui, sans-serif;
+  --font-ethi:  var(--font-noto-ethiopic), "Noto Sans Ethiopic", "Nyala", system-ui, sans-serif;
+
+  /* Radius scale — exposed for components that read tokens directly */
+  --radius-sm:   var(--r-sm);
+  --radius:      var(--r-md);
+  --radius-md:   var(--r-md);
+  --radius-lg:   var(--r-lg);
+  --radius-xl:   var(--r-xl);
+  --radius-pill: 999px;
+
+  /* Folio shadow aliases used by existing components */
+  --shadow-folio:    var(--shadow-sm);
+  --shadow-folio-md: var(--shadow-md);
+  --shadow-folio-lg: var(--shadow-lg);
+}
+
+/* ── Per-workspace acharya brand overrides ─────────────────────────────── */
+/* Default: OmniDel green primary (suits arjun = vatika domain). */
+[data-acharya="arjun"]  { /* default */ }
+
+/* Vivek workspaces (finance): tone toward ochre/terracotta accent. */
+[data-acharya="vivek"]  {
+  --green:          #a5711a;
+  --green-deep:     #6b3a1f;
+  --green-wash:     #ecd6b4;
+  --green-soft:     #e6cf9a;
+}
+
+/* Subhas (business): leave on the OmniDel green base; could shift if needed. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+  overscroll-behavior-y: contain;
+}
+
+/* OmniDel CustomSelect / SearchableSelect dropdown scrollbar */
+.custom-select-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+.custom-select-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-select-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-select-dropdown::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 3px;
+}
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-mute);
+}
+.picker-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Subtle paper-grain — same recipe as OmniDel */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(37, 74, 51, .015) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 60%, rgba(167, 74, 45, .015) 0 1px, transparent 2px);
+  background-size: 7px 7px, 11px 11px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+p { margin: 0; }
+
+input, button, select, textarea { font-family: var(--font-sans); }
+
+::selection { background: var(--green-wash); color: var(--green-deep); }
+
+/* Mobile-first utilities */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* No visible page scrollbar — this reads as an app, not a document, and a
+   desktop scrollbar gutter also shifted the mobile-width layout. Content still
+   scrolls; the deliberately styled .custom-select-dropdown bar is untouched. */
+html, body { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+
+.pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+
+/* ── Animation system ──────────────────────────────────────────────────────
+ * Custom easing curves — the built-in CSS easings are too weak. These have the
+ * punch that makes motion feel intentional (Emil Kowalski / animations.dev).
+ * ────────────────────────────────────────────────────────────────────────── */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);        /* strong ease-out for UI */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);    /* on-screen movement */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);     /* iOS drawer curve */
+}
+
+@keyframes mic-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+.mic-pulse { animation: mic-pulse 1.5s ease-in-out infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 360ms var(--ease-out) both; }
+
+/* Overlay entrance — drawer-style rise from the bottom. */
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.slide-up { animation: slide-up 360ms var(--ease-drawer) both; }
+
+/* Plain opacity fade — for modal backdrops/scrims where translate is wrong. */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.fade-in { animation: fade-in 200ms var(--ease-out) both; }
+
+/* Dropdown/popover entrance — scales from the trigger (top-right), not centre.
+ * Fast (150ms) since menus are opened often. */
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.menu-in { animation: menu-in 150ms var(--ease-out) both; transform-origin: top right; }
+
+/* Chat bubble entrance — never from scale(0); start from 0.96 + opacity so
+ * the bubble feels like it grows into place rather than popping in. */
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.bubble-in { animation: bubble-in 240ms var(--ease-out) both; }
+
+/* Lane content crossfade — tab switching is frequent, so keep it fast (160ms)
+ * and subtle. Just enough to avoid a jarring instant swap. */
+@keyframes lane-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lane-in { animation: lane-in 160ms var(--ease-out) both; }
+
+/* Staggered card entrance. Short delays (40ms) — long ones feel slow.
+ * Capped at 8 so a long list doesn't wait noticeably. */
+.stagger > * { animation: bubble-in 260ms var(--ease-out) both; }
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 40ms; }
+.stagger > *:nth-child(3) { animation-delay: 80ms; }
+.stagger > *:nth-child(4) { animation-delay: 120ms; }
+.stagger > *:nth-child(5) { animation-delay: 160ms; }
+.stagger > *:nth-child(6) { animation-delay: 200ms; }
+.stagger > *:nth-child(7) { animation-delay: 240ms; }
+.stagger > *:nth-child(n+8) { animation-delay: 280ms; }
+
+/* Typing indicator — three dots that breathe in sequence. Reads as "thinking",
+ * unlike a static "•••". */
+.typing { display: inline-flex; align-items: center; gap: 4px; padding: 2px 0; }
+.typing span {
+  width: 6px; height: 6px; border-radius: 9999px;
+  background: var(--color-accent-deep);
+  opacity: 0.4;
+  animation: typing-dot 1.2s var(--ease-in-out) infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.18s; }
+.typing span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* Press feedback — any element that should feel pressable. scale(0.97) gives
+ * instant tactile confirmation that the UI heard the tap. */
+.press { transition: transform 140ms var(--ease-out); }
+.press:active { transform: scale(0.97); }
+
+/* Reduced motion — keep opacity/comprehension cues, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  .mic-pulse, .typing span { animation: none; }
+  .fade-up, .slide-up, .bubble-in, .lane-in, .stagger > * {
+    animation-duration: 0.01ms;
+    animation-delay: 0ms;
+  }
+  .press:active { transform: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* Script helpers */
+.bn { font-family: var(--font-beng); }
+.hi { font-family: var(--font-deva); }
+.te { font-family: var(--font-telu); }
+.am { font-family: var(--font-ethi); }
+
+/* ── Markdown rendering for the Acharya's bubbles ──────────────────────────
+ * Compact, body-text-first. Headings stay close to body size; lists indent
+ * cleanly; code blocks get a subtle parchment fill. The Acharya is instructed
+ * to keep replies short, so these styles target snippet-length markdown.
+ * ────────────────────────────────────────────────────────────────────────── */
+.acharya-md > * + * { margin-top: 8px; }
+.acharya-md p { margin: 0; }
+.acharya-md strong { font-weight: 600; color: var(--ink); }
+.acharya-md em { font-style: italic; }
+.acharya-md a {
+  color: var(--green-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.acharya-md a:hover { color: var(--green); }
+.acharya-md ul, .acharya-md ol {
+  margin: 4px 0 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.acharya-md ul { list-style: disc; }
+.acharya-md ol { list-style: decimal; }
+.acharya-md li { padding-left: 2px; }
+.acharya-md li::marker { color: var(--ink-mute); }
+.acharya-md h1, .acharya-md h2, .acharya-md h3, .acharya-md h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+.acharya-md h1 { font-size: 17px; }
+.acharya-md h2 { font-size: 16px; }
+.acharya-md h3 { font-size: 15px; font-style: italic; color: var(--ink-soft); }
+.acharya-md h4 { font-size: 14px; color: var(--ink-soft); }
+.acharya-md hr { border: 0; border-top: 1px solid var(--rule); margin: 8px 0; }
+.acharya-md blockquote {
+  margin: 0;
+  padding: 4px 12px;
+  border-left: 3px solid var(--rule-strong);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.acharya-md code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--surface-sunk);
+  padding: 1px 5px;
+  border-radius: var(--r-sm);
+  color: var(--ink);
+}
+.acharya-md pre {
+  margin: 0;
+  background: var(--surface-sunk);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+.acharya-md pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 12.5px;
+}
+.acharya-md table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+.acharya-md th, .acharya-md td {
+  border: 1px solid var(--rule);
+  padding: 6px 8px;
+  text-align: left;
+}
+.acharya-md th {
+  background: var(--surface-sunk);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ── Feature-acharya card: wide viewports ────────────────────────────────────
+ *
+ * The card is a single column of two bands — a 4:3 portrait, then a solid strip
+ * with the name, field chip and persona line (see components/FeaturedAcharyaCard).
+ * That works because a phone makes the two agree: the band's aspect ratio is
+ * width-driven and its height is capped at 250px, and at ~360px wide those come
+ * out the same shape.
+ *
+ * They stop agreeing as soon as the card is wide. This app sets no maximum
+ * content width, so on a desktop viewport the photo band stretched to the whole
+ * window while the cap held it at 250px tall — a >5:1 letterbox over a
+ * head-and-shoulders portrait, and `object-fit: cover` answered by keeping the
+ * turban and throwing away the chin. The phone rendered him fully; the desktop
+ * did not, which is the crop QA caught.
+ *
+ * From 640px up the two bands sit side by side instead. The portrait gets a
+ * column no wider than its own height cap allows at 4:3, so the crop is exactly
+ * the one the phone shows, and the width that was doing the cropping goes to the
+ * type. The mic is unaffected: it is pinned to the CARD's bottom-right corner,
+ * which is still inside the text half and still off the photograph.
+ *
+ * `--feature-photo-w` is set inline by the component, derived from the same
+ * height cap, so this rule cannot drift from it.
+ */
+@media (min-width: 640px) {
+  .feature-acharya-card {
+    display: grid;
+    grid-template-columns: minmax(0, var(--feature-photo-w, 334px)) minmax(0, 1fr);
+    align-items: center;
+  }
+  /* start, not stretch: stretch would take its height from the row (i.e. from
+     the text band) and the aspect ratio would be ignored — the same crop again,
+     just narrower. */
+  .feature-acharya-card > .feature-acharya-photo {
+    align-self: start;
+  }
+}
+
+/* ===========================================================================
+ * Chat ground — the wash behind every Acharya conversation.
+ *
+ * A conversation surface was flat `--page`, so an empty chat (which is how one
+ * always starts) was a large blank rectangle with a greeting stranded at the
+ * bottom. The reference the founder gave pools a tint in opposite corners and
+ * leaves the middle clear; this is that structure in this app's own colours —
+ * `--green-soft` and `--green-wash` over cream, never a hue of its own.
+ *
+ * Deliberately faint. Message bubbles are `--surface` and `--green-wash`, and
+ * a strong field behind them would flatten the difference between who said
+ * what. The base stays `--surface` so text contrast is unchanged wherever a
+ * bubble does not cover it.
+ *
+ * Gradients only — no blur, no filter, nothing animated. This paints on every
+ * chat open on a low-end Android.
+ * ======================================================================== */
+.acharya-chat-ground {
+  background-color: var(--surface);
+  background-image:
+    /* the acharya's side, top-left */
+    radial-gradient(130% 58% at 2% -8%, color-mix(in srgb, var(--green-soft) 92%, transparent) 0%, transparent 66%),
+    /* the karigar's side, bottom-right, where the composer sits */
+    radial-gradient(118% 52% at 108% 108%, color-mix(in srgb, var(--green-soft) 82%, transparent) 0%, transparent 70%),
+    /* holds the two ends together and keeps the middle clear for bubbles */
+    linear-gradient(
+      170deg,
+      color-mix(in srgb, var(--green-wash) 78%, transparent) 0%,
+      color-mix(in srgb, var(--green-wash) 26%, transparent) 26%,
+      transparent 48%,
+      color-mix(in srgb, var(--green-wash) 30%, transparent) 74%,
+      color-mix(in srgb, var(--green-wash) 82%, transparent) 100%
+    );
+}
+
+
+/* The composer sits ON the ground rather than cutting it off with a solid bar
+   — the same reason the reference lets its input float over the wash. */
+.acharya-chat-composer {
+  background: color-mix(in srgb, var(--surface) 82%, transparent) !important;
+}
+
+/* ===========================================================================
+ * Quiz feedback — the moment an answer lands.
+ *
+ * Choosing an option only ever recoloured it, so a right answer and a wrong
+ * one felt identical: the same instant repaint, no reaction. These give the
+ * two outcomes different BODY LANGUAGE — right pops open and throws a small
+ * burst, wrong shakes its head — so the karigar knows which happened before
+ * reading a word of it.
+ *
+ * Transform and opacity only, so every one of these runs on the compositor
+ * and none of them trigger layout. Nothing loops; each fires once and stops.
+ * ======================================================================== */
+
+/* Right: a short swell, as if the option took a breath. */
+@keyframes quiz-pop {
+  0%   { transform: scale(1); }
+  38%  { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
+/* Wrong: a head-shake. Decaying, so it reads as "no" and not as a glitch. */
+@keyframes quiz-shake {
+  0%, 100% { transform: translateX(0); }
+  14%  { transform: translateX(-7px); }
+  30%  { transform: translateX(6px); }
+  46%  { transform: translateX(-4px); }
+  62%  { transform: translateX(3px); }
+  80%  { transform: translateX(-2px); }
+}
+
+/* A ring leaving the option outwards. */
+@keyframes quiz-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 42%, transparent); }
+  100% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--ok) 0%, transparent); }
+}
+
+/* Same, in the losing colour, on the option that WAS right. */
+@keyframes quiz-ring-teach {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 34%, transparent); }
+  100% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--ok) 0%, transparent); }
+}
+
+/* The verdict mark, landing. */
+@keyframes quiz-mark-in {
+  0%   { transform: scale(.4) rotate(-12deg); opacity: 0; }
+  58%  { transform: scale(1.18) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* One spark of the burst. --dx/--dy are set per spark on the element. */
+@keyframes quiz-spark {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(.35); opacity: 0; }
+}
+
+/* The explanation and the Next button arriving, rather than appearing. */
+@keyframes quiz-rise {
+  0%   { transform: translateY(9px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* The score, noticing it went up. */
+@keyframes quiz-bump {
+  0%, 100% { transform: scale(1); }
+  34%      { transform: scale(1.32); }
+}
+
+/* The result medal. Slight overshoot — this is the one celebratory beat. */
+@keyframes quiz-medal {
+  0%   { transform: scale(.55); opacity: 0; }
+  56%  { transform: scale(1.09); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.quiz-opt-right  { animation: quiz-pop 420ms ease-out both, quiz-ring 760ms ease-out both; }
+.quiz-opt-wrong  { animation: quiz-shake 400ms ease-out both; }
+/* Delayed: it answers "then which one was it?", which is the question the
+   karigar asks a beat AFTER their own option has finished shaking. */
+.quiz-opt-teach  { animation: quiz-ring-teach 900ms ease-out 380ms both; }
+.quiz-mark       { animation: quiz-mark-in 420ms cubic-bezier(.2, .9, .3, 1.25) both; }
+.quiz-reveal     { animation: quiz-rise 300ms ease-out both; }
+.quiz-score-bump { animation: quiz-bump 460ms ease-out; }
+.quiz-medal      { animation: quiz-medal 560ms cubic-bezier(.2, .9, .3, 1.2) both; }
+.quiz-spark      { animation: quiz-spark 640ms ease-out forwards; }
+
+/*
+ * Reduced motion keeps the OUTCOME and drops the performance: colours, the
+ * tick and the cross all still land, they just stop moving. The burst goes
+ * entirely — a shower of dots has no meaning left once it cannot travel.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .quiz-opt-right,
+  .quiz-opt-wrong,
+  .quiz-opt-teach,
+  .quiz-mark,
+  .quiz-reveal,
+  .quiz-score-bump,
+  .quiz-medal { animation: none !important; }
+  .quiz-burst { display: none !important; }
+}
+
+/* ── Quiz result: the moment it is over ────────────────────────────────────
+ *
+ * The result screen stated a number and stopped. A quiz that ends with no
+ * reaction teaches the karigar that finishing it did not matter — so a pass
+ * gets balloons and confetti, and a miss gets a face that shakes its head
+ * once and settles, which is commiseration rather than a scolding.
+ *
+ * Both are short and neither loops: this screen is a full stop, not a party
+ * the karigar has to wait out before tapping Retake.
+ * ----------------------------------------------------------------------- */
+
+/* Up and away, with a sway. --sway is set per balloon. */
+@keyframes quiz-balloon {
+  0%   { transform: translate(0, 60px) scale(.88); opacity: 0; }
+  14%  { opacity: 1; }
+  55%  { transform: translate(var(--sway), -140px) scale(1); opacity: 1; }
+  100% { transform: translate(calc(var(--sway) * -0.55), -330px) scale(1.03); opacity: 0; }
+}
+
+/* Thrown up, then falling past. --dx and --spin are set per piece. */
+@keyframes quiz-confetti {
+  0%   { transform: translate(0, -10px) rotate(0deg); opacity: 0; }
+  12%  { opacity: 1; }
+  100% { transform: translate(var(--dx), 210px) rotate(var(--spin)); opacity: 0; }
+}
+
+/* Not this time: it arrives lower and settles, rather than popping. */
+@keyframes quiz-console {
+  0%   { transform: translateY(-12px) scale(.9); opacity: 0; }
+  62%  { transform: translateY(3px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* One shake of the head. Once — twice would be nagging. */
+@keyframes quiz-headshake {
+  0%, 100% { transform: rotate(0deg); }
+  22% { transform: rotate(-7deg); }
+  48% { transform: rotate(6deg); }
+  74% { transform: rotate(-3deg); }
+}
+
+.quiz-balloon   { animation: quiz-balloon 2600ms cubic-bezier(.25, .6, .4, 1) forwards; }
+.quiz-confetti  { animation: quiz-confetti 1700ms cubic-bezier(.2, .5, .5, 1) forwards; }
+.quiz-console   { animation: quiz-console 520ms cubic-bezier(.2, .9, .3, 1.15) both; }
+.quiz-headshake { animation: quiz-headshake 620ms ease-in-out 420ms both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-console,
+  .quiz-headshake { animation: none !important; }
+  /* The whole celebration layer goes: balloons that cannot rise and confetti
+     that cannot fall are just dots parked on the screen. */
+  .quiz-celebration { display: none !important; }
+}

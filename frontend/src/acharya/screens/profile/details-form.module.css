@@ -1,0 +1,110 @@
+/* ===========================================================================
+ * Floating-label fields for the Edit details form — the pattern delivery apps
+ * use for addresses. The label sits inside the empty box like a placeholder;
+ * tap the field (or once it holds a value) and the label shrinks up onto the
+ * top border while the border turns green, so the karigar always sees which
+ * field they are in and what it is for.
+ *
+ * Pure CSS: `:placeholder-shown` tells an empty input from a filled one, so
+ * every input carries a placeholder (a single space when it has no hint).
+ * ======================================================================== */
+
+.field {
+  position: relative;
+  min-width: 0;
+}
+
+.control {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  padding: 22px 14px 8px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px; /* 16px stops iOS zooming on focus */
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.control:focus {
+  border-color: var(--green-deep);
+  box-shadow: 0 0 0 1px var(--green-deep);
+}
+
+.control[readonly] {
+  opacity: 0.6;
+}
+
+/* The hint (e.g. "you@example.com") only appears once the field is selected,
+   so it never collides with the label sitting in the same spot. */
+.control::placeholder {
+  color: var(--ink-faint);
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.control:focus::placeholder {
+  opacity: 1;
+}
+
+/* Grows with its content instead of scrolling inside one line. */
+.textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.label {
+  position: absolute;
+  left: 11px;
+  top: 17px;
+  max-width: calc(100% - 22px);
+  padding: 0 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink-mute);
+  font-size: 15px;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: top 140ms ease, font-size 140ms ease, color 140ms ease;
+}
+
+/* Selected, or filled: the label moves up onto the border. */
+.control:focus + .label,
+.control:not(:placeholder-shown) + .label,
+.labelFixed {
+  top: -8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.control:focus + .label {
+  color: var(--green-deep);
+}
+
+/* Dropdowns always show a value or a prompt, so their label stays up. */
+.labelFixed {
+  z-index: 1;
+}
+
+.field:focus-within > .labelFixed {
+  color: var(--green-deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control,
+  .label,
+  .control::placeholder {
+    transition: none;
+  }
+}
