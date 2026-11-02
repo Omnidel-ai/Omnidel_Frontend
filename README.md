@@ -219,6 +219,7 @@ sheet) — each carries domain knowledge or a heavy dependency.
 | Folder | What is in it | Built here? |
 |---|---|---|
 | `common/` | The domain-free library above — what both apps share | yes |
+| `acharya-mobile/` | The phone kit the Kaarigar (Acharya) and Contractor (OmniPulse) apps share, built once — see its `README.md` and `docs/ACHARYA_OMNIPULSE_COMMON_COMPONENTS.md`. Its screens are `src/mobile/` (sidebar → Mobile apps) | yes |
 | `acharya/` | The Acharya karigar portal's `src/components` (omnidel-acharya PR #207) | no |
 | `omnidel/` | The OmniDel Next.js app's `src/components` | no |
 

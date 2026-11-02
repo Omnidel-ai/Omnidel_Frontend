@@ -18,6 +18,12 @@ const PATHS: Record<string, ReactElement> = {
     </>
   ),
   pulse: <path d="M3 12h4l3-7 4 14 3-7h4" />,
+  phone: (
+    <>
+      <rect x="6" y="2" width="12" height="20" rx="2.5" />
+      <path d="M10.5 18.5h3" />
+    </>
+  ),
   cart: (
     <>
       <circle cx="9" cy="20" r="1.4" />

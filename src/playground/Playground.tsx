@@ -9,8 +9,9 @@ import { ChromeSection } from "./ChromeSection";
 import { StatesSection } from "./StatesSection";
 import { UploadsSection } from "./UploadsSection";
 import { DropzoneSection } from "./DropzoneSection";
+import { AcharyaMobileSection } from "./AcharyaMobileSection";
 
-const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Empty & loading", "Overlays", "Header", "Media & files", "Uploads"];
+const TABS = ["All", "Buttons", "Inputs", "Selects & filters", "Table", "Empty & loading", "Overlays", "Header", "Media & files", "Uploads", "Acharya mobile"];
 
 /**
  * Component playground.
@@ -55,6 +56,7 @@ export function Playground() {
       {show("Header") && <ChromeSection />}
       {show("Media & files") && <UploadsSection />}
       {show("Uploads") && <DropzoneSection />}
+      {show("Acharya mobile") && <AcharyaMobileSection />}
     </div>
   );
 }

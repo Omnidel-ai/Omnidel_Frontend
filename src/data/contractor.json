@@ -1,0 +1,154 @@
+{
+  "user": { "name": "Shubham Gupta", "phone": "+91 98765 43210", "role": "Supervisor" },
+  "approvals": [
+    {
+      "id": "r-1",
+      "task": "Fix the kitchen sink trap and re-seal the joints",
+      "kaarigar": "Sunita Devi",
+      "project": "Kitchen Fitout — Baner",
+      "when": "2h ago",
+      "ageDays": 0,
+      "score": 8,
+      "acharya": "Jal Acharya",
+      "acharyaNotes": "Trap fitted straight and hand-tight. The wall joint is sealed evenly with no gaps in the after photo. Water ran for two minutes with no drip under the trap.",
+      "said": "Purana trap hata diya, naya laga diya. Silicone white wala lagaya. Do minute paani chalaya, koi leak nahi.",
+      "photos": 4,
+      "priority": "normal",
+      "type": "Plumbing"
+    },
+    {
+      "id": "r-2",
+      "task": "Unload the tile delivery and stack by room",
+      "kaarigar": "Ramesh Kumar",
+      "project": "Kitchen Fitout — Baner",
+      "when": "5h ago",
+      "ageDays": 0,
+      "score": 6,
+      "acharya": "MahAcharya Ji",
+      "acharyaNotes": "Tiles are stacked by room but two piles have no label in the photos.",
+      "said": "Saari tiles utaar ke room ke hisaab se rakh di.",
+      "photos": 3,
+      "priority": "urgent",
+      "type": "Labour"
+    },
+    {
+      "id": "r-3",
+      "task": "Pressure-test the new kitchen line",
+      "kaarigar": "Sunita Devi",
+      "project": "Kitchen Fitout — Baner",
+      "when": "Yesterday",
+      "ageDays": 1,
+      "score": 9,
+      "acharya": "Jal Acharya",
+      "acharyaNotes": "Gauge holds 6 bar for the full 15 minutes in the video.",
+      "said": "6 bar pe 15 minute rakha, pressure nahi gira.",
+      "photos": 2,
+      "priority": "normal",
+      "type": "Testing"
+    },
+    {
+      "id": "r-4",
+      "task": "Prime the meeting room walls",
+      "kaarigar": "Imran Khan",
+      "project": "Office repaint — Kothrud",
+      "when": "3d ago",
+      "ageDays": 3,
+      "score": 7,
+      "acharya": "MahAcharya Ji",
+      "acharyaNotes": "One coat, even cover. The corner by the window looks thin.",
+      "said": "Primer ka ek coat poora ho gaya.",
+      "photos": 5,
+      "priority": "normal",
+      "type": "Painting"
+    }
+  ],
+  "projects": [
+    { "id": "p-1", "name": "Kitchen Fitout — Baner", "color": "#376a46", "team": "Pune crew", "open": 4 },
+    { "id": "p-2", "name": "Office repaint — Kothrud", "color": "#a5711a", "team": "Everyone", "open": 2 },
+    { "id": "p-3", "name": "Site upkeep", "color": "#3f5a72", "team": "Baner site", "open": 0 }
+  ],
+  "lanes": [
+    { "key": "todo", "label": "To do", "color": "#9a8d70" },
+    { "key": "doing", "label": "Doing", "color": "#a5711a" },
+    { "key": "review", "label": "Review", "color": "#3f5a72" },
+    { "key": "done", "label": "Done", "color": "#376a46" }
+  ],
+  "tasks": [
+    {
+      "id": "t-214", "projectId": "p-1", "code": "#214", "lane": "doing",
+      "title": "Fix the kitchen sink trap and re-seal the joints",
+      "description": "Use the white silicone in the van, not the clear one. Photograph the joint before and after.",
+      "assignee": "Sunita Devi", "due": "Today", "priority": "normal", "comments": 2, "attachments": 1,
+      "notes": [
+        { "author": "Shubham Gupta", "text": "Customer is home after 2pm — ring before you go up.", "when": "Today, 10:40" },
+        { "author": "Sunita Devi", "text": "Started. Old trap is cracked, replacing the whole thing.", "when": "Today, 14:12" }
+      ],
+      "files": [{ "name": "before-joint.jpg", "size": "1.2 MB" }],
+      "activity": ["Moved to Doing — today 11:02", "Assigned to Sunita Devi — yesterday", "Created by Shubham Gupta — yesterday"]
+    },
+    {
+      "id": "t-215", "projectId": "p-1", "code": "#215", "lane": "todo",
+      "title": "Replace the bathroom mixer tap — 2nd floor flat",
+      "description": "Mixer is in the store room, box 14.",
+      "assignee": "Sunita Devi", "due": "Tomorrow", "priority": "normal", "comments": 0, "attachments": 0,
+      "notes": [], "files": [], "activity": ["Created by Shubham Gupta — yesterday"]
+    },
+    {
+      "id": "t-216", "projectId": "p-1", "code": "#216", "lane": "todo",
+      "title": "Grout the kitchen backsplash",
+      "description": "",
+      "assignee": null, "due": "20 Nov", "priority": "urgent", "comments": 0, "attachments": 0,
+      "notes": [], "files": [], "activity": ["Created by Shubham Gupta — today"]
+    },
+    {
+      "id": "t-217", "projectId": "p-1", "code": "#217", "lane": "review",
+      "title": "Unload the tile delivery and stack by room",
+      "description": "Check the delivery note against the order.",
+      "assignee": "Ramesh Kumar", "due": "Yesterday", "priority": "urgent", "comments": 1, "attachments": 3,
+      "notes": [{ "author": "Ramesh Kumar", "text": "Done, photos attached.", "when": "Today, 09:15" }],
+      "files": [{ "name": "stack-1.jpg", "size": "0.9 MB" }, { "name": "stack-2.jpg", "size": "1.1 MB" }, { "name": "delivery-note.pdf", "size": "240 KB" }],
+      "activity": ["Submitted for review — today 09:15"]
+    },
+    {
+      "id": "t-218", "projectId": "p-1", "code": "#218", "lane": "done",
+      "title": "Clear the blocked drain in the utility room",
+      "description": "",
+      "assignee": "Sunita Devi", "due": "2 Nov", "priority": "normal", "comments": 0, "attachments": 2,
+      "notes": [], "files": [], "activity": ["Approved by Shubham Gupta — 2 Nov"]
+    },
+    {
+      "id": "t-301", "projectId": "p-2", "code": "#301", "lane": "doing",
+      "title": "Prime the meeting room walls",
+      "description": "One coat of primer; second coat after it dries overnight.",
+      "assignee": "Imran Khan", "due": "Today", "priority": "normal", "comments": 0, "attachments": 0,
+      "notes": [], "files": [], "activity": ["Moved to Doing — today"]
+    },
+    {
+      "id": "t-302", "projectId": "p-2", "code": "#302", "lane": "todo",
+      "title": "Fit two new sockets in the living room",
+      "description": "Switch off at the board first. Use the 16A sockets.",
+      "assignee": "Vikram Rao", "due": "18 Nov", "priority": "normal", "comments": 0, "attachments": 0,
+      "notes": [], "files": [], "activity": ["Created by Shubham Gupta — today"]
+    }
+  ],
+  "teams": [
+    {
+      "id": "tm-1", "name": "Pune crew", "role": "lead", "description": "Plumbing and fit-out crew for Baner and Wakad.",
+      "members": [
+        { "name": "Sunita Devi", "role": "Kaarigar" },
+        { "name": "Ramesh Kumar", "role": "Kaarigar" },
+        { "name": "Asha Patil", "role": "Kaarigar" },
+        { "name": "Shubham Gupta", "role": "Supervisor" }
+      ]
+    },
+    {
+      "id": "tm-2", "name": "Baner site", "role": "member", "description": "Everyone on the Baner site.",
+      "members": [
+        { "name": "Imran Khan", "role": "Kaarigar" },
+        { "name": "Vikram Rao", "role": "Kaarigar" },
+        { "name": "Neha Joshi", "role": "Supervisor" }
+      ]
+    }
+  ],
+  "profile": { "waiting": 4, "given": 27, "managing": 6 }
+}
