@@ -316,6 +316,21 @@
       ]
     },
     {
+      "label": "Mobile apps",
+      "href": "/mobile",
+      "icon": "phone",
+      "children": [
+        {
+          "label": "Kaarigar app",
+          "href": "/mobile/kaarigar"
+        },
+        {
+          "label": "Contractor app",
+          "href": "/mobile/contractor"
+        }
+      ]
+    },
+    {
       "label": "Components",
       "href": "/playground",
       "icon": "grid"

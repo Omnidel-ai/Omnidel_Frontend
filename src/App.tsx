@@ -36,6 +36,7 @@ const AdminScreen = lazy(() => import("./admin/AdminScreen"));
 const MartScreen = lazy(() => import("./omnimart/MartScreen"));
 const PulseScreen = lazy(() => import("./omnipulse/PulseScreen"));
 const VarsityScreen = lazy(() => import("./omnivarsity/VarsityScreen"));
+const MobileAppsScreen = lazy(() => import("./mobile/MobileAppsScreen"));
 const DashboardHome = lazy(() =>
   import("./dashboard").then((m) => ({ default: m.DashboardHome })),
 );
@@ -139,6 +140,13 @@ function Screen({
     return (
       <Lazy>
         <PulseScreen href={href} onNavigate={onNavigate} />
+      </Lazy>
+    );
+  }
+  if (href.startsWith("/mobile/")) {
+    return (
+      <Lazy>
+        <MobileAppsScreen href={href} fallback={missing} />
       </Lazy>
     );
   }

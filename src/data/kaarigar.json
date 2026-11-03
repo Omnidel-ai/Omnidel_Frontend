@@ -1,0 +1,148 @@
+{
+  "user": {
+    "name": "Sunita Devi",
+    "phone": "9830067217",
+    "trade": "Plumbing & fittings",
+    "org": "Omnidel Pune",
+    "joined": "March 2025"
+  },
+  "acharyas": [
+    { "slug": "mahacharya", "name": "MahAcharya Ji", "role": "Your guide for every task", "featured": true },
+    { "slug": "jal", "name": "Jal Acharya", "role": "Plumbing, drains and fittings" },
+    { "slug": "vidyut", "name": "Vidyut Acharya", "role": "Wiring, sockets and safety" },
+    { "slug": "bhumi", "name": "Bhumi Acharya", "role": "Planting and site upkeep" }
+  ],
+  "tasks": [
+    {
+      "id": "k-101",
+      "title": "Fix the kitchen sink trap and re-seal the joints",
+      "description": "Use the white silicone in the van, not the clear one. Photograph the joint before and after.",
+      "lane": "doing",
+      "category": "plumbing",
+      "board": "Kitchen Fitout — Baner",
+      "acharya": "jal",
+      "due": { "label": "Today", "tone": "warn" },
+      "sessions": { "done": 1, "total": 3 },
+      "steps": ["Shut the supply valve under the sink", "Take the old trap off and clean the threads", "Fit the new trap, hand-tight plus a quarter turn", "Seal the wall joint and run water for two minutes"],
+      "notes": [
+        { "author": "Shubham Gupta", "text": "Customer is home after 2pm — ring before you go up.", "when": "Today, 10:40" },
+        { "author": "Jal Acharya", "text": "Moved to list: DOING", "when": "Today, 11:02" }
+      ]
+    },
+    {
+      "id": "k-102",
+      "title": "Replace the bathroom mixer tap — 2nd floor flat",
+      "description": "Mixer is in the store room, box 14.",
+      "lane": "todo",
+      "category": "plumbing",
+      "board": "Kitchen Fitout — Baner",
+      "acharya": "jal",
+      "due": { "label": "Tomorrow", "tone": "neutral" },
+      "sessions": { "done": 0, "total": 2 },
+      "steps": ["Isolate hot and cold", "Remove the old mixer", "Fit and test for drips"],
+      "notes": []
+    },
+    {
+      "id": "k-103",
+      "title": "Fit two new sockets in the living room",
+      "description": "Switch off at the board first. Use the 16A sockets.",
+      "lane": "todo",
+      "category": "electrical",
+      "board": "Office repaint — Kothrud",
+      "acharya": "vidyut",
+      "due": { "label": "18 Nov", "tone": "neutral" },
+      "sessions": { "done": 0, "total": 1 },
+      "steps": ["Switch off at the board and test dead", "Mark and chase the wall", "Wire, fix and test"],
+      "notes": []
+    },
+    {
+      "id": "k-104",
+      "title": "Plant the balcony boxes with tulsi and marigold",
+      "lane": "todo",
+      "category": "planting",
+      "board": "Site upkeep",
+      "acharya": "bhumi",
+      "due": { "label": "3d late", "tone": "overdue" },
+      "sessions": { "done": 0, "total": 1 },
+      "steps": ["Fill boxes with potting mix", "Plant and water"],
+      "notes": []
+    },
+    {
+      "id": "k-105",
+      "title": "Unload the tile delivery and stack by room",
+      "lane": "review",
+      "category": "labour",
+      "board": "Kitchen Fitout — Baner",
+      "acharya": "mahacharya",
+      "sessions": { "done": 2, "total": 2 },
+      "steps": ["Check the delivery note", "Stack by room, label each pile"],
+      "notes": [{ "author": "MahAcharya Ji", "text": "Submitted for review with 4 photos.", "when": "Yesterday" }]
+    },
+    {
+      "id": "k-106",
+      "title": "Pressure-test the new kitchen line",
+      "lane": "review",
+      "category": "testing",
+      "board": "Kitchen Fitout — Baner",
+      "acharya": "jal",
+      "sessions": { "done": 1, "total": 1 },
+      "steps": ["Cap the line", "Pump to 6 bar and hold 15 minutes"],
+      "notes": []
+    },
+    {
+      "id": "k-107",
+      "title": "Clear the blocked drain in the utility room",
+      "lane": "done",
+      "category": "plumbing",
+      "board": "Kitchen Fitout — Baner",
+      "acharya": "jal",
+      "score": 8.5,
+      "sessions": { "done": 1, "total": 1 },
+      "steps": [],
+      "notes": []
+    },
+    {
+      "id": "k-108",
+      "title": "Fix the loose switch plate in the corridor",
+      "lane": "done",
+      "category": "electrical",
+      "board": "Office repaint — Kothrud",
+      "acharya": "vidyut",
+      "score": 9,
+      "sessions": { "done": 1, "total": 1 },
+      "steps": [],
+      "notes": []
+    }
+  ],
+  "report": { "tasksDone": 18, "avgScore": "8.4", "jobsDone": 6 },
+  "history": [
+    { "title": "Bathroom refit — Aundh", "org": "Omnidel Pune", "date": "28 Oct 2026", "score": "8.5/10", "verdict": "approved" },
+    { "title": "Kitchen sink and trap — Wakad", "org": "Omnidel Pune", "date": "14 Oct 2026", "score": "6.0/10", "verdict": "needs redo" },
+    { "title": "Overhead tank cleaning — Baner", "org": "Patil Builders", "date": "2 Sep 2026", "score": "9.0/10", "verdict": "approved" }
+  ],
+  "requests": [
+    { "org": "Patil Builders", "city": "Pune", "about": "Residential towers, Baner and Balewadi", "kind": "invite" },
+    { "org": "Omnidel Pune", "city": "Pune", "about": "Home renovation and fit-outs", "kind": "member" }
+  ],
+  "details": {
+    "contact": [
+      { "label": "Phone", "value": "+91 98300 67217" },
+      { "label": "Email", "value": "" }
+    ],
+    "work": [
+      { "label": "Trade", "value": "Plumbing & fittings" },
+      { "label": "Experience", "value": "7 years" }
+    ],
+    "location": [
+      { "label": "City", "value": "Pune" },
+      { "label": "Area", "value": "Wakad" }
+    ],
+    "about": [{ "label": "About", "value": "" }]
+  },
+  "stories": [
+    { "title": "How a P-trap keeps the smell out", "acharya": "Jal Acharya", "duration": "0:48" },
+    { "title": "Testing a socket before you touch it", "acharya": "Vidyut Acharya", "duration": "1:05" },
+    { "title": "Silicone that lasts: prep is everything", "acharya": "Jal Acharya", "duration": "0:39" },
+    { "title": "Watering new plants in the first week", "acharya": "Bhumi Acharya", "duration": "0:55" }
+  ]
+}

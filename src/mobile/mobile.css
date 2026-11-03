@@ -1,0 +1,170 @@
+/* Screens of the two phone apps. The shared components live in
+   components/acharya-mobile; this file only holds the device preview and the
+   handful of pieces that one app has and the other doesn't. Prefixed `mb-`. */
+
+/* ── Preview stage ─────────────────────────────────────────────────────── */
+.mb-stage { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 28px; }
+.mb-device {
+  position: relative; flex-shrink: 0; overflow: hidden;
+  width: min(390px, 100%); height: min(844px, calc(100dvh - 140px)); min-height: 560px;
+  border: 10px solid #1f1b14; border-radius: 46px; background: var(--page);
+  box-shadow: 0 30px 60px -24px rgba(26, 31, 23, 0.35), 0 0 0 1px var(--rule-strong);
+  /* Containing block for position: fixed — the dock and sheets stay in the phone. */
+  transform: translateZ(0);
+}
+.mb-viewport { height: 100%; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.mb-viewport::-webkit-scrollbar { display: none; }
+.mb-viewport .am-screen { min-height: 100%; }
+.mb-panel { flex: 1; min-width: 240px; max-width: 360px; display: grid; gap: 10px; align-content: start; }
+.mb-panel__eyebrow { margin: 0; font: 700 10.5px/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+.mb-panel__title { margin: 0; font-size: 28px; }
+.mb-panel__text { margin: 0; color: var(--ink-soft); font-size: 13.5px; line-height: 1.6; }
+.mb-panel__screens { display: grid; gap: 4px; margin-top: 6px; }
+.mb-panel__screen {
+  display: flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid transparent; border-radius: var(--r-md);
+  background: transparent; color: var(--ink-soft); font: 500 13.5px/1.2 var(--sans); text-align: left; cursor: pointer;
+}
+.mb-panel__screen:hover { background: var(--surface); border-color: var(--rule); }
+.mb-panel__screen[aria-current] { background: var(--green-wash); color: var(--green-deep); font-weight: 650; }
+.mb-panel__source { margin: 8px 0 0; color: var(--ink-mute); font-size: 12px; line-height: 1.55; }
+@media (max-width: 720px) {
+  /* Ends ~84px above the viewport's bottom edge: the shell's floating "Ask
+     MahAcharya" button (fixed, bottom 20px) and status bar live there, and the
+     phone's own dock must not sit under them. */
+  .mb-device { width: 100%; height: calc(100dvh - 210px); min-height: 520px; border-width: 0; border-radius: 0; box-shadow: none; }
+  .mb-panel { max-width: none; }
+}
+
+/* ── Bits used by both apps ────────────────────────────────────────────── */
+.mb-link {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 0; border: 0; background: transparent;
+  color: var(--green-deep); font: 650 13.5px/1 var(--sans); cursor: pointer;
+}
+.mb-link:disabled { color: var(--ink-mute); cursor: default; }
+.mb-eyebrow { margin: 0 0 8px; font: 700 10px/1.2 var(--am-label-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+.mb-section-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0 -2px; }
+.mb-section-title h2 { margin: 0; font: 650 16px/1.3 var(--sans); }
+.mb-body { margin: 0; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
+.mb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mb-steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: step; }
+.mb-steps li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; color: var(--ink); counter-increment: step; }
+.mb-steps li::before {
+  content: counter(step); display: grid; place-items: center; flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--green-wash); color: var(--green-deep); font: 700 12px/1 var(--mono);
+}
+.mb-note { display: flex; gap: 10px; align-items: flex-start; }
+.mb-note + .mb-note { margin-top: 14px; }
+.mb-note__who { font: 650 13px/1.3 var(--sans); color: var(--ink); }
+.mb-note__when { margin-left: 6px; font: 500 11px/1 var(--mono); color: var(--ink-mute); }
+.mb-note__text { margin: 3px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+
+/* ── Sign-in ───────────────────────────────────────────────────────────── */
+.mb-signin { min-height: 100%; display: flex; flex-direction: column; background: var(--page); }
+.mb-signin__hero { display: grid; place-items: center; min-height: 300px; padding: 48px 24px 28px; text-align: center; }
+.mb-signin__hero--forest { background: var(--green-deep); color: var(--cream); border-radius: 0 0 32px 32px; }
+.mb-signin__form { display: grid; gap: 16px; padding: 24px 20px 32px; }
+.mb-signin__title { margin: 0; font: var(--am-title-weight) 24px/1.2 var(--am-title-font); letter-spacing: -0.015em; }
+.mb-signin__text { margin: 6px 0 0; color: var(--ink-mute); font-size: 14px; line-height: 1.5; }
+.mb-signin__row { display: flex; justify-content: space-between; gap: 12px; }
+.mb-signin__hint { margin: 0; color: var(--ink-faint); font: 500 11.5px/1.4 var(--mono); text-align: center; }
+.mb-wordmark { margin: 14px 0 0; font: 500 34px/1 var(--serif); letter-spacing: -0.02em; color: var(--ink); }
+.mb-wordmark-sub { margin: 8px 0 0; font: 700 10px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); }
+
+/* ── Kaarigar only ─────────────────────────────────────────────────────── */
+.mb-greeting { margin: 4px 0 0; color: var(--ink-mute); font-size: 13.5px; }
+.mb-guide { display: flex; align-items: center; gap: 12px; }
+.mb-guide__text { flex: 1; min-width: 0; }
+.mb-guide__eyebrow { margin: 0; font: 700 10px/1 var(--sans); letter-spacing: 0.14em; color: color-mix(in srgb, var(--cream) 70%, transparent); }
+.mb-guide__name { margin: 6px 0 0; font: 650 19px/1.2 var(--sans); }
+.mb-guide__invite { margin: 4px 0 0; font-size: 13px; line-height: 1.4; color: color-mix(in srgb, var(--cream) 82%, transparent); }
+.mb-next {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; text-align: left; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--ochre) 35%, var(--rule)); border-radius: var(--am-radius);
+  background: color-mix(in srgb, var(--ochre-wash) 32%, var(--surface)); color: var(--ink); font: inherit;
+}
+.mb-next__icon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--ochre-wash); color: var(--ochre); }
+.mb-next__text { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.mb-next__eyebrow { font: 700 10px/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ochre); }
+.mb-next__title { font: 650 15px/1.35 var(--sans); }
+.mb-overview { display: flex; align-items: center; gap: 12px; }
+.mb-overview__text { flex: 1; min-width: 0; }
+.mb-overview__text h2 { margin: 0 0 4px; font: 650 15px/1.3 var(--sans); }
+.mb-overview__text p { margin: 0; font-size: 12px; line-height: 1.4; color: var(--ink-mute); }
+.mb-dial { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
+.mb-dial > svg { display: block; width: 100%; height: 100%; }
+.mb-dial__value { position: absolute; inset: 0; display: grid; place-items: center; }
+.mb-dial__value strong { font-size: 21px; line-height: 1; letter-spacing: -0.05em; font-weight: 600; }
+.mb-dial__value small { font-size: 10px; color: var(--ink-mute); }
+.mb-board-progress { display: flex; align-items: center; gap: 12px; }
+.mb-board-progress > strong { font-size: 26px; line-height: 1; font-weight: 550; letter-spacing: -0.05em; color: var(--green-deep); }
+.mb-board-progress__body { flex: 1; min-width: 0; }
+.mb-board-progress__label { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 7px; font-size: 11.5px; color: var(--ink-soft); }
+.mb-board-progress__track { height: 6px; overflow: hidden; border-radius: 999px; background: var(--surface-sunk); }
+.mb-board-progress__track > div { height: 100%; border-radius: inherit; background: var(--green-deep); }
+.mb-symbol { display: grid; place-items: center; flex-shrink: 0; }
+.mb-stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.mb-story {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; aspect-ratio: 9 / 14; padding: 12px;
+  overflow: hidden; border: 0; border-radius: var(--am-radius); color: var(--cream); text-align: left; cursor: pointer; font: inherit;
+  background: linear-gradient(180deg, transparent 35%, rgba(20, 30, 22, 0.85)), var(--story-bg, var(--green));
+}
+.mb-story__play { position: absolute; top: 12px; left: 12px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #ffffff2e; }
+.mb-story__title { font: 650 14px/1.3 var(--sans); }
+.mb-story__meta { font: 500 11px/1.2 var(--mono); opacity: 0.8; }
+
+/* ── Contractor only ───────────────────────────────────────────────────── */
+.mb-search {
+  display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px;
+  border: 1px solid var(--rule); border-radius: var(--am-radius-sm); background: var(--surface-sunk); color: var(--ink-faint);
+}
+.mb-search input { flex: 1; min-width: 0; height: 100%; border: 0; outline: none; background: transparent; color: var(--ink); font: 400 15px/1 var(--sans); }
+.mb-filters { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.mb-filters::-webkit-scrollbar { display: none; }
+.mb-chip {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; min-height: 36px; padding: 0 13px;
+  border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); color: var(--ink-soft);
+  font: 500 13px/1 var(--sans); white-space: nowrap; cursor: pointer;
+}
+.mb-chip[aria-pressed="true"] { border-color: var(--green-deep); background: var(--green-deep); color: var(--cream); }
+.mb-sort {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--rule); border-radius: var(--r-md);
+  background: var(--surface-sunk); color: var(--ink-soft); font: 700 11px/1 var(--mono); cursor: pointer;
+}
+.mb-score { font: 800 14px/1 var(--mono); }
+.mb-score small { color: var(--ink-faint); font-weight: 700; }
+.mb-score[data-good] { color: var(--ok); }
+.mb-score:not([data-good]) { color: var(--ochre); }
+.mb-task-title { margin: 0; font: var(--am-title-weight) 21px/1.3 var(--am-title-font); color: var(--ink); }
+.mb-photos { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 6px; }
+.mb-photo {
+  display: grid; place-items: center; aspect-ratio: 4 / 3; border: 0; border-radius: var(--am-radius-sm); cursor: pointer; color: #ffffffcc;
+  background: linear-gradient(135deg, var(--photo-a, #b5a77a), var(--photo-b, #6b5f47));
+}
+.mb-quote { margin: 0; padding: 12px 14px; border-left: 3px solid var(--rule-strong); background: var(--surface-sunk); border-radius: 0 var(--am-radius-sm) var(--am-radius-sm) 0; font-size: 14.5px; line-height: 1.55; color: var(--ink); }
+.mb-verdict { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mb-verdict__score { display: grid; justify-items: center; padding: 6px 12px; border: 1px solid var(--rule); border-radius: var(--am-radius-sm); background: var(--surface); }
+.mb-verdict__score strong { font: 800 22px/1 var(--mono); }
+.mb-verdict__score small { margin-top: 3px; font: 700 9px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }
+.mb-presets { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.mb-decision {
+  position: fixed; inset: auto 0 0 0; z-index: 36; display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px;
+  padding: 12px 16px max(env(safe-area-inset-bottom, 0px), 14px);
+  border-top: 1px solid var(--rule); background: color-mix(in srgb, var(--page) 94%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.mb-team__members { margin: 0; padding: 0 12px 12px 56px; list-style: none; display: grid; gap: 8px; }
+.mb-team__members li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.mb-team__members li span:last-child { margin-left: auto; }
+.mb-files { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.mb-files li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.mb-files li small { margin-left: auto; font: 500 11px/1 var(--mono); color: var(--ink-mute); }
+.mb-activity { margin: 0; padding: 0 0 0 14px; list-style: none; display: grid; gap: 10px; border-left: 2px solid var(--rule); }
+.mb-activity li { position: relative; font-size: 13.5px; color: var(--ink-soft); }
+.mb-activity li::before { content: ""; position: absolute; left: -20px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--rule-strong); }
+.mb-field { display: grid; gap: 6px; }
+.mb-field > span { font: 700 10px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+.mb-field input, .mb-field textarea {
+  width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--rule-strong); border-radius: var(--am-radius-sm);
+  background: var(--surface); color: var(--ink); font: 400 16px/1.4 var(--sans); outline: none; resize: none;
+}
+.mb-field input:focus, .mb-field textarea:focus { border-color: var(--green-deep); box-shadow: 0 0 0 3px var(--green-wash); }

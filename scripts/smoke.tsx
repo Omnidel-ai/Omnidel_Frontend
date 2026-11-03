@@ -24,6 +24,7 @@ import { AdminScreen } from "../src/admin/AdminScreen";
 import { MartScreen } from "../src/omnimart/MartScreen";
 import { VarsityScreen } from "../src/omnivarsity/VarsityScreen";
 import { PulseScreen } from "../src/omnipulse/PulseScreen";
+import { MobileAppsScreen } from "../src/mobile/MobileAppsScreen";
 import demo from "../src/data/demo.json";
 import masters from "../src/data/masters.json";
 import omnipulse from "../src/data/omnipulse.json";
@@ -246,6 +247,36 @@ const screens: Screen[] = [
     name: "screens/omnipulse by route",
     html: renderToString(<PulseScreen href="/omnipulse/review" onNavigate={() => undefined} />),
     markers: [["the review queue", "table-header"], ["a score out of ten", "/10"]],
+  },
+  {
+    // The two phone apps open on their home screens; the rest of each app is
+    // reached by tapping, which SSR cannot do — the playground's Acharya mobile
+    // tab covers every kit component, and omnidel-e2e drives the flows.
+    name: "mobile/kaarigar by route",
+    html: renderToString(<MobileAppsScreen href="/mobile/kaarigar" fallback={null} />),
+    markers: [
+      ["phone frame", "mb-device"],
+      ["kaarigar look", 'data-am-look="kaarigar"'],
+      ["light dock", "am-dock--light"],
+      ["mic", "am-mic"],
+      ["greeting", "Namaste, Sunita"],
+      ["journey dial", "mb-dial"],
+      ["guide count, counted", "1 task"],
+      ["screen list", "Profile — Requests"],
+    ],
+  },
+  {
+    name: "mobile/contractor by route",
+    html: renderToString(<MobileAppsScreen href="/mobile/contractor" fallback={null} />),
+    markers: [
+      ["contractor look", 'data-am-look="contractor"'],
+      ["dark dock", "am-dock--dark"],
+      ["dock floor", "am-dock__floor"],
+      ["row stat tiles", "am-stat--row"],
+      ["review queue", "Needs your answer"],
+      ["oldest, computed", "3d"],
+      ["screen list", "Approval — score &amp; decide"],
+    ],
   },
   {
     name: "omnivarsity/dashboard",
